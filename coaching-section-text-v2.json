@@ -28,7 +28,7 @@
       "title": "What Is ADHD Coaching?",
       "defaultContent": [
         { "type": "text", "text": "ADHD Coaching is a bespoke partnership.<br>Bespoke, because each person with ADHD actually experiences different challenges to different extents." },
-        { "type": "text", "text": "It is a structured, ongoing relationship focused on helping you understand better how your brain actually works`—`and build strategies together that work in accordance with it, not despite it." }
+        { "type": "text", "text": "It is a structured, ongoing relationship focused on helping you understand better how your brain actually works`—`and build strategies together that work in accordance with it, not despite it." },
         { "type": "text", "text": "A coaching is the person who sits beside you on the rug. Not to build it for you. Not to tell you how to build it. To help you figure out what will help you move forward, and keep building." }
       ],
       "adhdContent": [
@@ -44,14 +44,14 @@
       "defaultContent": [
         { "type": "text", "text": "It helps to know how coaching differs from other modalities of ADHD support, and how it works in conjunction with them." },
         { "type": "text", "text": "<strong>Medication</strong> addresses the neurobiology directly. It clears the floor so you can begin to build. It does not teach you how to proceed next.<br><strong>Therapy</strong> works on emotional wounds and mental health challenges that often travel alongside ADHD (such as anxiety or depression).<br><strong>Productivity systems</strong> and <strong>life hacks</strong> invite you to adapt your brain to someone else's methods. They tell you how to build, the way they did." },
-        { "type": "text", "text": "<strong>Traditional life coaching</strong> comes close in similarities of <em>reflective-inquiry</em>. However, <strong>ADHD Coaching</strong> is rooted in the neurobiology of the ADHD brain. It acknowledges the ADHD brain is fundamentally different in its operation of regions that affect motivation, focus, and self-regulation." },
+        { "type": "text", "text": "<strong>Traditional life coaching</strong> comes close in similarities of <em>reflective-inquiry</em>. However, <strong>ADHD Coaching</strong> is rooted in the neurobiology of the ADHD brain. It acknowledges the ADHD brain is fundamentally different in its operation of regions that affect motivation, focus, and self-regulation." }
       ],
       "adhdContent": [
         { "type": "bullet", "text": "◾Medication addresses biology" },
         { "type": "bullet", "text": "◾Therapy heals emotional wounds" },
         { "type": "bullet", "text": "◾Productivity tools invite you to adapt your brain to a particular methodology" },
         { "type": "bullet", "text": "◾ADHD Coaching is grounded in ADHD brain science and focuses on execution" },     
-        { "type": "bullet", "text": "◾Voodoo depends on finding bat-wings and crafting straw figurines" },
+        { "type": "bullet", "text": "◾Voodoo depends on finding bat-wings and crafting straw figurines" }
       ]
     },   
     {
