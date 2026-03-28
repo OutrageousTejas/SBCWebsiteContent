@@ -14,11 +14,11 @@
       "defaultContent": [
         { "type": "text", "text": "You’re sitting on the floor, surrounded by a thousand colorful bricks. You know exactly what you want to build—a 1,254-piece masterpiece. (Well, 1,251. You lose three pieces somewhere.)" },
         { "type": "text", "text": "You've wanted to build for weeks. You opened the box three times before. Today is the day! But you don't start. Not because you don't know how. Not because you don’t want to. Duh!<br>Yet you just sit there. Completely aware of everything you need to do, and yet completely unable to make yourself do it." },
-        { "type": "text", "text": "That gap, between <em>knowing</em>, <em>wanting</em>, and <em>doing</em>, is one of the most disorienting parts of ADHD. And it's exactly where coaching lives." }
+        { "type": "text", "text": "That gap, between <em>knowing</em>, <em>wanting</em>, and <em>doing</em>, is one of the most disorienting parts of ADHD.<>And it's exactly where coaching lives." }
       ],
       "adhdContent": [
-        { "type": "bullet", "text": "⚡In an ADHD brain, the wiring between <em>thinking </em> and <em>doing </em> is frayed.<br>Sometimes the spark carries; sometimes the wire stays cold, and rarely is the connection consistent." },
-        { "type": "bullet", "text": "⚡It’s not a lack of willpower or intelligence. Most certainly not laziness. It’s a bio-mechanical failure in the delivery system of your own intention." },
+        { "type": "bullet", "text": "⚡In an ADHD brain, the wiring between <em>thinking </em> and <em>doing </em> is frayed. Sometimes the spark carries; sometimes not, and rarely is the connection consistent." },
+        { "type": "bullet", "text": "⚡It isn't a lack of willpower or intelligence. Most certainly not laziness. It’s a bio-mechanical failure in the delivery system of your own intention." },
         { "type": "bullet", "text": "⚡It’s frustrating. It's baffling. It’s invisible." }
       ]
     },
