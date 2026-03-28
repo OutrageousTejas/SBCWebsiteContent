@@ -1,96 +1,105 @@
 {
+  "_comment": "Squirrel Brain Coaching — Coaching Section copy file. Edit text here, commit to GitHub, refresh SQS page to see changes. HTML structure/behavior changes still require editing the HTML file directly.",
+
   "sectionHeader": {
     "title": "What Is ADHD Coaching?",
-    "subtitle": "A thousand colorful bricks. One puzzling question: why won't I start?"
+    "subtitle": "A thousand colorful bricks. One big question: where do you start?"
   },
+
   "subsections": [
     {
       "id": 0,
+      "note": "No toggle — default content only. adhdContent is ignored by the renderer.",
       "title": "A View from the Rug",
-      "defaultParagraphs": [
-        "You're sitting on the floor surrounded by a thousand colorful bricks. You know exactly what you want to build — a perfect 1,000-piece masterpiece. Well, 997. You lost three pieces somewhere.",
-        "But you don't start. Not because you don't know how. Not because you don't want to. You just… sit there. Completely aware of everything you need to do, and completely unable to make yourself do the first thing.",
-        "This isn't laziness. It's a disconnect between knowing and doing — and it's one of the most disorienting parts of having an ADHD brain."
+      "defaultContent": [
+        { "type": "text", "text": "You're sitting on the floor surrounded by a thousand colorful bricks. You know exactly what you want to build — a perfect 1,000-piece masterpiece. Well, 997. You lost three pieces somewhere." },
+        { "type": "text", "text": "But you don't start. Not because you don't know how. Not because you don't want to. You just… sit there. Completely aware of everything you need to do, and completely unable to make yourself do the first thing." },
+        { "type": "text", "text": "This isn't laziness. It's a disconnect between knowing and doing — and it's one of the most disorienting parts of having an ADHD brain." }
       ],
-      "adhdParagraphs": []
+      "adhdContent": []
     },
     {
       "id": 1,
+      "note": "ADHD content is a comparison table — hardcoded in HTML. adhdContent here is ignored by the renderer. To edit the table, update the HTML directly.",
       "title": "What Is ADHD Coaching?",
-      "defaultParagraphs": [
-        "Coaching isn't someone building the set for you. It's having a Master Builder sit beside you on the rug.",
-        "Therapy might explore <em>why</em> you're afraid of the Expert-level sets. Medication clears the clutter off the table so you can actually see the pieces. Coaching is the manual — written for your brain, by you. Not productivity hacks. Not glue. A sorting system you actually want to use."
+      "defaultContent": [
+        { "type": "text", "text": "Coaching isn't someone building the set for you. It's having a Master Builder sit beside you on the rug." },
+        { "type": "text", "text": "Therapy might explore <em>why</em> you're afraid of the Expert-level sets. Medication clears the clutter off the table so you can actually see the pieces. Coaching is the manual — written for your brain, by you. Not productivity hacks. Not glue. A sorting system you actually want to use." }
       ],
-      "adhdParagraphs": []
+      "adhdContent": []
     },
     {
       "id": 2,
+      "note": "Standard subsection — bullets in ADHD mode.",
       "title": "How Coaching Works",
-      "defaultParagraphs": [
-        "Think of sessions as a weekly Sorting Sync.",
-        "We look at what's on your table: what's in progress, what's stalled, and what's been sitting in the corner since January. Together we break the 100-page instruction manual into five-minute micro-builds. We take stock of your mental energy, decide which bag to open first, and figure out what's actually blocking the build — not what <em>should</em> be blocking it.",
-        "I'm not there to judge the mess on the floor. I'm there to help you find the techniques that work for <em>your</em> brain."
+      "defaultContent": [
+        { "type": "text", "text": "Think of sessions as a weekly Sorting Sync." },
+        { "type": "text", "text": "We look at what's on your table: what's in progress, what's stalled, and what's been sitting in the corner since January. Together we break the 100-page instruction manual into five-minute micro-builds. We take stock of your mental energy, decide which bag to open first, and figure out what's actually blocking the build — not what <em>should</em> be blocking it." },
+        { "type": "text", "text": "I'm not there to judge the mess on the floor. I'm there to help you find the techniques that work for <em>your</em> brain." }
       ],
-      "adhdParagraphs": [
-        "We break the overwhelming stuff into five-minute micro-builds",
-        "We figure out what's <em>actually</em> blocking you — not what should be blocking you",
-        "We look at what's in progress, what's stalled, and what's been sitting in the corner since January",
-        "No judgment. Just the right techniques for <em>your</em> brain"
+      "adhdContent": [
+        { "type": "bullet", "text": "We break the overwhelming stuff into five-minute micro-builds" },
+        { "type": "bullet", "text": "We figure out what's <em>actually</em> blocking you — not what should be blocking you" },
+        { "type": "bullet", "text": "We look at what's in progress, what's stalled, and what's been sitting in the corner since January" },
+        { "type": "bullet", "text": "No judgment. Just the right techniques for <em>your</em> brain" }
       ]
     },
     {
       "id": 3,
+      "note": "Standard subsection — emoji bullets in ADHD mode (emoji act as the visual marker, CSS hides the default LEGO stud).",
       "title": "What Coaching Can and Can't Do",
-      "defaultParagraphs": [
-        "A coach is a precision tool — like a brick separator. It makes the hard parts easier. It doesn't do the snapping for you.",
-        "Coaching can help you find a better way to organize the pieces. It won't replace therapy, and it won't replace medication. We can't change the pieces you were given — it's a non-standard set — but we can change the way you arrange them.",
-        "What coaching <em>will</em> do is help you figure out an arrangement that actually works — and help you stop waiting for the \"right\" moment to start."
+      "defaultContent": [
+        { "type": "text", "text": "A coach is a precision tool — like a brick separator. It makes the hard parts easier. It doesn't do the snapping for you." },
+        { "type": "text", "text": "Coaching can help you find a better way to organize the pieces. It won't replace therapy, and it won't replace medication. We can't change the pieces you were given — it's a non-standard set — but we can change the way you arrange them." },
+        { "type": "text", "text": "What coaching <em>will</em> do is help you figure out an arrangement that actually works — and help you stop waiting for the \"right\" moment to start." }
       ],
-      "adhdParagraphs": [
-        "✅ Help you understand your patterns",
-        "✅ Helps you stop waiting for the \"right\" moment to start",
-        "✅ Changes the way you arrange what you've got",
-        "❌ Won't diagnose mental health conditions",
-        "❌ Won't replace medication",
-        "❌ Can't  the pieces you were given",
-        "❌ Can't help you win the lottery"
+      "adhdContent": [
+        { "type": "bullet", "text": "✅ Helps you find a better way to organize the pieces" },
+        { "type": "bullet", "text": "✅ Helps you stop waiting for the \"right\" moment to start" },
+        { "type": "bullet", "text": "✅ Changes the way you arrange what you've got" },
+        { "type": "bullet", "text": "❌ Won't replace therapy" },
+        { "type": "bullet", "text": "❌ Won't replace medication" },
+        { "type": "bullet", "text": "❌ Can't change the pieces you were given" },
+        { "type": "bullet", "text": "❌ Can't help you win the lottery" }
       ]
     },
     {
       "id": 4,
+      "note": "ADHD content is an image pair (TheirBuildOrder + MyBuildOrder2) — hardcoded in HTML. adhdContent here is ignored by the renderer. To edit the images or labels, update the HTML directly.",
       "title": "Adapt to the Way Your Brain Works",
-      "defaultParagraphs": [
-        "\"Just be more organized\" is like being told to build a castle without any baseplates. Technically possible. Deeply miserable. Not the point.",
-        "We don't force your brain through a linear 1-to-100 manual if you work better building the dragon first. We honor how your brain actually moves — hyperfocus, creative leaps, nonlinear everything — and design your Build Station around that. The pieces you need most? Always within reach."
+      "defaultContent": [
+        { "type": "text", "text": "\"Just be more organized\" is like being told to build a castle without any baseplates. Technically possible. Deeply miserable. Not the point." },
+        { "type": "text", "text": "We don't force your brain through a linear 1-to-100 manual if you work better building the dragon first. We honor how your brain actually moves — hyperfocus, creative leaps, nonlinear everything — and design your Build Station around that. The pieces you need most? Always within reach." }
       ],
-      "adhdParagraphs": []
+      "adhdContent": []
     },
     {
       "id": 5,
-      "title": "Self-Awareness + Self-Compassion Come First",
-      "defaultParagraphs": [
-        "You step on a stray brick in the dark. You curse the brick. You turn on the light and see the mess. You curse yourself. You meant to put them away. You didn't.",
-        "Here's the thing — everyone leaves bricks out. Everyone. But for us, it never feels like a minor oversight or an understandable remnant after an exhausted day. It feels like proof. Proof that we are the mess, not the floor.",
-        "That's the part worth examining — not the brick, not even how the mess came to be — but the story we've been telling ourselves about what that means."
+      "note": "Broken subsection — switch flips but ADHD content never appears. adhdContent[0] is the amber reveal text shown only on the 2nd toggle attempt. Only the first item is used; additional items are ignored. Rendered as raw inline HTML inside a <p>, not a bullet.",
+      "title": "Why Self-Awareness + Self-Compassion Come First",
+      "defaultContent": [
+        { "type": "text", "text": "You step on a stray brick in the dark. You curse the brick. You turn on the light and see the mess. You curse yourself. You meant to put them away. You didn't." },
+        { "type": "text", "text": "Here's the thing — everyone leaves bricks out. Everyone. But for us, it never feels like a minor oversight or an understandable remnant after an exhausted day. It feels like proof. Proof that we are the mess, not the floor." },
+        { "type": "text", "text": "That's the part worth examining — not the brick, not even how the mess came to be — but the story we've been telling ourselves about what that means." }
       ],
-      "adhdParagraphs": [
-        "<em>\"Getting stuck isn't a character flaw.\"</em>"
+      "adhdContent": [
+        { "type": "text", "text": "<em>\"Getting stuck isn't a character flaw.\"</em>" }
       ]
     },
     {
       "id": 6,
+      "note": "Standard subsection — emoji bullets in ADHD mode (emoji act as the visual marker, CSS hides the default LEGO stud).",
       "title": "When Coaching Makes Sense",
-      "defaultParagraphs": [
-        "You're ready when the to-build pile is touching the ceiling and you're tired of just looking at the boxes. What used to bring joy now just brings dread.",
-        "You don't need more sets. You need a system to open the ones you already have.",
-        "Coaching is for the builder who's done waiting for the \"perfect\" moment — and is ready to see something on the shelf."
+      "defaultContent": [
+        { "type": "text", "text": "You're ready when the to-build pile is touching the ceiling and you're tired of just looking at the boxes. What used to bring joy now just brings dread." },
+        { "type": "text", "text": "You don't need more sets. You need a system to open the ones you already have." },
+        { "type": "text", "text": "Coaching is for the builder who's done waiting for the \"perfect\" moment — and is ready to see something on the shelf." }
       ],
-      "adhdParagraphs": [
-        " ",
-        "🧱 The to-build pile is touching the ceiling",
-        "📦 You're tired of just looking at the boxes",
-        "😶 What used to bring joy now just brings dread",
-        "🔧 You're not sure you're ready — but you're tired of waiting to feel ready"
+      "adhdContent": [
+        { "type": "bullet", "text": "🧱 The to-build pile is touching the ceiling" },
+        { "type": "bullet", "text": "📦 You're tired of just looking at the boxes" },
+        { "type": "bullet", "text": "😶 What used to bring joy now just brings dread" },
+        { "type": "bullet", "text": "🔧 You're not sure you're ready — but you're tired of waiting to feel ready" }
       ]
     }
   ]
