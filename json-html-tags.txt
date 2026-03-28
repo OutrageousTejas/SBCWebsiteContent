@@ -1,0 +1,23 @@
+Any HTML that's valid inside a `<p>` or `<li>` tag works, since that's where the JSON strings land. Practically speaking:
+
+**Emphasis & style**
+- `<em>text</em>` — italic
+- `<strong>text</strong>` — bold
+- `<em><strong>text</strong></em>` — bold italic
+
+**Inline structure**
+- `<br>` — line break within a paragraph
+- `<span style="color:#4a7a8a">text</span>` — inline color (use sparingly)
+
+**Special characters** — use these instead of raw characters to be safe:
+- `&amp;` → &
+- `&mdash;` → — (you're already using the literal `—` which also works fine in JSON)
+- `&ldquo;` / `&rdquo;` → " " (again, literal quotes work too)
+
+**What won't work:**
+- Block elements like `<p>`, `<div>`, `<ul>` — those are created by the JS renderer, not from JSON strings
+- Anything that needs to wrap multiple paragraphs — structural changes still require HTML edits
+
+**One gotcha with quotes in JSON:** If you need a literal `"` inside a string, escape it as `\"`. You're already doing this correctly in the existing JSON (e.g. `\"right\"` in §3 and §6).
+
+So in practice, `<em>` and `<strong>` cover 95% of what you'll need for copy editing.
