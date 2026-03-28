@@ -2,21 +2,25 @@
   "_comment": "Squirrel Brain Coaching — Coaching Section copy file. Edit text here, commit to GitHub, refresh SQS page to see changes. HTML structure/behavior changes still require editing the HTML file directly.",
 
   "sectionHeader": {
-    "title": "What Is ADHD Coaching?",
-    "subtitle": "A thousand colorful bricks. One big question: where do you start?"
+    "title": "ADHD Coaching?",
+    "subtitle": "A thousand colorful bricks. One puzzling question: why don't I start?"
   },
 
   "subsections": [
     {
       "id": 0,
-      "note": "No toggle — default content only. adhdContent is ignored by the renderer.",
+      "note": "Prologue, setting up the scene.",
       "title": "A View from the Rug",
       "defaultContent": [
-        { "type": "text", "text": "You're sitting on the floor surrounded by a thousand colorful bricks. You know exactly what you want to build — a perfect 1,000-piece masterpiece. Well, 997. You lost three pieces somewhere." },
-        { "type": "text", "text": "But you don't start. Not because you don't know how. Not because you don't want to. You just… sit there. Completely aware of everything you need to do, and completely unable to make yourself do the first thing." },
-        { "type": "text", "text": "This isn't laziness. It's a disconnect between knowing and doing — and it's one of the most disorienting parts of having an ADHD brain." }
+        { "type": "text", "text": "You’re sitting in the middle of the floor, surrounded by a thousand colorful bricks. You know exactly what you want to build—a majestic 1,254-piece masterpiece. (Well, 1,251. You lose three pieces somewhere.)<br>You have wanted to build, for weeks. You opened the box three times before. You decided today was the day." },
+        { "type": "text", "text": "But you don't start. Not because you don't know how. Not because you don’t want to. Duh.<br>But you just sit there… gazing elsewhere. Completely aware of everything you need to do, and yet completely unable to make yourself do it." },
+        { "type": "text", "text": "That gap, between knowing, wanting, and doing, is one of the most disorienting parts of ADHD. And it's exactly where coaching lives." }
       ],
-      "adhdContent": []
+      "adhdContent": [
+        { "type": "bullet", "text": "In an ADHD brain, the wiring between thinking and doing is frayed. Sometimes the spark carries; sometimes the wire stays cold, and rarely is the connection consistent." },
+        { "type": "bullet", "text": "It’s not a lack of willpower or intelligence. Most certainly not laziness. It’s a bio-mechanical failure in the delivery system of your own intention." },
+        { "type": "bullet", "text": "It’s frustrating. It's baffling. It’s invisible." }
+      ]
     },
     {
       "id": 1,
@@ -26,7 +30,10 @@
         { "type": "text", "text": "Coaching isn't someone building the set for you. It's having a Master Builder sit beside you on the rug." },
         { "type": "text", "text": "Therapy might explore <em>why</em> you're afraid of the Expert-level sets. Medication clears the clutter off the table so you can actually see the pieces. Coaching is the manual — written for your brain, by you. Not productivity hacks. Not glue. A sorting system you actually want to use." }
       ],
-      "adhdContent": []
+      "adhdContent": [
+
+        
+      ]
     },
     {
       "id": 2,
