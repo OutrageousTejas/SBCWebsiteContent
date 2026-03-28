@@ -30,7 +30,7 @@
         { "type": "text", "text": "ADHD Coaching is a bespoke partnership.<br>Bespoke, because each person with ADHD actually experiences different challenges and to different extents." },
         { "type": "text", "text": "It is a structured, ongoing relationship, focused on helping you understand better how your brain actually works. And build strategies together that work in <em>accordance</em> with it, not <em>despite</em> it." },
         { "type": "text", "text": "A coaching is the person who sits beside you on the rug. Not to build it for you. Not to tell you how to build it. To help you figure out what will help you move forward, and keep building." },
-        { "type": "text", "text": "Coaching works in conjunction with other modalities of ADHD support such as medication, therapy, or productivity systems. It does not compete with them, it does not replace them." }  
+        { "type": "text", "text": "Coaching works in conjunction with other forms of ADHD support such as medication, therapy, or productivity systems. It does not compete with them, it does not replace them." }  
       ],
       "adhdContent": [
         { "type": "bullet", "text": "↔️ADHD coaching closes the gap between knowing what to do and doing it — the defining frustration of ADHD." },
@@ -43,16 +43,15 @@
       "note": "May wish to add a tooltip for reflective-inquiry",
       "title": "A Different Type of Support",
       "defaultContent": [
-        { "type": "text", "text": "It helps to know how coaching differs from the other modalities of ADHD support." },
-        { "type": "text", "text": "<strong>Medication</strong> addresses the neurobiology directly. It clears the floor so you can begin to build. It does not teach you how to proceed next. <strong>Therapy</strong> works on emotional wounds and mental health challenges that often travel alongside ADHD (such as anxiety or depression). <strong>Productivity systems</strong> and <strong>life hacks</strong> often invite you to adapt your brain to someone else's methods. They tell you how to build, the way they did." }, 
-        { "type": "text", "text": "<strong>Medication</strong> addresses the neurobiology directly. It clears the floor so you can begin to build. It does not teach you how to proceed next.<br><strong>Therapy</strong> works on emotional wounds and mental health challenges that often travel alongside ADHD (such as anxiety or depression).<br><strong>Productivity systems</strong> and <strong>life hacks</strong> often invite you to adapt your brain to someone else's methods. They tell you how to build, the way they did." },
+        { "type": "text", "text": "It helps to know how coaching differs from the other ADHD support modalities." },
+        { "type": "text", "text": "<strong>Medication</strong> addresses the neurobiology directly. It clears the floor so you can begin to build. It does not teach you how to proceed next. <strong>Therapy</strong> works on emotional wounds and mental health challenges that often travel alongside ADHD (such as anxiety or depression). <strong>Productivity systems</strong> or <strong>life hacks</strong> often invite you to adapt your brain to someone else's methods. They tell you how to build, the way they did." }, 
         { "type": "text", "text": "<strong>Traditional life coaching</strong> comes close in similarities of <em>reflective-inquiry</em>. However, <strong>ADHD Coaching</strong> is rooted in the neurobiology of the ADHD brain. It acknowledges the ADHD brain is fundamentally different in its operation of regions that affect motivation, focus, and self-regulation." }
       ],
       "adhdContent": [
         { "type": "bullet", "text": "◾Medication addresses biology" },
         { "type": "bullet", "text": "◾Therapy heals emotional wounds" },
-        { "type": "bullet", "text": "◾Productivity tools invite you to adapt your brain to a particular methodology" },
-        { "type": "bullet", "text": "◾ADHD Coaching is grounded in ADHD brain science and focuses on execution" } 
+        { "type": "bullet", "text": "◾Productivity tools invite you to adapt your brain to particular techniques" },
+        { "type": "bullet", "text": "◾ADHD Coaching is grounded in ADHD brain science and focuses on execution." } 
       ]
     },   
     {
