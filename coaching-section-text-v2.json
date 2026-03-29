@@ -89,12 +89,14 @@
       "note": "Broken subsection — switch flips but ADHD content never appears. adhdContent[0] is the amber reveal text shown only on the 2nd toggle attempt. Only the first item is used; additional items are ignored. Rendered as raw inline HTML inside a <p>, not a bullet.",
       "title": "Why Self-Awareness + Self-Compassion Come First",
       "defaultContent": [
-        { "type": "text", "text": "You step on a stray brick in the dark. You curse the brick. You turn on the light and see the mess. You curse yourself. You meant to put them away. You didn't." },
-        { "type": "text", "text": "Here's the thing — everyone leaves bricks out. Everyone. But for us, it never feels like a minor oversight or an understandable remnant after an exhausted day. It feels like proof. Proof that we are the mess, not the floor." },
-        { "type": "text", "text": "That's the part worth examining — not the brick, not even how the mess came to be — but the story we've been telling ourselves about what that means." }
+        { "type": "text", "text": "Most people arrive wanting to fix a problem. Or fix themselves." },
+        { "type": "text", "text": "That's not where we start." },
+        { "type": "text", "text": "We start with understanding. Because when every mistake immediately becomes \"<em>what's wrong with me?</em>\" — you don't get insight. You get noise." },
+        { "type": "text", "text": "Self-awareness helps you stay curious about what's happening — even when what's happening is frustrating. Self-compassion lets you take risks with new strategies without the weight of judgment, and recover from inevitable setbacks with grace." },
+        { "type": "text", "text": "This isn't self-love in a bumper-sticker kind of way. It's motivation built on earned self-respect." }
       ],
       "adhdContent": [
-        { "type": "text", "text": "<em>\"Getting stuck isn't a character flaw.\"</em>" }
+        { "type": "text", "text": "<em>Things will inevitably go wrong. Coaching helps you replace that inner critic with a curious observer</em>" }
       ]
     },
     {
