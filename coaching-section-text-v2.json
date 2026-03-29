@@ -58,8 +58,7 @@
       "note": "Standard subsection — bullets in ADHD mode.",
       "title": "How Coaching Works",
       "defaultContent": [
-         { "type": "text", "text": "Coaching is a conversation. A curious one."},
-         { "type": "text", "text": "At the start of the journey, there's excavation: mapping patterns, understanding your defaults, discovering strengths you draw on naturally."},
+         { "type": "text", "text": "Coaching is a conversation. A curious one.<br>At the start of the journey, there's excavation: mapping patterns, understanding your defaults, discovering strengths you draw on naturally."},
          { "type": "text", "text": "Then much of the session lives in questions. This is the part that surprises people. A coach doesn't hand you an action plan or efficiency hacks. The exploration is the work."},  
          { "type": "text", "text": "Between sessions, there's usually one specific commitment — not a to-do list. One thing, specific and small enough to actually be attempted. And if you don't follow through, no guilt. Just data. You're not expected to get it right. You're expected to stay in the process."}           
     ],
