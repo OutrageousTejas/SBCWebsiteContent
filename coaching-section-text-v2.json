@@ -12,12 +12,12 @@
       "note": "Prologue, setting up the scene.",
       "title": "Prologue: A View from the Rug",
       "defaultContent": [
-        { "type": "text", "text": "You’re sitting on the floor, surrounded by a thousand colorful bricks. You know exactly what you want to build — a 1,254-piece masterpiece. <em>(Well, 1,251. You lose three pieces somewhere.)</em>" },
+        { "type": "text", "text": "You’re sitting on the floor, surrounded by a thousand colorful bricks. You know exactly what you want to build — a 1,254-piece masterpiece. <em>(Well, 1,251. You lost three pieces somewhere.)</em>" },
         { "type": "text", "text": "You've wanted to build for weeks. You opened the box three times before. Today is the day! But you don't start. Not because you don't know how. Not because you don’t want to. Duh!<br>Yet you just sit there. Completely aware of everything you need to do, and yet completely unable to make yourself do it." },
         { "type": "text", "text": "That gap, between <em>knowing</em>, <em>wanting</em>, and <em>doing</em>, is one of the most disorienting parts of ADHD.<br>And it's exactly where coaching lives." }
       ],
       "adhdContent": [
-        { "type": "bullet", "text": "⚡In an ADHD brain, the wiring between <em>thinking</em> and <em>doing</em>  is  frayed. Sometimes the spark carries, sometimes not, and rarely is the connection consistent." },
+        { "type": "bullet", "text": "⚡In an ADHD brain, the wiring between <em>thinking</em> and <em>doing</em> is frayed. Sometimes the spark carries, sometimes not, and rarely is the connection consistent." },
         { "type": "bullet", "text": "⚡It's not a lack of willpower or intelligence. Most certainly not laziness. It’s a bio-mechanical failure in the delivery system of your own intention." },
         { "type": "bullet", "text": "⚡It’s frustrating. It's baffling. It’s invisible." }
       ]
@@ -27,7 +27,7 @@
       "note": "May wish to add a tooltip for bespoke",
       "title": "What Is ADHD Coaching?",
       "defaultContent": [
-        { "type": "text", "text": "ADHD Coaching is a bespoke partnership.<br>Bespoke, because each person with ADHD actually experiences different challenges and to different extents. It focuses on helping you understand better how your brain actually works. And build strategies that work in <em>accordance </em> with it, not <em>despite</em>  it." },
+        { "type": "text", "text": "ADHD Coaching is a bespoke partnership.<br>Bespoke, because each person with ADHD actually experiences different challenges, and to different extents. It focuses on helping you understand better how your brain actually works. And build strategies that work in <em>accordance </em> with it, not <em>despite</em>  it." },
         { "type": "text", "text": "A coach is the person who sits beside you on the rug. Not to build it for you. Not to tell you how to build it. To help you figure out what will help you move forward, and keep building." },
         { "type": "text", "text": "Coaching works in conjunction with other forms of ADHD support such as medication, therapy, or productivity systems. It does not compete with them, it does not replace them." }  
       ],
@@ -40,7 +40,7 @@
      {
       "id": 2,
       "note": "May wish to add a tooltip for reflective-inquiry",
-      "title": "A Different Type of Support",
+      "title": "A Different Kind of Support",
       "defaultContent": [
         { "type": "text", "text": "It helps to know how coaching differs from the other ADHD support modalities." },
         { "type": "text", "text": "<strong>Medication</strong> addresses the neurobiology directly. It clears the floor so you can begin to build. It does not teach you how to proceed next. <strong>Therapy</strong> works on emotional wounds and challenges that often travel alongside ADHD (such as anxiety or depression). <strong>Productivity systems</strong> or <strong>life hacks</strong> often invite you to adapt your brain to someone else's methods. They tell you how to build, the way they did." }, 
