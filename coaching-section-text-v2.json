@@ -13,7 +13,7 @@
       "title": "Prologue: A View from the Rug",
       "defaultContent": [
         { "type": "text", "text": "You’re sitting on the floor, surrounded by a thousand colorful bricks. You know exactly what you want to build — a 1,254-piece masterpiece. <em>(Well, 1,251. You lost three pieces somewhere.)</em>" },
-        { "type": "text", "text": "You've wanted to build for weeks. You opened the box three times before. Today is the day! But you don't start. You just sit there. Completely aware of everything you need to do, and yet completely unable to make yourself do it." },
+        { "type": "text", "text": "You've wanted to build for weeks. You opened the box three times before. Today is the day!<br>But you don't start. You just sit there. Completely aware of everything you need to do, and yet completely unable to make yourself do it." },
         { "type": "text", "text": "That gap, between <em>knowing</em> and <em>doing</em>, is one of the most disorienting parts of ADHD.<br>And it's exactly where coaching lives." }
       ],
       "adhdContent": [
@@ -73,10 +73,9 @@
       "note": "ADHD content is an image pair (TheirBuildOrder + MyBuildOrder2) — hardcoded in HTML. adhdContent here is ignored by the renderer. To edit the images or labels, update the HTML directly.",
       "title": "Adapt to the Way Your Brain Works",
       "defaultContent": [
-        { "type": "text", "text": "\"Make a list, and set a timer.\"<br>Much of the advice ADHD persons receive is built on the premise the problem is effort or organization. It isn't. It's a difference in neurobiology." },
-        { "type": "text", "text": "Research shows clear difference in ADHD brain's structure and functioning in regions that regulate <strong>activation</strong>: the ability to engage in tasks that don't carry an immediate reward. This isn't a character flaw. It's a biological wiring and operational difference."}, 
-        { "type": "text", "text": "Research also shows the ADHD brain thrives on <strong>i</strong>nterest, <strong>n</strong>ovelty, <strong>c</strong>hallenge, <strong>u</strong>rgency, and <strong>p</strong>assion (abbreviated:INCUP). So, we can be strategic in how we approach a task — using brain science, instead of a barrel of caffeine."},
-        { "type": "text", "text": "You may struggle to follow the linear instructions 1 to 12. But if building the cool parts first helps you get started, and stay interested, we explore that." }
+        { "type": "text", "text": "\"Make a list, and set a timer.\"<br>Much of the advice ADHD persons receive is built on the premise the problem is effort or organization. It isn't. It's a difference in neurobiology — specifically in the brain regions that govern activation: the ability to engage in tasks that don't offer an immediate reward." },
+        { "type": "text", "text": "Research shows the ADHD brain thrives on <strong>i</strong>nterest, <strong>n</strong>ovelty, <strong>c</strong>hallenge, <strong>u</strong>rgency, and <strong>p</strong>assion (abbreviated:INCUP). So, we can be strategic in approaching a task — using brain science, instead of a barrel of caffeine."},
+        { "type": "text", "text": "You might struggle to follow linear instructions 1 to 12. But if tackling the most intersting part first is what gets you started — that's not cheating. That's strategy." }
       ],
       "adhdContent": [
         { "type": "bullet", "text": "Strategically leverage INCUP: If you need to start with the fun parts first to stay interested, we do that."},
@@ -88,9 +87,7 @@
       "note": "Broken subsection — switch flips but ADHD content never appears. adhdContent[0] is the amber reveal text shown only on the 2nd toggle attempt. Only the first item is used; additional items are ignored. Rendered as raw inline HTML inside a <p>, not a bullet.",
       "title": "Why Self-Awareness + Self-Compassion Come First",
       "defaultContent": [
-        { "type": "text", "text": "Most people arrive wanting to fix a problem. Or fix themselves." },
-        { "type": "text", "text": "That's not where we start." },
-        { "type": "text", "text": "We start with understanding. Because when every mistake immediately becomes \"<em>what's wrong with me?</em>\" — you don't get insight. You get noise." },
+        { "type": "text", "text": "Most people arrive wanting to fix a problem. Or fix themselves. That's not where we start.<br>We start with understanding. Because when every mistake immediately becomes <em>what's wrong with me</em>" — you don't get insight. You get noise." },
         { "type": "text", "text": "Self-awareness helps you stay curious about what's happening — even when what's happening is frustrating. Self-compassion lets you take risks with new strategies without the weight of judgment, and recover from inevitable setbacks with grace." },
         { "type": "text", "text": "This isn't self-love in a bumper-sticker kind of way. It's motivation built on earned self-respect." }
       ],
