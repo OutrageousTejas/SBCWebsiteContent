@@ -60,12 +60,12 @@
       "defaultContent": [
         { "type": "text", "text": "If you've never been in a coaching relationship, it can sound vague.<br>\"We talk about your goals.\" Sure. But that describes approximately everything from a job interview to a fortune cookie.😊"},
         { "type": "text", "text": "Coaching is a conversation. A curious one, with lots of questions. Much of the session lives in inquiry, not instruction. This is the part that surprises people. A coach doesn't hand you an action plan or efficiency hacks. The questions are the work." },
-        { "type": "text", "text": "At the start, there's a lot of excavation: mapping patterns, understanding your defaults, discovering strengths you draw on naturally. Over time, the sessions shift. As awareness and understanding deepen, you start to notice and strategize by yourself."},
+        { "type": "text", "text": "At the start, there's a fair bit of excavation: mapping patterns, understanding your defaults, discovering strengths you draw on naturally. Over time, the sessions shift. As awareness and understanding deepen, you start to notice and strategize by yourself."},
         { "type": "text", "text": "That shift — from coach-assisted to increasingly self-directed — is the whole point. The coaching relationship is designed to make itself less necessary over time." }
       ],
       "adhdContent": [
         { "type": "bullet", "text": "The work happens through questions, not instructions" },
-        { "type": "bullet", "text": "Coaching surfaces your own insight; the coach doesn't had you a plan" },
+        { "type": "bullet", "text": "The coaching process surfaces your own insight; the coach doesn't had you a plan" },
         { "type": "bullet", "text": "Over time, coaching builds self-directed awareness — you start catching patterns earlier, needing less external scaffolding." }
       ]
     },
