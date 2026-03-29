@@ -2,8 +2,8 @@
   "_comment": "Squirrel Brain Coaching — Coaching Section copy file. Edit text here, commit to GitHub, refresh SQS page to see changes. HTML structure/behavior changes still require editing the HTML file directly.",
 
   "sectionHeader": {
-    "title": "ADHD Coaching",
-    "subtitle": "A thousand colorful bricks. One puzzling question."
+    "title": "What is ADHD Coaching?",
+    "subtitle": "A thousand colorful bricks. One puzzling ."
   },
 
   "subsections": [
@@ -13,8 +13,8 @@
       "title": "Prologue: A View from the Rug",
       "defaultContent": [
         { "type": "text", "text": "You’re sitting on the floor, surrounded by a thousand colorful bricks. You know exactly what you want to build — a 1,254-piece masterpiece. <em>(Well, 1,251. You lost three pieces somewhere.)</em>" },
-        { "type": "text", "text": "You've wanted to build for weeks. You opened the box three times before. Today is the day! But you don't start. Not because you don't know how. Not because you don’t want to. Duh!<br>Yet you just sit there. Completely aware of everything you need to do, and yet completely unable to make yourself do it." },
-        { "type": "text", "text": "That gap, between <em>knowing</em>, <em>wanting</em>, and <em>doing</em>, is one of the most disorienting parts of ADHD.<br>And it's exactly where coaching lives." }
+        { "type": "text", "text": "You've wanted to build for weeks. You opened the box three times before. Today is the day! But you don't start. You just sit there. Completely aware of everything you need to do, and yet completely unable to make yourself do it." },
+        { "type": "text", "text": "That gap, between <em>knowing</em> and <em>doing</em>, is one of the most disorienting parts of ADHD.<br>And it's exactly where coaching lives." }
       ],
       "adhdContent": [
         { "type": "bullet", "text": "⚡In an ADHD brain, the wiring between <em>thinking</em> and <em>doing</em> is frayed. Sometimes the spark carries, sometimes not, and rarely is the connection consistent." },
@@ -25,16 +25,16 @@
     {
       "id": 1,
       "note": "May wish to add a tooltip for bespoke",
-      "title": "What Is ADHD Coaching?",
+      "title": "ADHD Coaching",
       "defaultContent": [
-        { "type": "text", "text": "ADHD Coaching is a bespoke partnership.<br>Bespoke, because each person with ADHD actually experiences different challenges, and to different extents. It focuses on helping you understand better how your brain actually works. And build strategies that work in <em>accordance </em> with it, not <em>despite</em>  it." },
+        { "type": "text", "text": "ADHD Coaching is a bespoke partnership.<br>Bespoke, because each person with ADHD actually experiences different challenges, and to different extents. It focuses on helping you understand better how your brain actually works. And build strategies that work in accordance with it." },
         { "type": "text", "text": "A coach is a person who sits beside you on the rug. Not to build it for you. Not to tell you how to build it. To help you figure out what will help you move forward, and keep building." },
-        { "type": "text", "text": "Coaching works alongside other forms of ADHD support such as medication, therapy, or productivity systems. It does not compete with them, it does not replace them." }  
+        { "type": "text", "text": "And over time, as awareness and understanding deepen, you start to notice and strategize by yourself. That shift — from coach-assisted to increasingly self-directed — is the whole point. The coaching relationship is designed to make itself less necessary over time." }  
       ],
       "adhdContent": [
         { "type": "bullet", "text": "↔️ ADHD coaching closes the gap between knowing what to do and doing it — the defining frustration of ADHD." },
         { "type": "bullet", "text": "🪡 It is a custom-tailored partnership because each ADHD brain actually works differently and presents different challenges." },
-        { "type": "bullet", "text": "🔍 Coaching isn't telling you what to do or how to do it. It's helping you discover what will enable you do the work." }  
+        { "type": "bullet", "text": "🔍 Over time, coaching builds self-directed awareness — you start catching patterns earlier, needing less external scaffolding." }
       ]
     },
      {
@@ -42,9 +42,9 @@
       "note": "May wish to add a tooltip for reflective-inquiry",
       "title": "A Different Kind of Support",
       "defaultContent": [
-        { "type": "text", "text": "It helps to know how coaching differs from the other ADHD support modalities." },
-        { "type": "text", "text": "<strong>Medication</strong> addresses the neurobiology directly. It clears the floor so you can begin to build. It does not teach you how to proceed next. <strong>Therapy</strong> works on emotional wounds and challenges that often travel alongside ADHD (such as anxiety or depression). <strong>Productivity systems</strong> or <strong>life hacks</strong> often invite you to adapt your brain to someone else's methods. They tell you how to build, the way they did." }, 
-        { "type": "text", "text": "<strong>Traditional life coaching</strong> comes close in similarities of <em>reflective-inquiry</em>. However, <strong>ADHD coaching</strong> is rooted in the neurobiology of the ADHD brain. It acknowledges the ADHD brain is fundamentally different in its operation of regions that affect motivation, focus, and self-regulation." }
+        { "type": "text", "text": "Coaching works alongside other forms of ADHD support such as medication, therapy, or productivity systems. It does not replace them." },
+        { "type": "text", "text": "<strong>Medication</strong> addresses the neurobiology directly. It clears the floor so you can begin to build. It does not teach you how to proceed next. <strong>Therapy</strong> works on emotional wounds and challenges that often travel alongside ADHD. <strong>Productivity systems</strong> or <strong>life hacks</strong> often invite you to adapt your brain to someone else's methods. They tell you how to build, the way they did." }, 
+        { "type": "text", "text": "<strong>Traditional life coaching</strong> uses a similar reflective process — however, <strong>ADHD coaching</strong> is rooted in the neurobiology of the ADHD brain. It acknowledges the ADHD brain is fundamentally different in its operation of regions that affect motivation, focus, and self-regulation." }
       ],
       "adhdContent": [
         { "type": "bullet", "text": "◾Medication addresses neurobiology" },
@@ -58,16 +58,16 @@
       "note": "Standard subsection — bullets in ADHD mode.",
       "title": "How Coaching Works",
       "defaultContent": [
-        { "type": "text", "text": "If you've never been in a coaching relationship, it can sound vague.<br>\"We talk about your goals.\" Sure. But that describes approximately everything from a job interview to a fortune cookie.😊"},
-        { "type": "text", "text": "Coaching is a conversation. A curious one, with lots of questions. Much of the session lives in inquiry, not instruction. This is the part that surprises people. A coach doesn't hand you an action plan or efficiency hacks. The questions are the work." },
-        { "type": "text", "text": "At the start of the journey, there's excavation: mapping patterns, understanding your defaults, discovering strengths you draw on naturally. Over time, the sessions shift. As awareness and understanding deepen, you start to notice and strategize by yourself."},
-        { "type": "text", "text": "That shift — from coach-assisted to increasingly self-directed — is the whole point. The coaching relationship is designed to make itself less necessary over time." }
-      ],
+         { "type": "text", "text": "Coaching is a conversation. A curious one."},
+         { "type": "text", "text": "At the start of the journey, there's excavation: mapping patterns, understanding your defaults, discovering strengths you draw on naturally."},
+         { "type": "text", "text": "Then much of the session lives in questions. This is the part that surprises people. A coach doesn't hand you an action plan or efficiency hacks. The exploration is the work."},  
+         { "type": "text", "text": "Between sessions, there's usually one specific commitment — not a to-do list. One thing, specific and small enough to actually be attempted. And if you don't follow through, no guilt. Just data. You're not expected to get it right. You're expected to stay in the process."}           
+    ],
       "adhdContent": [
         { "type": "bullet", "text": "The work happens through inquiry, not instructions" },
         { "type": "bullet", "text": "The coaching process surfaces your own insight; the coach doesn't had you a plan" },
-        { "type": "bullet", "text": "Over time, coaching builds self-directed awareness — you start catching patterns earlier, needing less external scaffolding." }
-      ]
+        { "type": "bullet", "text": "Coaching isn't telling you what to do or how to do it. It's helping you discover what will enable you do the work." }        
+    ]
     },
     {
       "id": 4,
