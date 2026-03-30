@@ -85,7 +85,7 @@
     {
       "id": 5,
       "note": "Broken subsection — switch flips but ADHD content never appears. adhdContent[0] is the amber reveal text shown only on the 2nd toggle attempt. Only the first item is used; additional items are ignored. Rendered as raw inline HTML inside a <p>, not a bullet.",
-      "title": "Why Self-Awareness + Self-Compassion Come First",
+      "title": "Self-Awareness + Self-Compassion Come First",
       "defaultContent": [
         { "type": "text", "text": "Most people arrive wanting to fix a problem. Or fix themselves. That's not where we start.<br>We start with understanding. Because when every mistake immediately becomes \"<em>what's wrong with me</em>\" — you don't get insight. You get noise." },
         { "type": "text", "text": "Self-awareness helps you stay curious about what's happening — even when what's happening is frustrating. Self-compassion lets you take risks with new strategies without the weight of judgment, and recover from setbacks with grace." },
