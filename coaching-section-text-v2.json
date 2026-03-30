@@ -18,7 +18,7 @@
       ],
       "adhdContent": [
         { "type": "bullet", "text": "⚡In an ADHD brain, the wiring between <em>thinking</em> and <em>doing</em> is frayed. Sometimes the spark carries, sometimes not, and rarely is the connection consistent." },
-        { "type": "bullet", "text": "⚡It's not a lack of willpower or intelligence. Most certainly not laziness. It’s a bio-mechanical failure in the delivery system of your own intention." },
+        { "type": "bullet", "text": "⚡It's not a lack of willpower or intelligence. Certainly not laziness. It’s a bio-mechanical failure in the delivery system of your own intention." },
         { "type": "bullet", "text": "⚡It’s frustrating. It's baffling. It’s invisible." }
       ]
     },
@@ -32,7 +32,7 @@
         { "type": "text", "text": "Over time, as awareness and understanding deepen, you start to notice and strategize by yourself. That shift — from coach-assisted to increasingly self-directed — is the whole point. The coaching relationship is designed to make itself less necessary over time." }  
       ],
       "adhdContent": [
-        { "type": "bullet", "text": "↔️ ADHD coaching closes the gap between knowing what to do and doing it — the defining frustration of ADHD." },
+        { "type": "bullet", "text": "↔️ ADHD coaching closes the gap between wanting to and doing it — the defining frustration of ADHD." },
         { "type": "bullet", "text": "🪡 It is a custom-tailored partnership because each ADHD brain actually works differently and presents different challenges." },
         { "type": "bullet", "text": "🔍 Over time, coaching builds self-directed awareness — you start catching patterns earlier, needing less external scaffolding." }
       ]
@@ -47,10 +47,11 @@
         { "type": "text", "text": "<strong>Traditional life coaching</strong> uses a similar reflective process — however, <strong>ADHD coaching</strong> is rooted in the neurobiology of the ADHD brain. It acknowledges the ADHD brain is fundamentally different in its operation of regions that affect motivation, focus, and self-regulation." }
       ],
       "adhdContent": [
-        { "type": "bullet", "text": "◾Medication addresses neurobiology" },
-        { "type": "bullet", "text": "◾Therapy heals emotional wounds" },
-        { "type": "bullet", "text": "◾Productivity tools invite your brain to use particular techniques" },
-        { "type": "bullet", "text": "◾ADHD Coaching is grounded in ADHD brain science and focuses on execution." } 
+        { "type": "bullet", "text": "◾Medication | Addresses neurobiology and enhances execution capability" },
+        { "type": "bullet", "text": "◾Therapy | Explores the past and heals emotional wounds" },
+        { "type": "bullet", "text": "◾Productivity tools | Often invite you to adapt to someone's else's system" },
+        { "type": "bullet", "text": "◾ADHD Coaching | Grounded in brain science and focuses on execution." },
+        { "type": "bullet", "text": "◾Voodoo | Unclear approach. Mixed results." },
       ]
     },   
     {
@@ -64,7 +65,7 @@
     ],
       "adhdContent": [
         { "type": "bullet", "text": "The work happens through inquiry, not instructions" },
-        { "type": "bullet", "text": "The coaching process surfaces your own insight; the coach doesn't had you a plan" },
+        { "type": "bullet", "text": "The coaching process surfaces your own insight; the coach doesn't hand you a plan" },
         { "type": "bullet", "text": "Coaching isn't telling you what to do or how to do it. It's helping you discover what will enable you do the work." }        
     ]
     },
@@ -106,7 +107,7 @@
       ],
       "adhdContent": [
         { "type": "bullet", "text": "✅ Readiness isn’t about having your life together. It's simply being curious enough to try a different approach."},      
-        { "type": "bullet", "text": "✅ For teens, adults, and parents, it’s often where the frustration has somewhere useful to go." },        
+        { "type": "bullet", "text": "✅ For teens, adults, and parents, it’s often where the frustration <em>finally</em> has somewhere useful to go." },        
         { "type": "bullet", "text": "❌ If you're in acute crisis, therapy is likely the better first step." }
       ]
     },    
