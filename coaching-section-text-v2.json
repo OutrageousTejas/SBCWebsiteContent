@@ -98,37 +98,34 @@
     {
       "id": 6,
       "note": "Standard subsection — emoji bullets in ADHD mode (emoji act as the visual marker, CSS hides the default LEGO stud).",
-      "title": "What Coaching Can and Can't Do",
+      "title": "When Coaching Makes Sense",
       "defaultContent": [
-        { "type": "text", "text": "A coach is a precision tool — like a brick separator. It makes the hard parts easier. It doesn't do the snapping for you." },
-        { "type": "text", "text": "Coaching can help you find a better way to organize the pieces. It won't replace therapy, and it won't replace medication. We can't change the pieces you were given — it's a non-standard set — but we can change the way you arrange them." },
-        { "type": "text", "text": "What coaching <em>will</em> do is help you figure out an arrangement that actually works — and help you stop waiting for the \"right\" moment to start." }
+        { "type": "text", "text": "Coaching tends to help most when you know what you want to do, but can't reliably make yourself do it." },
+        { "type": "text", "text": "It's also a natural fit at transition points:<br>◾ For adults: a new diagnosis, work, home, follow-through, or the private exhaustion of juggling everything while feeling scattered underneath. <br>◾ For teens and young adults: school demands, building independence, finding routines that stick.<br>◾ For parents: seeking support their child — and at times, a better understanding of how to navigate this for themselves." },
+        { "type": "text", "text": "You don't need to have it figured out to start. Feeling like a mess is usually the honest starting point anyway."},
+        { "type": "text", "text": "Coaching is a process, and it has limits. There will still be hard days. But as things become more understandable — and more workable — life tends to feel less like a constant uphill push. Not fixed. But lighter." }
       ],
       "adhdContent": [
-        { "type": "bullet", "text": "✅ Helps you find a better way to organize the pieces" },
-        { "type": "bullet", "text": "✅ Helps you stop waiting for the \"right\" moment to start" },
-        { "type": "bullet", "text": "✅ Changes the way you arrange what you've got" },
-        { "type": "bullet", "text": "❌ Won't replace therapy" },
-        { "type": "bullet", "text": "❌ Won't replace medication" },
-        { "type": "bullet", "text": "❌ Can't change the pieces you were given" },
-        { "type": "bullet", "text": "❌ Can't help you win the lottery" }
+        { "type": "bullet", "text": "✅ Readiness isn’t about having your life together or getting \"finally serious\". It's simply being curious to try a different approach."},
+        { "type": "bullet", "text": "✅ You're curious to understand what's happening behind the scenes in your brain." },        
+        { "type": "bullet", "text": "✅ For teens, adults, and parents, it’s often the first place where things start to make sense instead of just feeling frustrating." },        
+        { "type": "bullet", "text": "❌ When you are in significant emotional crisis. Therapy may be better suited to assist with that." },
       ]
-    },
-    
+    },    
     {
       "id": 7,
       "note": "Standard subsection — emoji bullets in ADHD mode (emoji act as the visual marker, CSS hides the default LEGO stud).",
-      "title": "When Coaching Makes Sense",
+      "title": "Blank",
       "defaultContent": [
-        { "type": "text", "text": "You're ready when the to-build pile is touching the ceiling and you're tired of just looking at the boxes. What used to bring joy now just brings dread." },
-        { "type": "text", "text": "You don't need more sets. You need a system to open the ones you already have." },
-        { "type": "text", "text": "Coaching is for the builder who's done waiting for the \"perfect\" moment — and is ready to see something on the shelf." }
+        { "type": "text", "text": "Blank." },
+        { "type": "text", "text": "Blank." },
+        { "type": "text", "text": "Blank." }
       ],
       "adhdContent": [
-        { "type": "bullet", "text": "🧱 The to-build pile is touching the ceiling" },
-        { "type": "bullet", "text": "📦 You're tired of just looking at the boxes" },
-        { "type": "bullet", "text": "😶 What used to bring joy now just brings dread" },
-        { "type": "bullet", "text": "🔧 You're not sure you're ready — but you're tired of waiting to feel ready" }
+        { "type": "bullet", "text": "🧱 Blank" },
+        { "type": "bullet", "text": "📦 Blank" },
+        { "type": "bullet", "text": "😶 Blank" },
+        { "type": "bullet", "text": "🔧 Blank" }
       ]
     }
   ]
