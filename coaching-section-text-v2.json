@@ -100,16 +100,14 @@
       "note": "Standard subsection — emoji bullets in ADHD mode (emoji act as the visual marker, CSS hides the default LEGO stud).",
       "title": "When Coaching Makes Sense",
       "defaultContent": [
-        { "type": "text", "text": "Coaching tends to help most when you know what you want to do, but can't reliably make yourself do it." },
-        { "type": "text", "text": "It's also a natural fit at transition points:<br>◾ For adults: a new diagnosis, work, home, follow-through, or the private exhaustion of juggling everything while feeling scattered underneath. <br>◾ For teens and young adults: school demands, building independence, finding routines that stick.<br>◾ For parents: seeking support their child — and at times, a better understanding of how to navigate this for themselves." },
-        { "type": "text", "text": "You don't need to have it figured out to start. Feeling like a mess is usually the honest starting point anyway."},
-        { "type": "text", "text": "Coaching is a process, and it has limits. There will still be hard days. But as things become more understandable — and more workable — life tends to feel less like a constant uphill push. Not fixed. But lighter." }
+        { "type": "text", "text": "Coaching makes sense when something isn't working, and you're curious to explore further. Feeling like a mess is usually the honest starting point anyway." },
+        { "type": "text", "text": "It's also a natural fit at transition points:<br>◾ For adults: a new diagnosis, work, home, follow-through, or the private exhaustion of coping while feeling scattered underneath. <br>◾ For teens and young adults: school demands, building independence, finding routines that stick.<br>◾ For parents: seeking support their child — and often, a better understanding of how to navigate this for themselves." },
+        { "type": "text", "text": "Coaching is a process, and it has limits. There will still be hard days. But with deeper understanding, life tends to feel more workable — less of a constant uphill push. Not effortless. But lighter." }
       ],
       "adhdContent": [
-        { "type": "bullet", "text": "✅ Readiness isn’t about having your life together or getting \"finally serious\". It's simply being curious to try a different approach."},
-        { "type": "bullet", "text": "✅ You're curious to understand what's happening behind the scenes in your brain." },        
-        { "type": "bullet", "text": "✅ For teens, adults, and parents, it’s often the first place where things start to make sense instead of just feeling frustrating." },        
-        { "type": "bullet", "text": "❌ When you are in significant emotional crisis. Therapy may be better suited to assist with that." }
+        { "type": "bullet", "text": "✅ Readiness isn’t about having your life together. It's simply being curious enough to try a different approach."},      
+        { "type": "bullet", "text": "✅ For teens, adults, and parents, it’s often where the frustration has somewhere useful to go." },        
+        { "type": "bullet", "text": "❌ If you're in acute crisis, therapy is likely the better first step." }
       ]
     },    
     {
