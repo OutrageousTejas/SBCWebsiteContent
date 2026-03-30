@@ -66,7 +66,7 @@
       "adhdContent": [
         { "type": "bullet", "text": "The work happens through inquiry, not instructions" },
         { "type": "bullet", "text": "The coaching process surfaces your own insight; the coach doesn't hand you a plan" },
-        { "type": "bullet", "text": "Coaching isn't telling you what to do or how to do it. It's helping you discover what will enable you do the work." }        
+        { "type": "bullet", "text": "Small, specific commitments between sessions. No guilt for missed actions." }        
     ]
     },
     {
@@ -110,22 +110,6 @@
         { "type": "bullet", "text": "✅ For teens, adults, and parents, it’s often where the frustration <em>finally</em> has somewhere useful to go." },        
         { "type": "bullet", "text": "❌ If you're in acute crisis, therapy is likely the better first step." }
       ]
-    },    
-    {
-      "id": 7,
-      "note": "Standard subsection — emoji bullets in ADHD mode (emoji act as the visual marker, CSS hides the default LEGO stud).",
-      "title": "Blank",
-      "defaultContent": [
-        { "type": "text", "text": "Blank." },
-        { "type": "text", "text": "Blank." },
-        { "type": "text", "text": "Blank." }
-      ],
-      "adhdContent": [
-        { "type": "bullet", "text": "🧱 Blank" },
-        { "type": "bullet", "text": "📦 Blank" },
-        { "type": "bullet", "text": "😶 Blank" },
-        { "type": "bullet", "text": "🔧 Blank" }
-      ]
-    }
+    } 
   ]
 }
