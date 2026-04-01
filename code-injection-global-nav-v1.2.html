@@ -1,0 +1,90 @@
+<!--
+  SQUIRREL BRAIN COACHING — Global Navigation
+  Location: Squarespace > Settings > Advanced > Code Injection > Footer
+  Version: 1.2
+  Changes from v1.1:
+  - Nav link "Home" renamed to "Explore" in Squarespace nav settings.
+    Explore → #mainroom-wrap (the navigation hub).
+    About   → #about-section (unchanged).
+    Contact → #mainroom-wrap (placeholder until Contact section built).
+
+  USAGE (in any section's chevron click handler):
+    window.SBC?.scrollToNext('my-section-wrap');
+-->
+<script>
+(function() {
+  'use strict';
+
+  // ── Nav link targets ──────────────────────────────────────────
+  // Keys are nav link text (lowercase). Values are section IDs.
+  // Update Contact value once Contact section is built into the page.
+  var NAV_LINKS = {
+    'explore': 'mainroom-wrap',  // navigation hub
+    'about':   'about-section',
+    'contact': 'mainroom-wrap'   // placeholder — update when Contact section exists
+  };
+
+  // ── Section discovery ─────────────────────────────────────────
+  // Collects all .sbc-section elements in DOM order.
+  // Used by SBC.scrollToNext() to find the next section.
+  function buildSectionList() {
+    return Array.from(document.querySelectorAll('.sbc-section'));
+  }
+
+  // ── Global SBC object ─────────────────────────────────────────
+  function initSBC() {
+    var sections = buildSectionList();
+
+    window.SBC = {
+      scrollToNext: function(currentId) {
+        // Re-query in case sections were added after init
+        sections = buildSectionList();
+        var currentIndex = sections.findIndex(function(el) {
+          return el.id === currentId;
+        });
+        var next = sections[currentIndex + 1];
+        if (next) {
+          next.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        } else {
+          window.scrollBy({ top: window.innerHeight, behavior: 'smooth' });
+        }
+      }
+    };
+  }
+
+  // ── Nav link wiring ───────────────────────────────────────────
+  // Intercepts header nav clicks and smooth-scrolls to section.
+  // Falls back to normal href navigation if section not found
+  // (handles case where nav link points to a different page).
+  function wireNavLinks() {
+    var links = document.querySelectorAll('header a, .header-nav a, nav a');
+    links.forEach(function(link) {
+      var text = link.textContent.trim().toLowerCase();
+      var targetId = NAV_LINKS[text];
+      if (!targetId) return;
+
+      link.addEventListener('click', function(e) {
+        var target = document.getElementById(targetId);
+        if (target) {
+          e.preventDefault();
+          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+        // If target not found, let default href navigate normally
+      });
+    });
+  }
+
+  // ── Init ─────────────────────────────────────────────────────
+  function init() {
+    initSBC();
+    wireNavLinks();
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+
+})();
+</script>

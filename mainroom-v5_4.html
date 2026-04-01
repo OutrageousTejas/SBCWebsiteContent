@@ -1,0 +1,840 @@
+<!--
+  SQUIRREL BRAIN COACHING — MAINROOM SECTION
+  Version: 5.4
+  Changes from v5.3:
+  - Blueprint hotspot NAV target updated from 'treehouse-wrap' to
+    'coaching-section' so clicking the blueprint (desktop hotspot
+    and mobile sticker) scrolls directly to the Coaching section.
+
+  Changes from v5.2 (v5.3):
+  - Walkie-talkie hotspot NAV target updated from 'treehouse-wrap' to
+    'contact-section' so clicking the walkie-talkie (desktop hotspot
+    and mobile sticker) scrolls directly to the Contact section.
+    Both desktop and mobile route through the same navigateTo('walkie')
+    call — single change covers both.
+
+  Changes from v5.1 (v5.2):
+  - Photo hotspot NAV target updated from 'treehouse-wrap' to
+    'about-section' so clicking the photo/notebook in Mainroom
+    scrolls directly to the About Me section.
+
+  ARCHITECTURE
+  ─────────────
+  Desktop: hero image + position:absolute hotspots inside wrap.
+           Matches Treehouse pattern exactly — no body-moving needed.
+           Hotspots always visible. Section clipped by overflow:hidden.
+
+  Mobile:  Sticker grid over position:sticky blurred background.
+           Chevron moved to body (fixed position, always visible
+           while Mainroom section is scrolled into view).
+
+  FONT REQUIREMENT
+  ────────────────
+  Fredoka One must be loaded in Code Injection > Header:
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&display=swap" rel="stylesheet">
+-->
+
+<style>
+
+/* ─── SECTION BASE ───────────────────────────────────────────── */
+.mainroom-section {
+  position: relative;
+  width: 100vw;
+  height: 100dvh;
+  overflow: hidden;
+  background: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.mainroom-img {
+  position: absolute;
+  height: 100%;
+  width: auto;
+  max-width: none !important;
+  left: 50%;
+  top: 0;
+  transform: translateX(-50%);
+  display: block;
+  user-select: none;
+  pointer-events: none;
+}
+
+/* ─── DESKTOP: hotspots ──────────────────────────────────────── */
+.hotspot {
+  position: absolute;
+  cursor: pointer;
+  border-radius: 50%;
+  transition: background 0.3s ease, box-shadow 0.3s ease;
+}
+
+.hotspot::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+.hotspot:hover::before {
+  opacity: 1;
+  background: rgba(180, 230, 255, 0.45);
+  box-shadow: inset 0 0 30px rgba(180, 230, 255, 0.5),
+              0 0 40px 16px rgba(180, 230, 255, 0.65);
+  filter: blur(6px);
+}
+
+#lamp-spot:hover::before {
+  background: rgba(255, 200, 80, 0.5);
+  box-shadow: inset 0 0 30px rgba(255, 200, 80, 0.5),
+              0 0 40px 16px rgba(255, 180, 50, 0.65);
+  filter: blur(6px);
+}
+
+#skylight-spot:hover::before {
+  background: rgba(135, 206, 235, 0.5);
+  box-shadow: inset 0 0 30px rgba(135, 206, 235, 0.5),
+              0 0 40px 16px rgba(135, 206, 235, 0.65);
+  filter: blur(6px);
+}
+
+@keyframes mrHotspotPulse {
+  0%, 100% {
+    background: transparent;
+    box-shadow: none;
+    filter: blur(6px);
+    opacity: 0;
+  }
+  50% {
+    background: rgba(180, 230, 255, 0.7);
+    box-shadow: inset 0 0 40px rgba(180, 230, 255, 0.8),
+                0 0 60px 24px rgba(180, 230, 255, 0.9);
+    filter: blur(6px);
+    opacity: 1;
+  }
+}
+
+.hotspot.pulsing::before {
+  animation: mrHotspotPulse 4s ease-in-out;
+}
+
+.tooltip {
+  position: absolute;
+  left: 50%;
+  bottom: 110%;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+  z-index: 200;
+}
+
+.tooltip.visible { opacity: 1; }
+
+/* ─── OVERLAYS (desktop easter eggs) ────────────────────────── */
+#lamp-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.52);
+  opacity: 0;
+  pointer-events: none;
+  z-index: 50;
+  transition: opacity 0.6s ease;
+}
+
+#lamp-overlay.dimmed { opacity: 1; }
+
+#rain-overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 60;
+  opacity: 0;
+  overflow: hidden;
+  transition: opacity 0.8s ease;
+}
+
+#rain-overlay.raining { opacity: 1; }
+
+.raindrop {
+  position: absolute;
+  width: 2px;
+  background: linear-gradient(to bottom, transparent, #89b4d4);
+  border-radius: 2px;
+  animation: mrRainFall linear infinite;
+  opacity: 0.7;
+}
+
+@keyframes mrRainFall {
+  0%   { transform: translateY(-100px); opacity: 0.7; }
+  100% { transform: translateY(110%);   opacity: 0.3; }
+}
+
+/* ─── PAGE TRANSITION ────────────────────────────────────────── */
+#mainroom-transition {
+  position: fixed;
+  inset: 0;
+  background: #3d1f00;
+  opacity: 0;
+  pointer-events: none;
+  z-index: 10000;
+  transition: opacity 0.7s ease;
+}
+
+#mainroom-transition.active {
+  opacity: 1;
+  pointer-events: all;
+}
+
+/* ─── ENTRANCE BOUNCE ────────────────────────────────────────── */
+@keyframes mrEntranceBounce {
+  0%   { transform: translateY(0);     }
+  20%  { transform: translateY(-10px); }
+  40%  { transform: translateY(0);     }
+  60%  { transform: translateY(-5px);  }
+  80%  { transform: translateY(0);     }
+  100% { transform: translateY(0);     }
+}
+
+.mainroom-section.bounce {
+  animation: mrEntranceBounce 0.8s ease;
+}
+
+/* ─── SCROLL HINT CHEVRON ────────────────────────────────────── */
+#mr-scroll-hint {
+  position: fixed;
+  bottom: clamp(12px, 2dvh, 20px);
+  left: 50%;
+  transform: translateX(-50%);
+  cursor: pointer;
+  z-index: 9999;
+  opacity: 0;
+  pointer-events: none;
+  background: none;
+  transition: opacity 0.5s ease;
+  animation: mrBounceChevron 1.5s ease infinite;
+}
+
+#mr-scroll-hint svg {
+  width: clamp(24px, 3.5vw, 36px);
+  height: auto;
+  filter: drop-shadow(0 2px 3px rgba(0,0,0,0.6));
+}
+
+#mr-scroll-hint.visible {
+  opacity: 1;
+  pointer-events: all;
+}
+
+@keyframes mrBounceChevron {
+  0%, 100% { transform: translateX(-50%) translateY(0);   }
+  50%       { transform: translateX(-50%) translateY(5px); }
+}
+
+/* ─── Hide mobile-only elements on desktop ───────────────────── */
+@media (min-width: 768px) {
+  .sticker-grid { display: none !important; }
+  #mr-mobile-bg { display: none !important; }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   MOBILE LAYOUT
+   ═══════════════════════════════════════════════════════════════ */
+@media (max-width: 767px) {
+
+  .mainroom-section {
+    width: 100vw;
+    height: auto;
+    min-height: 100dvh;
+    overflow: visible;
+    display: block;
+    background: #ffffff;
+    padding: 0 !important;
+    margin-left: calc(-50vw + 50%) !important;
+  }
+
+  .mainroom-img  { display: none; }
+  #lamp-overlay,
+  #rain-overlay  { display: none !important; }
+  .hotspot       { display: none !important; }
+
+  #mr-mobile-bg {
+    position: sticky;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100dvh;
+    margin-left: calc(-50vw + 50%);
+    background-image: url('https://images.squarespace-cdn.com/content/69ba3296dd8f7f351597cdb9/9d9c3d83-f85b-497e-a792-d7d592c1f27c/MainRoomSectionElementsRemovedBookCase.webp');
+    background-size: cover;
+    background-position: center center;
+    opacity: 0.55;
+    filter: blur(2px);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .sticker-grid {
+    position: relative;
+    z-index: 10;
+    width: 100%;
+    margin-top: -100dvh;
+    padding: 12dvh 16px 48px;
+    display: grid !important;
+    grid-template-columns: 1fr 1fr;
+    gap: 0 8px;
+    align-items: start;
+    touch-action: pan-y;
+  }
+
+  .sticker-cell {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
+    padding: 8px 4px 16px;
+    margin-top: 0;
+  }
+
+  .sticker-cell:nth-child(even) { margin-top: 40px; }
+
+  .sticker-img-wrap {
+    width: 110px;
+    height: 110px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    filter:
+      drop-shadow(0 6px 16px rgba(0,0,0,0.55))
+      drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+    transition: transform 0.2s ease, filter 0.2s ease;
+  }
+
+  .sticker-cell:active .sticker-img-wrap {
+    transform: scale(0.94);
+    filter:
+      drop-shadow(0 3px 8px rgba(0,0,0,0.5))
+      drop-shadow(0 1px 2px rgba(0,0,0,0.3));
+  }
+
+  .sticker-img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+    filter: url(#sticker-outline);
+    user-select: none;
+    -webkit-user-drag: none;
+  }
+
+  .sticker-label {
+    margin-top: 8px;
+    font-family: 'Fredoka One', cursive;
+    font-size: clamp(0.8rem, 3.5vw, 0.95rem);
+    color: #fff8ee;
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    text-shadow:
+      0 1px 4px rgba(0,0,0,0.9),
+      0 0 12px rgba(0,0,0,0.7);
+    line-height: 1.2;
+  }
+}
+
+.svg-filters { position: absolute; width: 0; height: 0; overflow: hidden; }
+
+</style>
+
+<!-- SVG white-outline filter for sticker images -->
+<svg class="svg-filters" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <filter id="sticker-outline" color-interpolation-filters="sRGB"
+            x="-12%" y="-12%" width="124%" height="124%">
+      <feMorphology in="SourceAlpha" operator="dilate" radius="5" result="expanded"/>
+      <feFlood flood-color="#ffffff" result="white"/>
+      <feComposite in="white" in2="expanded" operator="in" result="outline"/>
+      <feMerge>
+        <feMergeNode in="outline"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+</svg>
+
+<div id="mainroom-wrap" class="mainroom-section sbc-section">
+
+  <!-- Utility divs live inside #mainroom-wrap so they don't pollute
+       the DOM sibling chain between Treehouse and Mainroom.
+       All are position:fixed so visual behavior is unchanged. -->
+
+  <!-- Page transition overlay -->
+  <div id="mainroom-transition"></div>
+
+  <!-- Version badge: keep visible until hotspot calibration is signed off -->
+  <div id="mr-version-badge" style="
+    position: fixed;
+    bottom: 8px;
+    right: 8px;
+    background: rgba(0,0,0,0.65);
+    color: #fff;
+    font-family: monospace;
+    font-size: 11px;
+    padding: 3px 8px;
+    border-radius: 4px;
+    z-index: 99999;
+    pointer-events: none;
+  ">MR v5.4</div>
+
+  <!-- Chevron: JS moves to body for reliable fixed positioning.
+       Starts here so it doesn't pollute the sibling chain. -->
+  <div id="mr-scroll-hint">
+    <svg viewBox="0 0 24 14" xmlns="http://www.w3.org/2000/svg">
+      <polyline points="2,2 12,12 22,2" fill="none" stroke="white"
+                stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </div>
+
+  <!-- Mobile sticky background (hidden on desktop) -->
+  <div id="mr-mobile-bg"></div>
+
+  <!-- Desktop hero image -->
+  <img class="mainroom-img" id="mainroom-img"
+       src="https://images.squarespace-cdn.com/content/69ba3296dd8f7f351597cdb9/1054b7cb-f54d-4a5b-b70a-47377924068f/MainroomSectionUp.webp"
+       alt="Squirrel Brain Coaching — The Treehouse Interior" />
+
+  <div id="lamp-overlay"></div>
+  <div id="rain-overlay"></div>
+
+  <!-- Desktop hotspots -->
+  <div class="hotspot" id="photo-spot">
+    <div class="tooltip" id="photo-tip">📓 About Me</div>
+  </div>
+  <div class="hotspot" id="blueprint-spot">
+    <div class="tooltip" id="blueprint-tip">📐 ADHD Coaching</div>
+  </div>
+  <div class="hotspot" id="walkie-spot">
+    <div class="tooltip" id="walkie-tip">📻 Contact Me</div>
+  </div>
+  <div class="hotspot" id="cubby-spot">
+    <div class="tooltip" id="cubby-tip">📦 Resources</div>
+  </div>
+  <div class="hotspot" id="bookcase-spot">
+    <div class="tooltip" id="bookcase-tip">🔬 ADHD Science</div>
+  </div>
+  <div class="hotspot" id="calendar-spot">
+    <div class="tooltip" id="calendar-tip">📅 Schedule a Session</div>
+  </div>
+  <div class="hotspot" id="lamp-spot">
+    <div class="tooltip" id="lamp-tip">💡 Toggle Light</div>
+  </div>
+  <div class="hotspot" id="skylight-spot">
+    <div class="tooltip" id="skylight-tip">🌧️ Change the Weather</div>
+  </div>
+  <div class="hotspot" id="back-spot">
+    <div class="tooltip" id="back-tip">🌳 Back Outside</div>
+  </div>
+
+  <!-- Mobile sticker grid -->
+  <div class="sticker-grid" id="sticker-grid">
+
+    <div class="sticker-cell" data-target="about" role="button" tabindex="0">
+      <div class="sticker-img-wrap">
+        <img class="sticker-img"
+             src="https://images.squarespace-cdn.com/content/69ba3296dd8f7f351597cdb9/1f031976-cc17-458b-99f7-8be8d5e1723a/PhotoSticker.webp"
+             alt="About Me" />
+      </div>
+      <div class="sticker-label">About Me</div>
+    </div>
+
+    <div class="sticker-cell" data-target="contact" role="button" tabindex="0">
+      <div class="sticker-img-wrap">
+        <img class="sticker-img"
+             src="https://images.squarespace-cdn.com/content/69ba3296dd8f7f351597cdb9/83f39168-6f9c-4709-a6b1-55d41db28e8f/WalkieTalkieSticker.webp"
+             alt="Contact Me" />
+      </div>
+      <div class="sticker-label">Contact Me</div>
+    </div>
+
+    <div class="sticker-cell" data-target="science" role="button" tabindex="0">
+      <div class="sticker-img-wrap">
+        <img class="sticker-img"
+             src="https://images.squarespace-cdn.com/content/69ba3296dd8f7f351597cdb9/32e2ed0b-eb79-48e9-a444-6a55c0238c5a/TallBookcaseSticker.webp"
+             alt="ADHD Science" />
+      </div>
+      <div class="sticker-label">ADHD Science</div>
+    </div>
+
+    <div class="sticker-cell" data-target="resources" role="button" tabindex="0">
+      <div class="sticker-img-wrap">
+        <img class="sticker-img"
+             src="https://images.squarespace-cdn.com/content/69ba3296dd8f7f351597cdb9/4bc55853-c21b-4eab-b1fa-f00d171e3724/SmallBookcaseSticker.webp"
+             alt="Resources" />
+      </div>
+      <div class="sticker-label">Resources</div>
+    </div>
+
+    <div class="sticker-cell" data-target="coaching" role="button" tabindex="0">
+      <div class="sticker-img-wrap">
+        <img class="sticker-img"
+             src="https://images.squarespace-cdn.com/content/69ba3296dd8f7f351597cdb9/8ed463d8-9058-4e24-bdbe-0ef43b279b6a/BlueprintStickerNoDotted.webp"
+             alt="Coaching Tools" />
+      </div>
+      <div class="sticker-label">Coaching Tools</div>
+    </div>
+
+    <div class="sticker-cell" data-target="schedule" role="button" tabindex="0">
+      <div class="sticker-img-wrap">
+        <img class="sticker-img"
+             src="https://images.squarespace-cdn.com/content/69ba3296dd8f7f351597cdb9/388519c7-eba5-4dd2-a36d-12585a1e40cd/CalendarSticker.webp"
+             alt="Schedule" />
+      </div>
+      <div class="sticker-label">Schedule</div>
+    </div>
+
+    <!-- TEST CELLS: remove after overflow scroll test -->
+    <div class="sticker-cell" data-target="about">
+      <div class="sticker-img-wrap">
+        <img class="sticker-img"
+             src="https://images.squarespace-cdn.com/content/69ba3296dd8f7f351597cdb9/83f39168-6f9c-4709-a6b1-55d41db28e8f/WalkieTalkieSticker.webp"
+             alt="Test 1" />
+      </div>
+      <div class="sticker-label">Test 1</div>
+    </div>
+    <div class="sticker-cell" data-target="about">
+      <div class="sticker-img-wrap">
+        <img class="sticker-img"
+             src="https://images.squarespace-cdn.com/content/69ba3296dd8f7f351597cdb9/388519c7-eba5-4dd2-a36d-12585a1e40cd/CalendarSticker.webp"
+             alt="Test 2" />
+      </div>
+      <div class="sticker-label">Test 2</div>
+    </div>
+    <div class="sticker-cell" data-target="about">
+      <div class="sticker-img-wrap">
+        <img class="sticker-img"
+             src="https://images.squarespace-cdn.com/content/69ba3296dd8f7f351597cdb9/8ed463d8-9058-4e24-bdbe-0ef43b279b6a/BlueprintStickerNoDotted.webp"
+             alt="Test 3" />
+      </div>
+      <div class="sticker-label">Test 3</div>
+    </div>
+    <!-- END TEST CELLS -->
+
+    <!-- Back: placeholder until real sticker is ready -->
+    <div class="sticker-cell" data-target="back" role="button" tabindex="0"
+         style="grid-column:1/-1; align-items:center; margin-top:0;">
+      <div class="sticker-img-wrap" style="width:auto;height:auto;">
+        <div style="padding:10px 28px;background:#ffffff;border:2px solid #3d1f00;
+                    border-radius:6px;font-family:'Fredoka One',cursive;font-size:16px;
+                    color:#3d1f00;letter-spacing:0.05em;">← BACK</div>
+      </div>
+      <div class="sticker-label">Back Outside</div>
+    </div>
+
+  </div><!-- /sticker-grid -->
+
+</div><!-- /mainroom-wrap -->
+
+<script>
+(function() {
+  'use strict';
+
+  const IMG_W = 1922;
+  const IMG_H = 2048;
+  const BREAKPOINT = 768;
+  const isMobile = () => window.innerWidth < BREAKPOINT;
+
+  // Navigation — wired as sections are built
+  const NAV = {
+    photo:     { scroll: 'about-section',   url: '/' },
+    blueprint: { scroll: 'coaching-section', url: '/' },  // ✅ v5.4: wired to Coaching section
+    walkie:    { scroll: 'contact-section',  url: '/' },  // ✅ v5.3: wired to Contact section
+    cubby:     { scroll: 'treehouse-wrap',  url: '/' },
+    bookcase:  { scroll: 'treehouse-wrap',  url: '/' },
+    calendar:  { scroll: 'treehouse-wrap',  url: '/' },
+    back:      { scroll: 'treehouse-wrap',  url: '/' }
+  };
+
+  const COORDS = {
+    photo:     { x: 530,  y: 880  },
+    calendar:  { x: 873,  y: 710  },
+    walkie:    { x: 1230, y: 1064 },
+    bookcase:  { x: 1719, y: 965  },
+    cubby:     { x: 958,  y: 1193 },
+    blueprint: { x: 703,  y: 1500 },
+    lamp:      { x: 336,  y: 1123 },
+    skylight:  { x: 624,  y: 348  },
+    back:      { x: 115,  y: 1900 }
+  };
+
+  const SIZES = {
+    photo:     [280, 260],
+    calendar:  [360, 340],
+    walkie:    [160, 240],
+    bookcase:  [240, 560],
+    cubby:     [260, 220],
+    blueprint: [340, 200],
+    lamp:      [100,  80],
+    skylight:  [180, 180],
+    back:      [180, 160]
+  };
+
+  // ── Chevron: move to body for reliable position:fixed ─────────
+  // Starts inside #mainroom-wrap (clean sibling chain), JS moves
+  // it to body so position:fixed works correctly in Fluid Engine.
+  const scrollHint = document.getElementById('mr-scroll-hint');
+  if (scrollHint) document.body.appendChild(scrollHint);
+
+  // ── Hotspot positioning ───────────────────────────────────────
+  function positionHotspots() {
+    if (isMobile()) return;
+
+    const img  = document.getElementById('mainroom-img');
+    const wrap = document.getElementById('mainroom-wrap');
+    if (!img || !wrap) return;
+
+    const imgRect  = img.getBoundingClientRect();
+    const wrapRect = wrap.getBoundingClientRect();
+    if (imgRect.height === 0) return;
+
+    const scale   = imgRect.height / IMG_H;
+    const offsetX = imgRect.left   - wrapRect.left;
+    const offsetY = imgRect.top    - wrapRect.top;
+
+    Object.keys(COORDS).forEach(key => {
+      const spot = document.getElementById(key + '-spot');
+      if (!spot) return;
+
+      const cx = offsetX + COORDS[key].x * scale;
+      const cy = offsetY + COORDS[key].y * scale;
+      const w  = SIZES[key][0] * scale;
+      const h  = SIZES[key][1] * scale;
+
+      spot.style.left   = (cx - w / 2) + 'px';
+      spot.style.top    = (cy - h / 2) + 'px';
+      spot.style.width  = w + 'px';
+      spot.style.height = h + 'px';
+    });
+  }
+
+  // ── Chevron and entrance bounce ──────────────────────────────
+  const mainWrap  = document.getElementById('mainroom-wrap');
+  const sqSection = mainWrap?.closest('section') || mainWrap;
+  let hasBouncedOnce = false;
+
+  function updateChevron() {
+    if (!scrollHint || !sqSection) return;
+    const r = sqSection.getBoundingClientRect();
+    // Show chevron only while Mainroom is substantially in view:
+    // r.top < innerHeight: Mainroom has started entering from below
+    // r.top > -(innerHeight * 0.5): hasn't scrolled more than 50vh above top
+    const inView = r.top < window.innerHeight && r.top > -(window.innerHeight * 0.5);
+    scrollHint.classList.toggle('visible', inView);
+    if (inView && !hasBouncedOnce && mainWrap) {
+      hasBouncedOnce = true;
+      mainWrap.classList.add('bounce');
+      mainWrap.addEventListener('animationend',
+        () => mainWrap.classList.remove('bounce'), { once: true });
+    }
+  }
+
+  if (scrollHint) {
+    scrollHint.addEventListener('click', () => {
+      if (window.SBC) window.SBC.scrollToNext('mainroom-wrap');
+      else window.scrollBy({ top: window.innerHeight, behavior: 'smooth' });
+    });
+  }
+
+  // ── Rotating hotspot pulse ────────────────────────────────────
+  const PULSE_KEYS = ['photo','blueprint','walkie','cubby','bookcase','calendar'];
+  let pulsesPaused = false;
+  let pulseDeck = [];
+  let pulseTimeout = null;
+
+  function shuffleDeck() {
+    pulseDeck = [...PULSE_KEYS];
+    for (let i = pulseDeck.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [pulseDeck[i], pulseDeck[j]] = [pulseDeck[j], pulseDeck[i]];
+    }
+  }
+
+  function scheduleNextPulse() {
+    clearTimeout(pulseTimeout);
+    const delay = 2000 + Math.random() * 2000;
+    pulseTimeout = setTimeout(pulseRandomHotspot, delay);
+  }
+
+  function pulseRandomHotspot() {
+    if (pulsesPaused || isMobile()) {
+      scheduleNextPulse();
+      return;
+    }
+    if (pulseDeck.length === 0) shuffleDeck();
+
+    const key  = pulseDeck.pop();
+    const spot = document.getElementById(key + '-spot');
+
+    if (spot && !spot.matches(':hover')) {
+      spot.classList.add('pulsing');
+      spot.addEventListener('animationend', () => {
+        spot.classList.remove('pulsing');
+        scheduleNextPulse();
+      }, { once: true });
+    } else {
+      pulseDeck.unshift(key);
+      scheduleNextPulse();
+    }
+  }
+
+  Object.keys(COORDS).forEach(key => {
+    const spot = document.getElementById(key + '-spot');
+    if (!spot) return;
+    spot.addEventListener('pointerenter', () => {
+      pulsesPaused = true;
+      clearTimeout(pulseTimeout);
+      PULSE_KEYS.forEach(k => {
+        const s = document.getElementById(k + '-spot');
+        if (s) s.classList.remove('pulsing');
+      });
+    });
+    spot.addEventListener('pointerleave', () => {
+      pulsesPaused = false;
+      clearTimeout(pulseTimeout);
+      pulseTimeout = setTimeout(pulseRandomHotspot, 1500);
+    });
+  });
+
+  shuffleDeck();
+  clearTimeout(pulseTimeout);
+  pulseTimeout = setTimeout(pulseRandomHotspot, 2000);
+
+  Object.keys(COORDS).forEach(key => {
+    const spot = document.getElementById(key + '-spot');
+    const tip  = document.getElementById(key + '-tip');
+    if (!spot || !tip) return;
+    tip.style.fontFamily = "'Fredoka One', cursive";
+    spot.addEventListener('pointerenter', () => tip.classList.add('visible'));
+    spot.addEventListener('pointerleave', () => tip.classList.remove('visible'));
+  });
+
+  // ── Navigation ────────────────────────────────────────────────
+  const transOverlay = document.getElementById('mainroom-transition');
+
+  function navigateTo(key) {
+    const target = NAV[key];
+    if (!target) return;
+    const el = document.getElementById(target.scroll);
+    if (el) { el.scrollIntoView({ behavior: 'smooth', block: 'start' }); return; }
+    if (transOverlay) transOverlay.classList.add('active');
+    setTimeout(() => { window.location.href = target.url; }, 700);
+  }
+
+  ['photo','blueprint','walkie','cubby','bookcase','calendar','back'].forEach(key => {
+    const spot = document.getElementById(key + '-spot');
+    if (spot) spot.addEventListener('pointerdown', () => navigateTo(key));
+  });
+
+  // ── Mobile sticker taps + keyboard accessibility ──────────────
+  const STICKER_NAV = {
+    about:'photo', contact:'walkie', science:'bookcase',
+    resources:'cubby', coaching:'blueprint', schedule:'calendar', back:'back'
+  };
+
+  document.querySelectorAll('.sticker-cell').forEach(cell => {
+    let startX = 0, startY = 0;
+    const TAP_THRESHOLD = 12;
+
+    cell.addEventListener('pointerdown', e => {
+      startX = e.clientX;
+      startY = e.clientY;
+    });
+
+    cell.addEventListener('pointerup', e => {
+      const dx = Math.abs(e.clientX - startX);
+      const dy = Math.abs(e.clientY - startY);
+      if (dx < TAP_THRESHOLD && dy < TAP_THRESHOLD) {
+        const k = STICKER_NAV[cell.dataset.target];
+        if (k) navigateTo(k);
+      }
+    });
+
+    cell.addEventListener('keydown', e => {
+      if (e.key === 'Enter') {
+        const k = STICKER_NAV[cell.dataset.target];
+        if (k) navigateTo(k);
+      }
+    });
+  });
+
+  // ── Lamp toggle ───────────────────────────────────────────────
+  const lampOverlay = document.getElementById('lamp-overlay');
+  let lampOn = true;
+  const lampSpot = document.getElementById('lamp-spot');
+  const lampTip  = document.getElementById('lamp-tip');
+  if (lampSpot && lampOverlay) {
+    lampSpot.addEventListener('pointerdown', () => {
+      lampOn = !lampOn;
+      lampOverlay.classList.toggle('dimmed', !lampOn);
+      if (lampTip) lampTip.textContent = lampOn ? '💡 Toggle Light' : '🌑 Toggle Light';
+    });
+  }
+
+  // ── Rain easter egg ───────────────────────────────────────────
+  const rainOverlay = document.getElementById('rain-overlay');
+  let raining = false, raindrops = [];
+  function createRain() {
+    for (let i = 0; i < 80; i++) {
+      const d = document.createElement('div');
+      d.classList.add('raindrop');
+      d.style.left              = Math.random() * 100 + '%';
+      d.style.height            = (Math.random() * 20 + 10) + 'px';
+      d.style.animationDuration = (Math.random() * 0.8 + 0.4) + 's';
+      d.style.animationDelay    = (Math.random() * 2) + 's';
+      rainOverlay.appendChild(d);
+      raindrops.push(d);
+    }
+  }
+  function clearRain() { raindrops.forEach(d => d.remove()); raindrops = []; }
+  const skylightSpot = document.getElementById('skylight-spot');
+  const skylightTip  = document.getElementById('skylight-tip');
+  if (skylightSpot && rainOverlay) {
+    skylightSpot.addEventListener('pointerdown', () => {
+      raining = !raining;
+      if (raining) {
+        createRain();
+        rainOverlay.classList.add('raining');
+        if (skylightTip) skylightTip.textContent = '☀️ Stop the Rain';
+      } else {
+        rainOverlay.classList.remove('raining');
+        setTimeout(clearRain, 800);
+        if (skylightTip) skylightTip.textContent = '🌧️ Change the Weather';
+      }
+    });
+  }
+
+  // ── Init and event listeners ──────────────────────────────────
+  function initLayout() {
+    positionHotspots();
+    updateChevron();
+  }
+
+  window.addEventListener('resize', initLayout);
+  window.addEventListener('scroll', updateChevron, { passive: true });
+  window.addEventListener('load', () => {
+    initLayout();
+    setTimeout(initLayout, 300);
+    setTimeout(initLayout, 800);
+  });
+
+  const imgEl = document.getElementById('mainroom-img');
+  if (imgEl) imgEl.addEventListener('load', initLayout);
+
+})();
+</script>

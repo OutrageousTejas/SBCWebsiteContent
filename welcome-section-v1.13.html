@@ -1,0 +1,448 @@
+<!-- ============================================================
+     SQUIRREL BRAIN COACHING — Welcome Section v1.13
+     "Why Squirrel Brain?"
+
+     CHANGELOG
+     v1.13 — Fix stray closing brace in @media(max-width:640px) block
+             introduced in v1.12. Brace was prematurely closing the media
+             query after #welcome-content rule, causing #welcome-body-grid,
+             #welcome-image, and #welcome-image img to apply globally —
+             collapsing the desktop grid to single-column and moving the
+             hero image above the header. Mobile padding fix preserved.
+     v1.12 — Mobile: #welcome-content padding-left/right overridden to 0.5rem
+             inside @media(max-width:640px). Matches coaching mobile paper
+             padding (clamp(1.25rem,4vw,2rem) 0.5rem). Desktop unchanged.
+             Note: mobile hero image appearing above header is expected — side
+             effect of header moving into left grid column for desktop vertical
+             centering. Visually acceptable, kept as-is per v1.11 review.
+     v1.11 — Scroll hint chevron added. Exact About Me v5.9 pattern:
+             position:fixed div appended to document.body at runtime
+             (required for reliable fixed positioning in SQS Fluid Engine).
+             Visibility toggled by scroll listener — visible while section
+             is substantially in view, hidden as next section approaches.
+             Click calls window.SBC.scrollToNext('welcome-section') with
+             fallback to window.scrollBy. Bouncing animation keyed as
+             welcomeBounceChevron (namespaced, no collision with about's).
+     v1.10 — Header h2: word-spacing: -0.16em (tuned via DevTools). Tillana
+             has generous inherent inter-word spacing baked into font metrics;
+             -0.16em tightens to visually balanced result.
+     v1.9  — Vertical centering root cause fixed properly. Header moved inside
+             left grid column (#welcome-left wraps header + text). Grid is now
+             [left | image] where left = full height of header+text. Image
+             column centers against that full height — no longer misaligned
+             against text-only height. grid-template-areas: "text image" →
+             "left image". Mobile: "image / left" order preserved.
+     v1.8  — Hero scale: max-height 464px → 394px (−15%).
+             Vertical centering root cause fixed: removed width:100% from img.
+             width:100% forced img to fill full column width, making it as
+             large as the flex container — no room for align-items:center to
+             act. width:auto lets img size from max-height via portrait ratio,
+             becoming a smaller flex child that centers correctly.
+             object-fit/object-position removed (only relevant with width:100%).
+             Gap after section: SQS Fluid Engine row height issue — fix by
+             dragging the section row bottom edge up in the SQS editor.
+     v1.7  — Desktop hero: max-height 580px → 464px (−20%). object-position
+             top center → center center (was pulling image low in its box,
+             creating more empty space below than above).
+     v1.6  — Hero image swapped: BlurredRoom3.webp → DoorOutward.webp (794×996).
+             Portrait ratio — reverted max-width to 100%, object-position to
+             top center, mobile max-height back to 340px.
+     v1.5  — Hero image swapped: WelcomeDoor.webp → BlurredRoom3.webp (1024×1024).
+             Desktop: max-width 100% → 85% (square image would fill full column
+             at 100%; 85% cap keeps it proportional). max-height stays 580px.
+             object-position: top center → center (square, no need to bias top).
+             Vertical centering fix: align-self:stretch on #welcome-image so
+             column fills full grid track height; align-items:center inside
+             then works correctly.
+             Mobile: max-height 340px → 280px (square reads larger than portrait
+             at same max-height).
+     v1.4  — Copy-only update. Reverted "that as our business name" → "the name".
+             Removed <br> before "On the inside". Removed "and adapting in
+             real time" from that sentence. No structural/CSS changes.
+     v1.3  — Header: letter-spacing 0.01em → 0; font-size clamp(1.8rem,3.5vw,2.8rem)
+             → clamp(1.6rem,3vw,2.4rem) (moderate reduction).
+             #welcome-header margin-bottom reduced. #welcome-outer padding
+             top/bottom reduced to tighten section height.
+             #welcome-paper box-shadow removed (flat with white void).
+             Hero image: align-items flex-start → center on grid for vertical
+             centering against text block.
+             Mobile hero: max-width 70% → 56% (20% scale-down).
+             KNOWN BUG (filed): chevron missing from Welcome + Coaching sections.
+             Chevron is rendered by global nav Footer injection; needs Welcome
+             section id registered and Coaching section investigated separately.
+     v1.2  — Hero image: removed drop-shadow filter (image merges into bg).
+             #welcome-paper: removed background-color fallback (#f5ede0) —
+             was bleeding through at card edges when card taller than bg image.
+             Header: font-weight 700 → 500 (Tillana lighter, warmer).
+             Body font-size: clamp(1.1rem,1.5vw,1.15rem) →
+             clamp(1.15rem,1.6vw,1.25rem) — one step up (warm bg makes
+             identical size read optically smaller).
+             Copy: "We chose that as our business name with intention, and
+             with care." / <br> line break before "Squirrels are actually..." /
+             <br> line break before "On the inside..." / final paragraph:
+             "Because what appears scattered on the surface...".
+     v1.1  — fixFullBleed: adopted Coaching v3.11 exact two-step pattern.
+             Step 1: expand #welcome-section to full vw by measuring
+             rect.left and negating with negative marginLeft + setting
+             width=innerWidth. (v1.0 only did step 2 — section stayed
+             in SQS narrow column, causing right overflow / left strip.)
+             Step 2: center #welcome-paper within full-width section.
+             Init timing: double-rAF so SQS finishes layout before
+             rect.left is measured. Resize: debounced 100ms.
+     v1.0  — Initial build. Paper background image (1300×1024 WelcomeBackground.webp)
+             as section surface. 60/40 grid (text left, hero image right).
+             Tillana font for section header (warmer/handwritten feel).
+             Pangolin body text. Sizing tokens matched to Coaching v3.11.
+             fixFullBleed() pattern from coaching/about for 1300px centering.
+             SQS re-execution guard. sbc-section class for global nav.
+     ============================================================ -->
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Tillana:wght@400;500;600;700;800&display=swap');
+
+/* ── RESET & TOKENS ─────────────────────────────────────── */
+#welcome-section,
+#welcome-section * {
+  box-sizing: border-box;
+}
+
+#welcome-section {
+  --ink:            #2c2c2c;
+  --ink-light:      #555;
+  --deep-slate:     #2c4a6e;
+  --font-body:      'Pangolin', cursive;
+  --font-head:      'Tillana', cursive;
+  --section-max:    1300px;
+  --para-size:      clamp(1.15rem, 1.6vw, 1.25rem);
+  --section-title-size: clamp(1.8rem, 3.5vw, 2.8rem);
+
+  background: #ffffff;
+  font-family: var(--font-body);
+  color: var(--ink);
+  overflow-x: hidden;
+}
+
+/* ── OUTER WRAPPER ──────────────────────────────────────── */
+#welcome-outer {
+  width: 100%;
+  padding: clamp(1rem, 2vw, 1.75rem) 0;
+}
+
+/* ── PAPER CARD — background image as surface ───────────── */
+#welcome-paper {
+  /* JS sets width + marginLeft via fixFullBleed */
+  position: relative;
+  border-radius: 6px;
+  /* box-shadow removed — flat with white void around it */
+  overflow: hidden;
+
+  /* Background image as the paper surface */
+  background-image: url('https://images.squarespace-cdn.com/content/69ba3296dd8f7f351597cdb9/014ad751-8970-4254-9c3c-d8ff2eed23bb/WelcomeBackground.webp');
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+
+  /* No fallback bg-color — white outer section shows at card edges
+     if card grows taller than bg image; matches outer #ffffff cleanly */
+}
+
+/* ── INNER CONTENT PADDING ──────────────────────────────── */
+#welcome-content {
+  padding: clamp(1.75rem, 3vw, 2.75rem) clamp(1.5rem, 3vw, 3rem) clamp(1.5rem, 2.5vw, 2.25rem);
+}
+
+/* ── SECTION HEADER ─────────────────────────────────────── */
+#welcome-header {
+  margin-bottom: clamp(0.75rem, 1.5vw, 1.25rem);
+}
+
+#welcome-header h2 {
+  font-family: var(--font-head);
+  font-weight: 500;
+  font-size: clamp(1.6rem, 3vw, 2.4rem);
+  color: var(--deep-slate);
+  margin: 0;
+  line-height: 1.15;
+  letter-spacing: 0;
+  word-spacing: -0.16em;
+}
+
+/* ── BODY GRID — 60/40 split ────────────────────────────── */
+#welcome-body-grid {
+  display: grid;
+  grid-template-columns: 3fr 2fr;
+  grid-template-areas: "left image";
+  gap: clamp(1.5rem, 3vw, 2.5rem);
+  align-items: stretch;  /* both columns fill full grid track height */
+}
+
+/* ── LEFT COLUMN: header + text ─────────────────────────── */
+#welcome-left {
+  grid-area: left;
+}
+
+/* ── TEXT BLOCK ─────────────────────────────────────────── */
+#welcome-text {
+  /* no grid-area needed — sits inside #welcome-left */
+}
+
+#welcome-text p {
+  font-family: var(--font-body);
+  font-size: var(--para-size);
+  line-height: 1.6;
+  color: var(--ink);
+  margin: 0 0 0.9em;
+}
+
+#welcome-text p:last-child {
+  margin-bottom: 0;
+}
+
+/* ── IMAGE COLUMN ───────────────────────────────────────── */
+#welcome-image {
+  grid-area: image;
+  display: flex;
+  justify-content: center;
+  align-items: center;      /* centers img vertically within the column */
+  align-self: stretch;      /* column fills full grid track height — fixes vertical centering */
+  padding-top: 0;
+}
+
+#welcome-image img {
+  /* No width:100% — let the image size from max-height naturally.
+     width:100% forces img to fill column width, making it as large as
+     the container and leaving no room for flex centering to act.
+     Without it, img sizes to its natural portrait ratio within max-height,
+     becoming a flex child smaller than the container — centered correctly. */
+  width: auto;
+  max-width: 100%;
+  max-height: 394px;        /* 464px * 0.85 = ~394px (-15%) */
+  height: auto;
+  display: block;
+  /* no filter — image merges naturally into the paper background */
+}
+
+/* ── SCROLL HINT CHEVRON ────────────────────────────────── */
+#welcome-scroll-hint {
+  position: fixed;
+  bottom: clamp(12px, 2dvh, 20px);
+  left: 50%;
+  transform: translateX(-50%);
+  cursor: pointer;
+  z-index: 9999;
+  opacity: 0;
+  pointer-events: none;
+  background: none;
+  transition: opacity 0.5s ease;
+  animation: welcomeBounceChevron 1.5s ease infinite;
+}
+
+#welcome-scroll-hint svg {
+  width: clamp(24px, 3.5vw, 36px);
+  height: auto;
+  filter: drop-shadow(0 2px 3px rgba(0,0,0,0.6));
+}
+
+#welcome-scroll-hint.visible {
+  opacity: 1;
+  pointer-events: all;
+}
+
+@keyframes welcomeBounceChevron {
+  0%, 100% { transform: translateX(-50%) translateY(0); }
+  50%       { transform: translateX(-50%) translateY(5px); }
+}
+
+/* ── VERSION BADGE ──────────────────────────────────────── */
+#welcome-version-badge {
+  position: fixed;
+  bottom: 54px; /* offset from coaching badge if both visible */
+  right: 12px;
+  background: rgba(0,0,0,0.65);
+  color: #fff;
+  font: 700 11px/1 monospace;
+  padding: 5px 9px;
+  border-radius: 4px;
+  z-index: 9999;
+  pointer-events: none;
+  letter-spacing: 0.5px;
+}
+
+/* ── MOBILE ─────────────────────────────────────────────── */
+@media (max-width: 640px) {
+  /* Match coaching mobile paper padding: 0.5rem horizontal */
+  #welcome-content {
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+  }
+
+  #welcome-body-grid {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "image"
+      "left";
+  }
+
+  #welcome-image {
+    justify-content: center;
+    padding-top: 0;
+  }
+
+  #welcome-image img {
+    max-height: 340px;
+    width: auto;
+    max-width: 56%;
+  }
+}
+</style>
+
+<div id="welcome-section" class="sbc-section sbc-welcome">
+  <div id="welcome-outer">
+
+    <!-- #welcome-paper: JS sets width + marginLeft for 1300px centering -->
+    <div id="welcome-paper">
+      <div id="welcome-content">
+
+        <!-- Two-column grid: left = header+text, right = image
+             Image now centers against full left column height (header + text),
+             not just text height. -->
+        <div id="welcome-body-grid">
+
+          <!-- Left column: header + text (60%) -->
+          <div id="welcome-left">
+            <div id="welcome-header">
+              <h2>Why Squirrel Brain?</h2>
+            </div>
+            <div id="welcome-text">
+              <p>'Squirrel brain' is often used as a joke — shorthand for someone who seems scattered or distracted.</p>
+
+              <p>We chose the name with intention, and with care.<br>
+              Squirrels are actually highly intelligent animals. Their brains are complex, adaptable, and remarkably good at learning. Far more capable than they appear at first glance.</p>
+
+              <p>ADHD brains share that same paradox.</p>
+
+              <p>From the outside, an ADHD brain can look unfocused, restless, or frenzied. On the inside, it is often busy noticing patterns, making connections, responding creatively.</p>
+
+              <p>At Squirrel Brain Coaching, we start from the recognition that the ADHD brain is already capable. Our work is creating conditions of unhurried support — support where a busy, curious brain can settle, stretch, and thrive.</p>
+
+              <p>Because what appears scattered on the surface is often, in fact, intelligent, adaptive, and quietly impressive.</p>
+            </div>
+          </div>
+
+          <!-- Image column (40%) -->
+          <div id="welcome-image">
+            <img
+              src="https://images.squarespace-cdn.com/content/69ba3296dd8f7f351597cdb9/4a9f5792-aa7c-4d69-a9ce-8e23984967bd/DoorOutward.webp"
+              alt="Looking outward through the treehouse door"
+              loading="lazy"
+            />
+          </div>
+
+        </div><!-- /welcome-body-grid -->
+      </div><!-- /welcome-content -->
+    </div><!-- /welcome-paper -->
+
+  </div><!-- /welcome-outer -->
+  <!-- Scroll hint chevron — JS moves to document.body for reliable position:fixed -->
+  <div id="welcome-scroll-hint">
+    <svg viewBox="0 0 24 14" xmlns="http://www.w3.org/2000/svg">
+      <polyline points="2,2 12,12 22,2" fill="none" stroke="white"
+                stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </div>
+
+</div><!-- /welcome-section -->
+
+<div id="welcome-version-badge">Welcome v1.13</div>
+
+<script>
+(function() {
+  /* ── SQS re-execution guard ─────────────────────────── */
+  if (window.__sbcWelcomeInitialized) return;
+  window.__sbcWelcomeInitialized = true;
+
+  /* ── fixFullBleed: matches Coaching v3.11 exact pattern ─
+     Step 1: Expand #welcome-section to full viewport width.
+             SQS constrains code blocks to a narrow column.
+             We measure rect.left, negate it with marginLeft,
+             then set width = window.innerWidth to escape.
+     Step 2: Size and center #welcome-paper within that
+             full-width section at min(1300, vw-120).        */
+  function fixFullBleed() {
+    var section = document.getElementById('welcome-section');
+    var paper   = document.getElementById('welcome-paper');
+    if (!section) return;
+
+    // Step 1: full-bleed the section
+    section.style.marginLeft = '';
+    section.style.width = '';
+    var rect   = section.getBoundingClientRect();
+    var scrollX = window.scrollX || window.pageXOffset || 0;
+    section.style.marginLeft = (-rect.left - scrollX) + 'px';
+    section.style.width      = window.innerWidth + 'px';
+
+    // Step 2: center the paper card
+    if (paper) {
+      var vw = window.innerWidth;
+      if (vw > 640) {
+        var paperW = Math.min(1300, vw - 120);
+        var marginL = Math.floor((vw - paperW) / 2) + 'px';
+        paper.style.width       = paperW + 'px';
+        paper.style.marginLeft  = marginL;
+        paper.style.marginRight = '0';
+      } else {
+        paper.style.width = paper.style.marginLeft = paper.style.marginRight = '';
+      }
+    }
+  }
+
+  /* ── Init ───────────────────────────────────────────── */
+  function init() {
+    fixFullBleed();
+  }
+
+  /* ── Wire up — double-rAF matches coaching pattern ─── */
+  /* When DOM is already ready, SQS may not have finished  */
+  /* its layout pass. Double-rAF defers until it has, so   */
+  /* rect.left in fixFullBleed is correct on first run.    */
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    requestAnimationFrame(function() { requestAnimationFrame(init); });
+  }
+
+  var resizeTimer;
+  window.addEventListener('resize', function() {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(fixFullBleed, 100);
+  });
+
+  /* ── Scroll hint chevron ────────────────────────────────
+     Appended to document.body so position:fixed works
+     correctly inside SQS Fluid Engine DOM structure.     */
+  var welcomeScrollHint = document.getElementById('welcome-scroll-hint');
+  var welcomeSection    = document.getElementById('welcome-section');
+
+  if (welcomeScrollHint) document.body.appendChild(welcomeScrollHint);
+
+  function updateWelcomeChevron() {
+    if (!welcomeScrollHint || !welcomeSection) return;
+    var r = welcomeSection.getBoundingClientRect();
+    // Show while Welcome is substantially in view.
+    // Hide once bottom of section nears viewport bottom (next section approaching).
+    var inView = r.top < window.innerHeight && r.bottom > window.innerHeight * 0.3;
+    welcomeScrollHint.classList.toggle('visible', inView);
+  }
+
+  if (welcomeScrollHint) {
+    welcomeScrollHint.addEventListener('click', function() {
+      if (window.SBC) window.SBC.scrollToNext('welcome-section');
+      else window.scrollBy({ top: window.innerHeight, behavior: 'smooth' });
+    });
+  }
+
+  window.addEventListener('scroll', updateWelcomeChevron, { passive: true });
+  window.addEventListener('load', updateWelcomeChevron);
+
+})();
+</script>

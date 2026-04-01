@@ -1,0 +1,1923 @@
+<!-- ============================================================
+     SQUIRREL BRAIN COACHING — Contact Section  v1.81
+
+     Changes from v1.59:
+     - Desktop layout: tree stump bg (ContactDesktopBackgroundUp.webp, 2048x1142).
+       Section min-height: 100vw\/1.793 preserves full image composition.
+     - Desktop: flex-direction:row, console right-of-center, heading\/subtitle hidden.
+     - Mobile image (transparent bg) now used on BOTH breakpoints — desk image retired.
+     - Left column placeholder div for future stump-surface decorative assets.
+     - activeImg()\/activeCoords() always return mob variants (no breakpoint branching).
+     - tryInit() simplified: gates on mobReady only.
+
+     Changes from v1.42:
+     - Tweak: sticky note size STICKY.w 0.32 → 0.36
+     - Tweak: resting tilt -4deg → -12deg (noticeably crooked)
+     - Tweak: text block rotated -8deg inside note for angled handwritten feel,
+       giving more effective width per line
+     - Tweak: content reordered — phone above, email below
+     - Tweak: emojis moved above their respective lines (not inline)
+     - Tweak: fake strikethrough number shortened to partial: (555) 867-530
+       so it doesn't look like a real old business number
+     - Tweak: real phone number on its own line below fake number
+     - Tweak: email allows word-wrap (break-all) so long address wraps naturally
+     - Fix: fall animation timing changed to linear so waypoints feel like one
+       continuous drift, not sequenced steps
+     - Fix: fall target clamped so full note stays within image bounds
+
+     Changes from v1.38:
+     - Fix: ROOT CAUSE of all v1.35–v1.38 regressions identified and fixed.
+       Email address in sticky note HTML triggered Cloudflare email obfuscation.
+       Fix: email removed from HTML, injected via JS string concatenation.
+       Fix: HTML comment containing literal script tag text also removed —
+       caused parser to treat comment content as markup. Both issues broken JS.
+
+     Changes from v1.32:
+     - Tweak: antenna coord +3px right/lower (cumulative: +19px right, +26px lower)
+     - Change: ink color order → black(0), blue(1), green(2), red(3)
+       (common pen ink order; KNOB_DOT_COLORS updated to match)
+     - Change: default knob position = 1 (blue) — rests at second stop,
+       looks naturally adjusted, blue is most legible
+     - Change: placeholder text → fictitious examples for all 4 fields
+       Name: "Robin Acornsby", Email: "robin@treehouse.net",
+       Phone: unchanged, Message: unchanged
+
+     Changes from v1.31:
+     - Tweak: placeholder opacity 0.28 → 0.34
+     - Tweak: antenna coord +3px right, +2px lower (cumulative: +16px right, +23px lower)
+     - Fix: antenna z-order behind console body — moved antenna HTML before console
+       imgs in DOM; added position:relative to .console-img--mobile so it paints
+       on top in stacking order. No z-index juggling required.
+
+     Changes from v1.30:
+     - Tweak: placeholder opacity 0.40 → 0.28 (less prominent)
+     - Tweak: placeholder hides on focus via :focus::placeholder{color:transparent}
+       Returns on blur if field still empty — native browser behavior, no JS needed
+     - Tweak: antenna coord +3px right/lower (cumulative: +13px right, +21px lower)
+     - Tweak: antenna wobble 1.2s → 1.6s, ease-out, slower initial swing keyframes
+
+     Changes from v1.29:
+     - Tweak: antenna coord +6px right, +6px lower (cumulative: +10px right, +18px lower)
+     - Tweak: antenna wobble duration 0.75s → 1.2s, more decay oscillations,
+       graceful ease out (cubic-bezier) instead of abrupt stop
+     - Feature: placeholder text now follows knob ink color via --console-placeholder
+       CSS variable. Turning knob changes placeholder color → self-demonstrating
+       affordance for knob discoverability (no label needed)
+
+     Changes from v1.28:
+     - Tweak: KNOB_DOT_CX_ADJUST -8 → -3 (tested value)
+     - Tweak: antenna coord +4px right, +12px lower (l:0.1192, t:0.0059)
+     - Fix: antenna auto-wobble disconnect() removed — fires on every
+       viewport entry. Physical metaphor (page motion → wobble) makes this
+       feel alive rather than glitchy. Consistent with fidget spinner intent.
+     - Fix: knob debug dot now renders at circle center (anchorCenter flag)
+       instead of top-left corner
+
+     Changes from v1.27:
+     - Tweak: KNOB_DOT_SIZE 10→6, KNOB_DOT_GAP 9→12, KNOB_STEP_DEG 36→32
+       (96° arc, positions: -48,-16,+16,+48)
+     - Fix: added KNOB_DOT_CX_ADJUST=-8 to shift dots left toward visual knob
+       center (knob circle may not be perfectly centered in 230×230 PNG)
+     - Fix: antenna debug dot now renders at bottom-right (base) not top-left
+       (tip); anchorBR flag added to debug system
+     - Fix: antenna auto-wobble disconnect() restored — now consistent with
+       fidget spinner: fires once on scroll-in, manual hover/tap still works
+
+     Changes from v1.26:
+     - Fix: knob indicator dots now visible — KNOB_DOT_ANGLES was computed
+       as IIFE at declaration time when KNOB_* vars were still undefined (var
+       hoisting). Fixed by computing angles inside placeKnobDots() at call time.
+     - Fix: antenna auto-wobble now fires on every viewport entry (removed
+       antObs.disconnect() which was limiting it to first entry only)
+     - Fix: DEBUG_COORDS now shows red dots for all 9 elements (added antenna,
+       LEDs, knob — previously only showed the 5 text fields)
+
+     Changes from v1.25:
+     - Mobile bg image swapped to MobileBackgroundNoAntUp7.webp
+       (antenna removed from image — no more duplicate antenna overlap)
+       Same dimensions (1132×2048), same coordinates — no other changes.
+
+     Changes from v1.24:
+     - Fix: KNOB_DOT_ANGLES now computed from KNOB_START_DEG+KNOB_STEP_DEG
+       formula — was hardcoded array, out of sync with knob. Now a single
+       source of truth: change KNOB_STEP_DEG and both knob+dots update.
+     - Tweak: KNOB_STEP_DEG 40° → 36° (108° arc, positions -54,-18,+18,+54)
+     - Tweak: KNOB_DOT_GAP 14 → 9px (dots closer to knob face)
+     - Feature: antenna auto-wobble on scroll into view (IntersectionObserver
+       threshold:0.6, fires once, 300ms delay — matches About Me spinner pattern)
+
+     Changes from v1.23:
+     - Tweak: KNOB_STEP_DEG 30° → 40° (wider arc more readable on small screens)
+       Formula auto-recalculates: start=-60°, positions: -60,-20,+20,+60
+
+     Changes from v1.22:
+     - Fix: knob positions restored to formula-based symmetric:
+       KNOB_START = -(STEP*(STOPS-1)/2), step=30°, 4 stops → -45,-15,+15,+45
+       (v1.22 used non-uniform hardcoded array [-40,-20,+20,+40])
+     - Feature: antenna div → img cutout (AntennaCutOut.webp 784×173)
+       transform-origin:100% 100% — pivots from base (bottom-right).
+       Wobble now animates visible pixels. Background antenna still present
+       until next image regeneration.
+
+     Changes from v1.21:
+     - Tweak: green LED glow reduced to match orange intensity
+     - Change: knob indicator dots — circles (was squares), 10px diameter
+     - Tweak: knob indicator colors lightened ~15% (v1.21 was too dark)
+     - Change: knob positions changed to symmetric {-40,-20,+20,+40} degrees;
+       KNOB_ANGLES array replaces start+step formula (steps non-uniform)
+     - Note: antenna wobble deferred — antenna is part of bg image, not
+       a cutout; fix requires generating antenna as separate PNG asset
+
+     Changes from v1.20:
+     - Fix: TRANSMIT button coord lowered +4px
+     - Fix: knob indicator dot cy calculation — circular elements use
+       height=width(px), so cy = t*iH + (w*iW)/2, not (t+w/2)*iH
+     - Tweak: knob indicator colors darkened ~30% (wood texture vs beige)
+     - Tweak: orange LED glow intensified (higher alpha + spread)
+     - Tweak: LED 2 color changed teal → green (more familiar LED color)
+
+     Changes from v1.19:
+     - Tweak: MOB field coords inset +4px right/down from trough border edge
+     - Tweak: LED coords shifted +10px lower
+     - Fix: LED glow now filled (background color added to .lit + .success)
+     - Feature: knob position indicator squares (16×16px colored dots at
+       each 45° stop around knob perimeter, matching ink color themes)
+
+     Changes from v1.18:
+     - Mobile image swapped to MobileBackgroundUp7.webp (1132×2048)
+       Antenna now top-right, tighter field troughs, transparent bg preserved
+     - All MOB coordinates updated for new image
+
+     Changes from v1.17:
+     - Tweak: desktop vertical centering — padding-top:3px on .console-clip
+       nudges content area down; t coords were measured from outer trough
+       border, actual ink area starts slightly lower. Tune ±1px as needed.
+     - Tweak: message line-height 1.2 → 1.1 (base rule, all viewports)
+     NOTE: Mobile image has background artifact (Photopea removal residue).
+       No code change — asset fix pending from Tejas.
+
+     Changes from v1.11 (v1.12):
+     - Mobile image swapped to MobileBackgroundTrimUp.webp
+       (transparent bg, trimmed height, LEDs now unlit/white,
+        knob removed from image — now a separate cutout overlay)
+     - Knob element changed from <div> to <img> (ButtonSquareUp.webp)
+       Rotates on click via transform:rotate(); indicator notch at top
+     - overflow:hidden removed on mobile (transparent bg needs no clip)
+     - Mobile scale(1.12) removed — transparent bg needs no bleed fill
+     - All MOB coordinates updated for new image
+
+     Image assets:
+       Desktop : ContactMeDeskUp.webp         1920 × 2048
+       Mobile  : MobileBackgroundNoAntUp7.webp 1132 × 2048 (transparent bg, antenna removed)
+       Knob    : ButtonSquareUp.webp          230  × 230  (transparent bg)
+
+     TODOs before launch (in priority order):
+     1. ✅ Desktop image URL — wired
+     2. ✅ Mobile image URL  — wired (new image)
+     3. ✅ Mobile coordinates — wired (new image)
+     4. ✅ Desktop coordinates — wired
+     5. ✅ Mobile antenna — wired
+     6. ✅ Knob cutout image — wired
+     7. First drop: set DEBUG_COORDS=true, verify all field positions
+     8. Replace phone placeholder with real Google Voice number
+     9. Remove version badge after full sign-off
+     ============================================================ -->
+
+<style>
+/* ── Global reset ── */
+#contact-section,
+#contact-section * {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* ── Section shell ──
+   JS sets marginLeft + width on mobile for full-bleed.
+   Desktop: width:100% fills SQS column naturally — no vw overrides. ── */
+#contact-section {
+  position: relative;
+  background: #ffffff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: clamp(40px, 5vw, 72px) clamp(16px, 4vw, 40px) clamp(40px, 5vw, 72px) !important;
+}
+
+/* ── Section heading ── */
+.contact-heading {
+  font-family: 'Fredoka One', cursive;
+  font-size: clamp(1.8rem, 3vw, 2.6rem);
+  color: #7a4a18;
+  text-align: center;
+  line-height: 1.15;
+  margin-bottom: 0.2em !important;
+}
+
+.contact-subtitle {
+  font-family: 'Pangolin', cursive;
+  font-size: clamp(1.2rem, 1.7vw, 1.4rem);
+  color: #5c3a14;
+  text-align: center;
+  margin-bottom: clamp(20px, 3vw, 40px) !important;
+}
+
+/* ── Console wrapper: sized to image, positions all children ──
+   Desktop image: 1920×2048 → aspect ratio 0.9375 (portrait)
+   Mobile  image: 1142×2048 → aspect ratio 0.5576 (tall portrait)
+   img {width:100%;height:auto} maintains aspect ratio automatically.
+   All overlays positioned as % of rendered image — swap-safe. ── */
+.console-wrapper {
+  position: relative;
+  width: min(72vw, 1300px);
+  max-width: calc(100% - 32px);
+  overflow: hidden;
+}
+
+/* ── Console images ── */
+.console-img {
+  display: block;
+  width: 100%;
+  height: auto;
+  user-select: none;
+  -webkit-user-drag: none;
+  /* pointer-events:none so clicks fall through to overlaid form/buttons */
+  pointer-events: none;
+}
+
+.console-img--desktop { display: block; transform: scale(0.88); transform-origin: center center; }
+.console-img--mobile  { display: none; position: relative; /* enables stacking: antenna (earlier in DOM) paints behind this */ }
+
+/* ── Form: transparent layer covering entire wrapper ── */
+.console-form {
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  /* form itself is transparent; children re-enable pointer events */
+  pointer-events: none;
+}
+
+/* ── Screen-reader-only labels (accessibility) ── */
+.sr-only {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0,0,0,0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
+
+/* ── Inputs: transparent over image troughs ── */
+.console-input {
+  position: absolute !important;
+  pointer-events: all;
+  background: transparent !important;
+  border: none !important;
+  outline: none !important;
+  /* Color driven by knob position via CSS variable */
+  color: var(--console-ink, #3d1f08) !important;
+  font-family: 'Pangolin', cursive !important;
+  font-size: clamp(1.2rem, 1.7vw, 1.4rem) !important;
+  line-height: 1.3 !important;
+  padding-left:  0.4em;
+  padding-right: 0.4em;
+  padding-top:   0.25em;
+  resize: none;
+  /* Overflow intentionally not set here.
+     Single-line inputs are wrapped in .console-clip (overflow:hidden parent)
+     which clips text reliably even when input is focused.
+     textarea uses overflow-y:auto declared further below. */
+  -webkit-tap-highlight-color: transparent;
+  transition: color 0.4s ease;
+}
+
+.console-input:focus {
+  /* No background, no border — console image stays seamless.
+     Blinking cursor is sufficient focus indicator for this UI. */
+  background: transparent !important;
+  border: none !important;
+  outline: none !important;
+}
+
+/* ── Clip wrapper: enforces trough boundary for single-line inputs ──
+   overflow:hidden on a parent element reliably clips text content even
+   in a focused <input> — browsers respect parent clipping regardless of
+   their internal text-scroll behavior.
+   overflow:hidden on the <input> itself is NOT respected when focused.
+   padding-top nudges the content area down — t coordinates were
+   measured from the outer trough border; actual ink area starts lower.
+   Tune this value if text appears too high or too low. ── */
+.console-clip {
+  position: absolute !important;
+  overflow: hidden !important;
+  padding-top: 5px;
+  /* Pass pointer events through to the input inside */
+  pointer-events: none;
+}
+
+/* Input inside clip div: fills it exactly.
+   padding-top:0 required — centerInputText() sets line-height=offsetHeight
+   for geometric vertical centering; any padding-top shifts text downward.
+   overflow+white-space+text-overflow must be on the input itself (not parent)
+   for ellipsis to render — parent overflow:hidden clips visually but does
+   not produce the ellipsis glyph. */
+.console-clip .console-input {
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  padding-top: 0 !important;
+  overflow: hidden !important;
+  white-space: nowrap !important;
+  text-overflow: ellipsis !important;
+}
+
+.console-input::placeholder {
+  /* Follows knob ink color — user sees placeholder shift color when knob turns,
+     making the knob's purpose self-evident before any text is typed. */
+  color: var(--console-placeholder, rgba(100, 60, 20, 0.38)) !important;
+  font-style: italic;
+}
+
+/* Hide placeholder immediately on focus (not just on first keystroke).
+   Returns automatically when field loses focus and is still empty — native behavior. */
+.console-input:focus::placeholder {
+  color: transparent !important;
+}
+
+/* Message textarea: fixed size, scrolls internally ── 
+   The console has fixed physical dimensions — 
+   this is a feature, not a limitation. */
+.console-input--message {
+  overflow-y: auto !important;
+  padding: 0.35em 0.4em !important;
+  line-height: 1.1 !important;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(120,70,20,0.3) transparent;
+}
+.console-input--message::-webkit-scrollbar { width: 4px; }
+.console-input--message::-webkit-scrollbar-thumb {
+  background: rgba(120,70,20,0.3);
+  border-radius: 2px;
+}
+
+/* ── Submit: invisible overlay on drawn TRANSMIT button ── */
+.console-submit {
+  position: absolute !important;
+  pointer-events: all;
+  background: transparent !important;
+  border: none !important;
+  outline: none !important;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  border-radius: 4px;
+  transition: transform 0.1s ease, opacity 0.1s ease;
+}
+.console-submit:active {
+  transform: scale(0.94) !important;
+  opacity: 0.65;
+}
+.console-submit:disabled {
+  pointer-events: none;
+  cursor: default;
+}
+
+/* ── LED overlays: transparent circles that add glow ── */
+.console-led {
+  position: absolute !important;
+  pointer-events: all;
+  border-radius: 50%;
+  cursor: pointer;
+  background: transparent;
+  transition: box-shadow 0.3s ease, filter 0.3s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Orange LED — intensified fill + glow */
+.console-led--1.lit {
+  background: rgba(230, 90, 10, 0.70) !important;
+  box-shadow:
+    0 0 8px  5px rgba(230, 90, 10, 0.90),
+    0 0 18px 8px rgba(230, 90, 10, 0.50) !important;
+  filter: brightness(1.35);
+}
+
+/* Green LED — matched to orange intensity */
+.console-led--2.lit {
+  background: rgba(30, 180, 60, 0.45) !important;
+  box-shadow:
+    0 0 8px  5px rgba(30, 180, 60, 0.65),
+    0 0 18px 8px rgba(30, 180, 60, 0.28) !important;
+  filter: brightness(1.25);
+}
+
+/* Both LEDs go green on successful transmission — filled green glow */
+.console-led.success {
+  background: rgba(50, 200, 80, 0.50) !important;
+  box-shadow:
+    0 0 10px 5px rgba(50, 200, 80, 0.90),
+    0 0 22px 9px rgba(50, 200, 80, 0.40) !important;
+  filter: brightness(1.5);
+  transition: box-shadow 0.15s ease, filter 0.15s ease, background 0.15s ease !important;
+}
+
+/* ── Knob: rotates on click, drives ink color ──
+   Now an <img> cutout (ButtonSquareUp.webp, transparent bg).
+   Indicator notch starts at top (0°); each click adds 90°.
+   No border-radius — image handles its own circular shape.
+   transform-origin defaults to center center — correct pivot. */
+.console-knob {
+  position: absolute !important;
+  pointer-events: all;
+  cursor: pointer;
+  display: block;
+  user-select: none;
+  -webkit-user-drag: none;
+  /* Spring-y rotation feel */
+  transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Ink color themes — knob cycles through these.
+   CSS variable consumed by .console-input color above. */
+/* Ink colors: 0=black, 1=blue, 2=green, 3=red — common pen ink order */
+#contact-section[data-knob="0"] { --console-ink: #3d1f08; --console-placeholder: rgba(61,31,8,0.34);   } /* black (warm brown) */
+#contact-section[data-knob="1"] { --console-ink: #1a5f6e; --console-placeholder: rgba(26,95,110,0.34); } /* blue (teal)        */
+#contact-section[data-knob="2"] { --console-ink: #3d5a1a; --console-placeholder: rgba(61,90,26,0.34);  } /* green              */
+#contact-section[data-knob="3"] { --console-ink: #6b1a3e; --console-placeholder: rgba(107,26,62,0.34); } /* red (plum)         */
+
+/* ── Knob position indicator dots ──
+   Small circles at each knob stop around the perimeter.
+   Sized 10×10px; positioned by JS (placeKnobDots). Pointer-events:none —
+   clicks pass through to the knob image beneath. ── */
+.knob-dot {
+  position: absolute !important;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;        /* circle */
+  pointer-events: none;
+  opacity: 0.90;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.35);
+}
+
+/* ── Antenna: wobbles on hover and tap ──
+   img cutout — wobble animates real visible pixels.
+   transform-origin: 100% 100% — pivots from base (bottom-right of image,
+   where antenna meets the console body). ── */
+.console-antenna {
+  position: absolute !important;
+  pointer-events: all;
+  cursor: pointer;
+  display: block;
+  user-select: none;
+  -webkit-user-drag: none;
+  transform-origin: 100% 100%;
+  -webkit-tap-highlight-color: transparent;
+}
+
+@keyframes antennaWobble {
+  0%   { transform: rotate(0deg);    }
+  10%  { transform: rotate(-8deg);   }  /* initial swing — unhurried */
+  25%  { transform: rotate(6deg);    }  /* first return + overshoot */
+  40%  { transform: rotate(-4deg);   }  /* decay oscillation */
+  54%  { transform: rotate(2.5deg);  }
+  66%  { transform: rotate(-1.5deg); }
+  76%  { transform: rotate(0.8deg);  }
+  85%  { transform: rotate(-0.4deg); }
+  93%  { transform: rotate(0.15deg); }
+  100% { transform: rotate(0deg);    }  /* graceful rest */
+}
+.console-antenna.wobbling {
+  animation: antennaWobble 1.6s ease-out forwards !important;
+}
+
+/* ── Success overlay: appears inside message area ── */
+.console-success {
+  position: absolute !important;
+  pointer-events: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: rgba(240, 232, 210, 0.96) !important;
+  border-radius: 4px;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  /* padding set here is safe — it's not inside the global reset scope
+     for .about-section, and the reset zero above is for contact-section
+     which we override with !important where needed */
+  padding: clamp(12px, 2vw, 20px) !important;
+  text-align: center;
+}
+.console-success.visible {
+  opacity: 1 !important;
+}
+
+.console-success-title {
+  font-family: 'Fredoka One', cursive !important;
+  font-size: clamp(1.2rem, 1.8vw, 1.5rem) !important;
+  color: #2e7d32 !important;
+  line-height: 1.1 !important;
+  margin-bottom: 0.35em !important;
+}
+
+.console-success-sub {
+  font-family: 'Pangolin', cursive !important;
+  font-size: clamp(1.2rem, 1.7vw, 1.4rem) !important;
+  color: #388e3c !important;
+  line-height: 1.3 !important;
+}
+
+/* ── Scroll hint chevron ── */
+#contact-scroll-hint {
+  position: fixed;
+  bottom: clamp(12px, 2dvh, 20px);
+  left: 50%;
+  transform: translateX(-50%);
+  cursor: pointer;
+  z-index: 9999;
+  opacity: 0;
+  pointer-events: none;
+  background: none;
+  transition: opacity 0.5s ease;
+  animation: contactBounceChevron 1.5s ease infinite;
+}
+#contact-scroll-hint svg {
+  width: clamp(24px, 3.5vw, 36px);
+  height: auto;
+  filter: drop-shadow(0 2px 3px rgba(0,0,0,0.6));
+}
+#contact-scroll-hint.visible {
+  opacity: 1 !important;
+  pointer-events: all;
+}
+@keyframes contactBounceChevron {
+  0%, 100% { transform: translateX(-50%) translateY(0);   }
+  50%       { transform: translateX(-50%) translateY(5px); }
+}
+
+/* ══════════════════════════════════════════════════════════════
+   STICKY NOTE — mobile only
+   Positioned by JS over LED occlusion zone (upper-right console).
+   Tap to fall to lower occlusion zone; tap again to re-stick.
+   Requires: Gaegu font loaded in Code Injection Header alongside
+   Pangolin + Fredoka One. Add to Header if not already present:
+   <link href="https://fonts.googleapis.com/css2?family=Gaegu&display=swap" rel="stylesheet">
+══════════════════════════════════════════════════════════════ */
+.sticky-note {
+  display: none; /* hidden by default; enabled in both mobile + desktop media queries */
+  position: absolute !important;
+  cursor: pointer;
+  pointer-events: all;
+  /* Resting tilt. transform-origin:center so rotation is symmetric —
+     top-right origin was incompatible with JS-driven fall (caused
+     off-screen rotation around a far-away anchor point). */
+  transform: rotate(-12deg);
+  transform-origin: center center;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+  z-index: 10;
+}
+
+/* .fallen is a state flag only — JS animates left/top/transform directly.
+   pointer-events:all kept so user can tap fallen note to re-stick it. */
+.sticky-note.fallen {
+  cursor: pointer;
+}
+
+/* The cutout image — purely decorative backdrop */
+.sticky-note__img {
+  display: block;
+  width: 100%;
+  height: auto;
+  pointer-events: none;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+/* Text overlay: more top padding so phone sits lower */
+.sticky-note__text {
+  position: absolute !important;
+  top: 22% !important;
+  left: 7% !important;
+  right: 5% !important;
+  bottom: 20% !important;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: 0.2em;
+  /* pointer-events:all so taps anywhere on note text register.
+     Individual links stay pointer-events:none until .settled. */
+  pointer-events: all;
+  transform: rotate(-5deg);
+  transform-origin: top left;
+  overflow: hidden;
+}
+
+/* Pencil-style text lines */
+.sticky-note__line {
+  font-family: 'Gaegu', cursive !important;
+  font-size: clamp(1.0rem, 4.4vw, 1.2rem) !important;
+  line-height: 1.2 !important;
+  color: #4a4a4a !important;
+  letter-spacing: 0.005em;
+  display: block;
+  word-break: break-all;
+  overflow-wrap: anywhere;
+  white-space: normal;
+}
+
+/* Phone line — no wrap */
+.sticky-note__line--phone {
+  white-space: nowrap !important;
+  word-break: normal !important;
+}
+
+/* Links on sticky note: inactive at rest, active only after fully landed (.settled) */
+.sticky-note__link {
+  color: inherit !important;
+  text-decoration: none !important;
+  pointer-events: none;
+}
+.sticky-note.settled .sticky-note__link {
+  pointer-events: all !important;
+  text-decoration: underline !important;
+  text-decoration-color: rgba(74,74,74,0.4) !important;
+  text-underline-offset: 2px !important;
+}
+
+/* Visual separator between phone and email blocks */
+.sticky-note__divider {
+  height: 0.9em;
+  display: block;
+}
+
+/* Pushpin: 📍 holds note at rest, hidden when fallen */
+.sticky-note__pin {
+  position: absolute !important;
+  top: -4% !important;
+  left: 50% !important;
+  transform: translateX(-50%) rotate(5deg);
+  font-size: clamp(1.1rem, 4.8vw, 1.4rem) !important;
+  line-height: 1 !important;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+  opacity: 1;
+}
+.sticky-note.fallen .sticky-note__pin {
+  opacity: 0 !important;
+}
+
+/* Reset hint: 📌 re-pin — only visible when settled */
+.sticky-note__reset {
+  position: absolute !important;
+  bottom: 6% !important;
+  left: 50% !important;
+  transform: translateX(-50%) rotate(-5deg) !important;
+  transform-origin: bottom center;
+  font-family: 'Gaegu', cursive !important;
+  font-size: clamp(0.9rem, 3.8vw, 1.05rem) !important;
+  color: #2a6496 !important;
+  opacity: 0;
+  pointer-events: none;
+  white-space: nowrap;
+  transition: opacity 0.4s ease;
+}
+.sticky-note.settled .sticky-note__reset {
+  opacity: 1 !important;
+}
+
+
+/* ── Mobile ── */
+@media (max-width: 767px) {
+  .console-img--desktop { display: none  !important; }
+  /* No scale transform — transparent bg image needs no bleed fill */
+  .console-img--mobile  { display: block !important; }
+
+  /* Mobile: console fills full section width */
+  #contact-section {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+  .console-wrapper {
+    /* align-self:stretch overrides the parent flex align-items:center for
+       this item, stretching it to the full section width (already set to
+       innerWidth by fixFullBleed). width:auto lets stretch do its job —
+       explicit width values override stretch and must be cleared. */
+    align-self: stretch !important;
+    width: auto !important;
+    max-width: none !important;
+    /* Transparent bg: remove clip so console edges render naturally */
+    overflow: visible !important;
+  }
+
+  /* Sticky note: visible on both mobile and desktop (display driven here,
+     positioning and behavior differ per breakpoint in JS) */
+  .sticky-note {
+    display: block !important;
+  }
+  /* contact-stage: transparent on mobile — no bg, no sizing, no layout effect.
+     All mobile layout comes from section + console-wrapper directly.
+     display:flex with no styling so children (desktop-row) are visible
+     but contribute nothing extra to mobile layout. */
+  .contact-stage {
+    display: block !important;
+    background: none !important;
+    width: auto !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+  /* contact-desktop-row and contact-desktop-left: invisible on mobile */
+  .contact-desktop-row {
+    display: contents !important;
+  }
+  .contact-desktop-left {
+    display: none !important;
+  }
+  /* Vertical centering handled by JS (line-height = offsetHeight trick).
+     No CSS padding-top hack needed — see centerInputText() in script. */
+  .console-input {
+    font-size: clamp(1.2rem, 4.8vw, 1.35rem) !important;
+    /* Reduced left padding — just enough breathing room */
+    padding-left: 0.3em !important;
+  }
+  /* 1.2: visually tight enough to feel natural inside the bounded trough.
+     (1.8 matched About Me's value but looked too loose in this context —
+     different element type and bounded box changes perception.) */
+  .console-input--message {
+    line-height: 1.1 !important;
+  }
+}
+
+/* ══════════════════════════════════════════════════════════════
+   DESKTOP LAYOUT (≥ 768px)
+   Section: full-viewport via fixFullBleed (SQS escape), white bg.
+   Heading/subtitle: in white section area above stage (on all viewports).
+   .contact-stage: constrained inner div, JS-sized to Mainroom geometry.
+   Stump bg on stage only. aspect-ratio:4/3 shows stump prominently
+   (bottom 75% of square image) without excessive wall area height.
+   Stage is flex-row: [left spacer] [console] — direct children.
+══════════════════════════════════════════════════════════════ */
+@media (min-width: 768px) {
+  #contact-section {
+    background: #ffffff !important;
+    flex-direction: column !important;
+    align-items: flex-start !important;   /* JS sets stage marginLeft — let it control centering */
+    justify-content: flex-start !important;
+    padding: clamp(32px, 4vw, 56px) 0 clamp(32px, 4vw, 56px) !important;
+    gap: 0 !important;
+    overflow: visible !important;
+    min-height: 0 !important;
+  }
+
+  /* Heading/subtitle: centered via text-align since section is now flex-start */
+  .contact-heading {
+    color: #7a4a18 !important;
+    text-shadow: none !important;
+    margin-bottom: 0.2em !important;
+    width: 100% !important;
+    text-align: center !important;
+  }
+  .contact-subtitle {
+    color: #5c3a14 !important;
+    margin-bottom: clamp(16px, 2vw, 32px) !important;
+    width: 100% !important;
+    text-align: center !important;
+  }
+
+  /* Stage: JS sets width + marginLeft for centering.
+     align-self:auto — do not let flexbox override JS margin. */
+  .contact-stage {
+    align-self: auto !important;
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: flex-end !important;
+    justify-content: center !important;
+    position: relative !important;
+    background-image: url('https://images.squarespace-cdn.com/content/69ba3296dd8f7f351597cdb9/e06f3733-b37a-4542-88f2-aab460cf30e2/ContactDesktopTrunkRaw.webp') !important;
+    background-size: cover !important;
+    /* background-position controls which part of the stump image is visible.
+       center bottom (100%) = full stump base visible, wall crops at top.
+       center top    (0%)   = full wall visible, stump base crops at bottom.
+       center 70%           = shows stump surface prominently, crops lower trunk.
+       Tune this value to frame the console on the stump correctly. */
+    background-position: center 55% !important;
+    background-repeat: no-repeat !important;
+    background-color: #c08850 !important;
+    aspect-ratio: 17 / 10 !important;
+    overflow: visible !important;
+    padding: 0 clamp(100px, 9vw, 140px) clamp(8px, 1.5vw, 20px) clamp(16px, 2vw, 32px) !important;
+    gap: clamp(16px, 3vw, 48px) !important;
+  }
+
+  /* .contact-desktop-row is a passthrough on desktop —
+     stage itself is the flex row container. */
+  .contact-desktop-row {
+    display: contents !important;
+  }
+
+  /* Left column: placeholder for stump-surface decorative assets */
+  .contact-desktop-left {
+    flex: 1 1 0 !important;
+    min-width: 0 !important;
+    align-self: flex-end !important;
+    min-height: 1px !important;
+  }
+
+  /* Console: width set by JS based on stage height to stay proportional
+     regardless of aspect-ratio changes. CSS provides a fallback only. */
+  .console-wrapper {
+    flex: 0 0 auto !important;
+    width: 340px; /* fallback — overridden by JS setConsoleWidth() */
+    max-width: none !important;
+    overflow: visible !important;
+    margin-bottom: clamp(8px, 1.5vw, 24px) !important;
+  }
+
+  /* Console input font: on desktop, console is ~400px wide so font must scale
+     with console width, not viewport. 1.1vw at 1881px = ~20px — fits trough.
+     Mobile override below uses 4.8vw which scales with full-width console. */
+  .console-input {
+    font-size: clamp(0.85rem, 1.1vw, 1.1rem) !important;
+  }
+  .console-input--message {
+    font-size: clamp(0.85rem, 1.1vw, 1.1rem) !important;
+  }
+
+  .console-img--desktop { display: none  !important; }
+  .console-img--mobile  { display: block !important; }
+
+  /* Sticky note: enabled on desktop — auto-drops on field focus */
+  .sticky-note { display: block !important; }
+
+  /* Sticky note font: one increment larger than mobile base on desktop */
+  .sticky-note__line {
+    font-size: clamp(1.1rem, 1.2vw, 1.35rem) !important;
+  }
+}
+</style>
+
+
+<section id="contact-section" class="sbc-section" aria-label="Contact Me">
+
+  <!-- Chevron: JS moves this to body for reliable position:fixed in Fluid Engine -->
+  <div id="contact-scroll-hint" aria-hidden="true">
+    <svg viewBox="0 0 24 14" xmlns="http://www.w3.org/2000/svg">
+      <polyline points="2,2 12,12 22,2" fill="none" stroke="white"
+                stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </div>
+
+  <h2 class="contact-heading">Contact Me</h2>
+  <p class="contact-subtitle">Curious? Questions? Bored? Drop a note!</p>
+
+  <!-- Stage: constrained inner div holding stump bg + console.
+       JS sizes this to match Mainroom image width (same as .about-paper).
+       On mobile: display:contents so children join section flex flow directly. -->
+  <div class="contact-stage" id="contactStage">
+
+    <!-- Desktop console row: left column + console at stump surface level -->
+    <div class="contact-desktop-row">
+      <div class="contact-desktop-left" aria-hidden="true"></div>
+
+      <div class="console-wrapper" id="consoleWrapper">
+
+    <!-- Antenna cutout: placed FIRST so that position:relative on .console-img--mobile
+         causes it to paint on top, hiding antenna artifact edges within the console body.
+         Transparent areas of the console image reveal the antenna beneath. No z-index needed. -->
+    <img class="console-antenna" id="consoleAntenna"
+         src="https://images.squarespace-cdn.com/content/69ba3296dd8f7f351597cdb9/78b524a3-a167-477c-8e3d-2f80199c72b3/AntennaCutOut.webp"
+         alt="" draggable="false"
+         role="button" tabindex="0"
+         aria-label="Wobble the antenna">
+
+    <!-- Desktop image (shown ≥ 768px) -->
+    <img class="console-img console-img--desktop" id="consoleImgDesk"
+         src="https://images.squarespace-cdn.com/content/69ba3296dd8f7f351597cdb9/b124a545-da31-4619-8534-5eeaf6158119/ContactMeDeskUp.webp"
+         alt="Wooden walkie-talkie style contact form — fill in the fields and hit Transmit"
+         draggable="false">
+
+    <!-- Mobile image (shown ≤ 767px) — transparent bg, antenna removed from image -->
+    <img class="console-img console-img--mobile" id="consoleImgMob"
+         src="https://images.squarespace-cdn.com/content/69ba3296dd8f7f351597cdb9/57a8a879-242a-472c-baae-5ec0ea042f43/MobileBackgroundNoAntUp7.webp"
+         alt="Wooden walkie-talkie style contact form — fill in the fields and hit Transmit"
+         draggable="false">
+
+    <!-- Form: absolutely covers the console image -->
+    <form id="contact-form" class="console-form"
+          action="https://formspree.io/f/mwvrjyrb"
+          method="POST">
+
+      <!-- Visually hidden labels (required for screen readers) -->
+
+      <!-- .console-clip: overflow:hidden parent clips typed text at trough
+           boundary even when input is focused (browser ignores overflow:hidden
+           on the input itself when focused — parent clip is always respected) -->
+      <label class="sr-only" for="cf-name">Your name</label>
+      <div class="console-clip" id="cf-name-clip">
+        <input class="console-input console-input--name"
+               id="cf-name" name="name" type="text"
+               placeholder="Robin Acornsby"
+               autocomplete="name" required>
+      </div>
+
+      <label class="sr-only" for="cf-email">Your email</label>
+      <div class="console-clip" id="cf-email-clip">
+        <input class="console-input console-input--email"
+               id="cf-email" name="email" type="email"
+               placeholder="robin@treehouse.net"
+               autocomplete="email" required>
+      </div>
+
+      <label class="sr-only" for="cf-phone">Your phone (optional)</label>
+      <div class="console-clip" id="cf-phone-clip">
+        <input class="console-input console-input--phone"
+               id="cf-phone" name="phone" type="tel"
+               placeholder="(425) 555-0123"
+               autocomplete="tel">
+      </div>
+
+      <label class="sr-only" for="cf-message">Your message</label>
+      <textarea class="console-input console-input--message"
+                id="cf-message" name="message"
+                placeholder="Once upon a time..."
+                required></textarea>
+
+      <!-- Transparent overlay on drawn TRANSMIT button in image -->
+      <button class="console-submit" type="submit"
+              aria-label="Send your message"></button>
+
+    </form>
+
+    <!-- ── Interactive overlays (transparent, positioned by JS) ── -->
+
+    <!-- LED 1 (orange) — click to toggle glow -->
+    <div class="console-led console-led--1" id="led1"
+         role="button" tabindex="0"
+         aria-label="Toggle orange indicator light"></div>
+
+    <!-- LED 2 (teal) — click to toggle glow -->
+    <div class="console-led console-led--2" id="led2"
+         role="button" tabindex="0"
+         aria-label="Toggle teal indicator light"></div>
+
+    <!-- Knob cutout — click to rotate (cycles ink color for typing)
+         Separate image so it can be independently positioned and rotated.
+         Indicator notch at top; each click rotates 45° clockwise. -->
+    <img class="console-knob" id="consoleKnob"
+         src="https://images.squarespace-cdn.com/content/69ba3296dd8f7f351597cdb9/c60d987e-3246-416d-8c11-e913e48e7b85/ButtonSquareUp.webp"
+         alt="" draggable="false"
+         role="button" tabindex="0"
+         aria-label="Change typing ink color">
+
+    <!-- Knob position indicator squares: placed by JS at each 45° stop
+         around the knob perimeter. Shows user the knob is interactive
+         and previews the ink color at each position. Passive/non-interactive. -->
+    <div class="knob-dot" id="knobDot0" aria-hidden="true"></div>
+    <div class="knob-dot" id="knobDot1" aria-hidden="true"></div>
+    <div class="knob-dot" id="knobDot2" aria-hidden="true"></div>
+    <div class="knob-dot" id="knobDot3" aria-hidden="true"></div>
+
+    <!-- Antenna: moved to before console images — see top of wrapper above -->
+
+    <!-- Sticky note: mobile only — positioned by JS over LED occlusion zone.
+         Tap to fall to lower console area.
+         Text is real HTML (copyable, accessible). Image is purely decorative.
+         Email injected via JS — never put email in HTML (Cloudflare obfuscation). -->
+    <div class="sticky-note" id="stickyNote"
+         role="button" tabindex="0"
+         aria-label="Contact info — tap to see full details">
+      <img class="sticky-note__img"
+           src="https://images.squarespace-cdn.com/content/69ba3296dd8f7f351597cdb9/51c2233a-edb6-4076-9530-8cd8c0f7d218/YellowNoteStickerNoBorder.webp"
+           alt="" draggable="false">
+      <!-- 📍 pushpin holds note at rest; fades out when note falls -->
+      <span class="sticky-note__pin" aria-hidden="true">📍</span>
+      <div class="sticky-note__text">
+        <span class="sticky-note__line sticky-note__line--phone">
+          ☎<a class="sticky-note__link" href="tel:+14255550123" id="stickyPhone">425-555-0123</a>
+        </span>
+        <span class="sticky-note__divider"></span>
+        <span class="sticky-note__line"><a class="sticky-note__link" id="stickyEmail"></a></span>
+      </div>
+      <!-- 📌 re-pin hint: appears after fall settles -->
+      <span class="sticky-note__reset" aria-hidden="true">📌re-pin</span>
+    </div>
+
+    <!-- Success overlay: appears inside message area after transmit -->
+    <div class="console-success" id="consoleSuccess" aria-live="polite" aria-atomic="true">
+      <p class="console-success-title">✓ TRANSMISSION SENT</p>
+      <p class="console-success-sub">Standing by for your signal.</p>
+    </div>
+
+  </div><!-- /.console-wrapper -->
+    </div><!-- /.contact-desktop-row -->
+
+  </div><!-- /.contact-stage -->
+
+</section>
+
+
+<script>
+(function () {
+  'use strict';
+
+  var VERSION = 'Contact v1.81';
+
+  /* ── Version badge (remove after sign-off) ── */
+  var badge = document.createElement('div');
+  badge.textContent = VERSION;
+  badge.style.cssText = [
+    'position:fixed', 'bottom:8px', 'right:14px',
+    'background:rgba(20,90,110,0.85)',
+    'color:#fff', 'font:bold 11px/1 monospace',
+    'padding:4px 9px', 'border-radius:4px',
+    'z-index:99999', 'pointer-events:none', 'letter-spacing:0.03em'
+  ].join(';');
+  document.body.appendChild(badge);
+
+  var stickyEmailEl = document.getElementById('stickyEmail');
+  if (stickyEmailEl) {
+    var emailAddr = ['tejas', 'squirrelbraincoaching.com'].join('@');
+    stickyEmailEl.href = 'mailto:' + emailAddr;
+    /* ✉ is on the same line as tejas@squirrel — inline with the address */
+    stickyEmailEl.innerHTML =
+      '<span style="display:block;white-space:nowrap">\u2709 tejas@squirrel</span>' +
+      '<span style="display:block;white-space:nowrap">braincoaching.com</span>';
+    stickyEmailEl.style.display = 'inline';
+  }
+
+  /* ══════════════════════════════════════════════════════════════
+     COORDINATE SYSTEM
+     All values are fractions of image width (l, w) or height (t, h).
+     Source: imagecoordinates.com at 100% zoom on each image.
+     h:null = circular element (JS sets height = width for aspect-ratio:1)
+
+     ⚠️  TODO: Replace ALL placeholder values below after measuring.
+         Workflow:
+         1. Open image in imagecoordinates.com at 100% zoom
+         2. Click top-left corner of each field trough → note x,y
+         3. Click bottom-right corner → note x,y
+         4. l = x1/imgW,  t = y1/imgH
+            w = (x2-x1)/imgW,  h = (y2-y1)/imgH
+         5. Set debug:true below, check red dots, then set debug:false
+  ══════════════════════════════════════════════════════════════ */
+
+  /* ── Debug flags: driven by debug panel toggles (see bottom of script) ──
+     Values persist across page reloads via sessionStorage.
+     Panel is only injected in this build — remove before launch. ── */
+  var DEBUG_COORDS = sessionStorage.getItem('sbc_debug_coords') === 'true';
+  var DEBUG_WIDTH  = sessionStorage.getItem('sbc_debug_width')  === 'true';
+  var DEBUG_STAGE  = sessionStorage.getItem('sbc_debug_stage')  === 'true';
+
+  // ── Desktop image coords (1920 × 2048) ────────────────────────
+  // name/email/phone : left x given; right edge ~1360 (before knob).
+  //                    Tune w after first drop.
+  // message          : ✅ all 4 corners given — precise
+  // submit           : bottom-right given; size estimated
+  // knob/LEDs        : center given; radius estimated. Tune after drop.
+  // antenna          : ✅ tip + base given — precise
+  var DESK = {
+    name:    { l:0.2740, t:0.2539, w:0.3568, h:0.0273 }, // TL(526,520) BR(1211,576) ✅ measured
+    email:   { l:0.2740, t:0.3257, w:0.3568, h:0.0254 }, // TL(526,667) BR(1211,719) ✅ measured
+    phone:   { l:0.2755, t:0.3970, w:0.3552, h:0.0269 }, // TL(529,813) BR(1211,868) ✅ measured
+    message: { l:0.2841, t:0.4897, w:0.4635, h:0.3064 }, // ✅ 4-corner measured unchanged
+    submit:  { l:0.6703, t:0.8677, w:0.1562, h:0.0439 }, // corrected: center (1437,1822)
+    led1:    { l:0.2812, t:0.1021, w:0.0469, h:null   },
+    led2:    { l:0.3557, t:0.1021, w:0.0469, h:null   },
+    knob:    { l:0.6818, t:0.2817, w:0.0938, h:null   },
+    antenna: { l:0.8609, t:0.0312, w:0.0250, h:0.5884 }  // ✅ tip+base measured
+  };
+
+  // ── Mobile image coords (1132 × 2048) — MobileBackgroundUp7.webp ──
+  // Transparent bg, antenna top-right, tighter single-line field troughs.
+  // Knob is NOT drawn on this image — placed as separate cutout img overlay.
+  // LED radius = 55px each; knob display diameter = 115px (cutout is 230×230).
+  //
+  // Calculation reference:
+  //   l = x1/1132,  t = y1/2048
+  //   w = (x2-x1)/1132,  h = (y2-y1)/2048
+  //   circular (h:null): height set equal to width by place()
+  var MOB = {
+    // Fields inset +4px right/down from measured trough border
+    name:    { l:0.1272, t:0.1817, w:0.5336, h:0.0444 }, // TL(140,368)+4px inset
+    email:   { l:0.1272, t:0.2774, w:0.5336, h:0.0444 }, // TL(140,564)+4px inset
+    phone:   { l:0.1272, t:0.3775, w:0.5336, h:0.0444 }, // TL(140,769)+4px inset
+    message: { l:0.1484, t:0.4961, w:0.6996, h:0.3672 }, // TL(164,1012)+4px inset
+    submit:  { l:0.7120, t:0.9258, w:0.2332, h:0.0518 }, // TL(806,1892) BR(1070,1998) +4px lower
+    led1:    { l:0.7050, t:0.1748, w:0.0972, h:null   }, // center(853,403) r=55px +10px lower
+    led2:    { l:0.8268, t:0.1748, w:0.0972, h:null   }, // center(991,403) r=55px +10px lower
+    knob:    { l:0.7597, t:0.3633, w:0.1016, h:null   }, // center(917,801) d=115px
+    antenna: { l:0.1324, t:0.0128, w:0.6820, h:0.0742 }  // TL(131,0)+19px right +26px lower (cumulative)
+  };
+  /* ══════════════════════════════════════════════════════════════ */
+
+  var section    = document.getElementById('contact-section');
+  var stage      = document.getElementById('contactStage');
+  var wrapper    = document.getElementById('consoleWrapper');
+  var imgDesk    = document.getElementById('consoleImgDesk');
+  var imgMob     = document.getElementById('consoleImgMob');
+  var form       = document.getElementById('contact-form');
+  var led1       = document.getElementById('led1');
+  var led2       = document.getElementById('led2');
+  var knobEl     = document.getElementById('consoleKnob');
+  var knobDots   = [0,1,2,3].map(function(i) {
+    return document.getElementById('knobDot' + i);
+  });
+  var antennaEl  = document.getElementById('consoleAntenna');
+  var successBox = document.getElementById('consoleSuccess');
+  var stickyNote = document.getElementById('stickyNote');
+
+  /* ── Sticky note coordinate zones (mobile image: 1132 × 2048) ──
+     OcclusionZoneA: upper-right — where note is pinned (over LEDs)
+       TL: 741,201  BR: 1117,631
+     OcclusionZoneB: lower-left — where note falls to
+       TL: 0,1764   BR: 542,2024
+     Note is anchored to top-right of ZoneA (right edge of image ≈ BR.x).
+     Dimensions: yellow cutout 278×284 → rendered at ~18% of image width. ── */
+  var STICKY = {
+    /* Vertical anchor: top of OcclusionZoneA = 201/2048 */
+    anchorT: 201  / 2048,
+    /* Rendered width as fraction of image width — wider for legibility */
+    w: 0.40,
+    /* Fall target CENTER — center of OcclusionZoneB (TL:0,1764 BR:542,2024) */
+    fallCX: 271  / 1132,   /* (0+542)/2 / 1132 */
+    fallCY: 1894 / 2048    /* (1764+2024)/2 / 2048 */
+  };
+
+  var inputName  = document.getElementById('cf-name');
+  var inputEmail = document.getElementById('cf-email');
+  var inputPhone = document.getElementById('cf-phone');
+  var inputMsg   = document.getElementById('cf-message');
+  var submitBtn  = form  ? form.querySelector('.console-submit') : null;
+
+  /* Clip wrapper divs — placed by JS; contain single-line inputs */
+  var clipName  = document.getElementById('cf-name-clip');
+  var clipEmail = document.getElementById('cf-email-clip');
+  var clipPhone = document.getElementById('cf-phone-clip');
+
+  /* ── Helpers ── */
+  function isMobile() { return window.innerWidth <= 767; }
+  /* Both breakpoints now use the mobile image (transparent bg).
+     Desktop image (ContactMeDeskUp.webp) is retired — the mobile
+     console sits on the stump background on desktop.
+     activeImg/activeCoords always return mob variants. */
+  function activeImg()    { return imgMob;  }
+  function activeCoords() { return MOB;     }
+
+  /* ── Place a single overlay element ── */
+  function place(el, coord, offL, offT, iW, iH) {
+    if (!el || !coord) return;
+    el.style.left   = (offL + coord.l * iW) + 'px';
+    el.style.top    = (offT + coord.t * iH) + 'px';
+    el.style.width  = (coord.w * iW) + 'px';
+    el.style.height = (coord.h !== null)
+      ? (coord.h * iH) + 'px'
+      : (coord.w * iW) + 'px'; /* circular: height = width */
+  }
+
+  /* ── Vertically center text in a single-line input ──
+     Sets line-height = input's own rendered height.
+     A single-line input with line-height equal to its height has
+     its text geometrically centered — no padding guessing needed.
+     Scales perfectly at every viewport size. ── */
+  function centerInputText(input) {
+    if (!input) return;
+    var h = input.offsetHeight;
+    if (h > 0) input.style.lineHeight = h + 'px';
+  }
+
+  /* ── Place knob indicator squares around knob perimeter ──
+     Positioned at -45°, 0°, 45°, 90° from 12 o'clock.
+     Math: for angle θ from 12 o'clock (clockwise positive):
+       x_offset = sin(θ) * radius
+       y_offset = -cos(θ) * radius
+     Dots placed just outside knob edge (kr + 14px gap). ── */
+  /* Dot colors match ink order: black(0), blue(1), green(2), red(3)
+     Darkened ~15% vs ink values for visibility on wood texture. */
+  var KNOB_DOT_COLORS = ['#341a06', '#165e6e', '#304d16', '#561630'];
+  /* KNOB_DOT_ANGLES computed inside placeKnobDots() — see below.
+     Must be computed at call time, after KNOB_COLOR_STOPS/KNOB_STEP_DEG/
+     KNOB_START_DEG are defined (those vars are declared later in the script;
+     computing here via IIFE caused NaN due to var hoisting with undefined values). */
+  var KNOB_DOT_SIZE   = 6;  /* px — small circles */
+  var KNOB_DOT_GAP      = 12; /* px outside knob radius */
+  /* Horizontal offset to compensate if knob circle is off-center in its PNG.
+     Positive = shift dots right, negative = shift dots left. Tune visually. */
+  var KNOB_DOT_CX_ADJUST = -3; /* px — tested value: shifts dots to visual knob center */
+
+  function placeKnobDots(knobCoord, offL, offT, iW, iH) {
+    /* Angles computed here at call time — KNOB_COLOR_STOPS, KNOB_STEP_DEG,
+       KNOB_START_DEG are declared later in the script. Computing in an IIFE
+       at declaration time caused NaN due to var hoisting (undefined values). */
+    var dotAngles = [];
+    for (var di = 0; di < KNOB_COLOR_STOPS; di++) {
+      dotAngles.push(KNOB_START_DEG + di * KNOB_STEP_DEG);
+    }
+
+    /* cx: l is fraction of iW — correct */
+    var cx   = offL + (knobCoord.l + knobCoord.w / 2) * iW + KNOB_DOT_CX_ADJUST;
+    /* cy: knob height = w*iW px (circular: h:null), not t-fraction of iH */
+    var cy   = offT + knobCoord.t * iH + (knobCoord.w * iW) / 2;
+    var kr   = (knobCoord.w * iW) / 2;
+    var orb  = kr + KNOB_DOT_GAP;
+    var half = KNOB_DOT_SIZE / 2;
+
+    dotAngles.forEach(function(deg, i) {
+      var dot = knobDots[i];
+      if (!dot) return;
+      var rad = deg * Math.PI / 180;
+      dot.style.position   = 'absolute';
+      dot.style.left       = (cx + Math.sin(rad) * orb - half) + 'px';
+      dot.style.top        = (cy - Math.cos(rad) * orb - half) + 'px';
+      dot.style.background = KNOB_DOT_COLORS[i];
+    });
+  }
+
+  /* ── Position all overlays relative to wrapper ── */
+  function placeOverlays() {
+    var img = activeImg();
+    if (!img || !wrapper) return;
+
+    var r   = img.getBoundingClientRect();
+    var wR  = wrapper.getBoundingClientRect();
+    var C   = activeCoords();
+    var offL = r.left - wR.left;
+    var offT = r.top  - wR.top;
+    var iW   = r.width;
+    var iH   = r.height;
+
+    /* Place clip wrappers (not inputs directly) for single-line fields.
+       The input inside each clip div fills it via CSS (width/height:100%).
+       centerInputText() then sets line-height = height for vertical centering. */
+    place(clipName,  C.name,    offL, offT, iW, iH);
+    place(clipEmail, C.email,   offL, offT, iW, iH);
+    place(clipPhone, C.phone,   offL, offT, iW, iH);
+
+    centerInputText(inputName);
+    centerInputText(inputEmail);
+    centerInputText(inputPhone);
+
+    place(inputMsg,   C.message, offL, offT, iW, iH);
+    place(submitBtn,  C.submit,  offL, offT, iW, iH);
+
+    /* Vertical centering handled by correct t coordinates — no JS needed. */
+    place(led1,       C.led1,    offL, offT, iW, iH);
+    place(led2,       C.led2,    offL, offT, iW, iH);
+    place(knobEl,     C.knob,    offL, offT, iW, iH);
+    placeKnobDots(C.knob, offL, offT, iW, iH);
+    place(antennaEl,  C.antenna, offL, offT, iW, iH);
+
+    /* Success overlay sits exactly over message area */
+    place(successBox, C.message, offL, offT, iW, iH);
+
+    /* ── Sticky note placement ────────────────────────────────────
+       MOBILE: peeks off right viewport edge (~83% visible), falls
+         to lower-left of console image (OcclusionZoneB).
+       DESKTOP: fully visible, pinned upper-right corner of console
+         wrapper, falls LEFT of console into the stump area.
+         Falls on field focus (not tap) — no re-pin needed.
+
+       Both paths store _fallCX/_fallCY/_restL/_restT on the element
+       so the shared animateFall() function works for both. ── */
+    if (stickyNote) {
+      var noteW = STICKY.w * iW;
+      var noteH = noteW * (284 / 278);
+
+      if (isMobile()) {
+        /* ── Mobile: peek off right viewport edge ── */
+        if (!stickyNote.classList.contains('fallen')) {
+          var vpRight = window.innerWidth - wR.left;
+          var noteL   = vpRight - noteW * 0.83;
+          var noteT   = offT + STICKY.anchorT * iH;
+          stickyNote.style.left      = noteL + 'px';
+          stickyNote.style.top       = noteT + 'px';
+          stickyNote.style.width     = noteW + 'px';
+          stickyNote.style.height    = noteH + 'px';
+          stickyNote.style.transform = 'rotate(-12deg)';
+        }
+        /* Fall target: OcclusionZoneB lower-left of console image */
+        var rawFCX = offL + STICKY.fallCX * iW;
+        var rawFCY = offT + STICKY.fallCY * iH;
+        stickyNote._fallCX = Math.max(offL + noteW/2, Math.min(rawFCX, offL + iW - noteW/2));
+        stickyNote._fallCY = Math.max(offT + noteH/2, Math.min(rawFCY, offT + iH - noteH/2));
+        stickyNote._fallRot = -8;   /* mobile: lands nearly flat */
+
+      } else {
+        /* ── Desktop: fully visible, upper-right of console wrapper ──
+           Position relative to wrapper (offL/offT = 0 since wrapper is
+           the positioning context for all overlays). Note sits at top-right
+           of the console, tilted -12deg, fully in frame. */
+
+        /* Note sized at 15% of stage width — confirmed readable at 1300px stage. */
+        var stageEl   = document.getElementById('contactStage');
+        var stageR    = stageEl ? stageEl.getBoundingClientRect() : wR;
+        var stageW    = stageR.width;
+        var deskNoteW = stageW * 0.145;
+        var deskNoteH = deskNoteW * (284/278);
+        noteW = deskNoteW;
+        noteH = deskNoteH;
+
+        if (!stickyNote.classList.contains('fallen')) {
+          /* Rest position: v1.75 base + 15px right + 5px down per v1.75 test */
+          var noteL = iW * 0.655;
+          var noteT = offT + iH * 0.069;
+          stickyNote.style.left      = noteL + 'px';
+          stickyNote.style.top       = noteT + 'px';
+          stickyNote.style.width     = deskNoteW + 'px';
+          stickyNote.style.height    = deskNoteH + 'px';
+          stickyNote.style.transform = 'rotate(-12deg)';
+        }
+
+        /* Fall: v1.75 base + 30px up + 10px right */
+        stickyNote._fallCX  = offL - deskNoteW * 0.34;
+        stickyNote._fallCY  = offT + iH * 0.839;
+        stickyNote._fallRot = -15;
+        stickyNote._noteW   = deskNoteW;
+        stickyNote._noteH   = deskNoteH;
+      }
+
+      /* Common: store rest position and dimensions */
+      stickyNote._noteW  = noteW;
+      stickyNote._noteH  = noteH;
+      if (!stickyNote.classList.contains('fallen')) {
+        stickyNote._restL = parseFloat(stickyNote.style.left)  || 0;
+        stickyNote._restT = parseFloat(stickyNote.style.top)   || 0;
+      }
+    }
+
+    /* ── Debug mode: show red dot at top-left of each element ──
+       Set DEBUG_COORDS = true at top of script to activate. ── */
+    if (DEBUG_COORDS) {
+      ['debug-d1','debug-d2','debug-d3','debug-d4','debug-d5','debug-d6','debug-d7','debug-d8','debug-d9'].forEach(function(id){
+        var old = document.getElementById(id);
+        if (old) old.parentNode.removeChild(old);
+      });
+      var fields = [
+        { id:'debug-d1', coord:C.name    },
+        { id:'debug-d2', coord:C.email   },
+        { id:'debug-d3', coord:C.phone   },
+        { id:'debug-d4', coord:C.message },
+        { id:'debug-d5', coord:C.submit  },
+        /* Antenna: render dot at bottom-right (base) not top-left (tip) */
+        { id:'debug-d6', coord:C.antenna, anchorBR: true },
+        { id:'debug-d7', coord:C.led1    },
+        { id:'debug-d8', coord:C.led2    },
+        { id:'debug-d9', coord:C.knob, anchorCenter: true }
+      ];
+      fields.forEach(function(f) {
+        var dot = document.createElement('div');
+        dot.id = f.id;
+        /* anchorBR: render at bottom-right of element (e.g. antenna base) */
+        /* anchorCenter: for circular elements, dot at visual center */
+        var dotX = f.anchorCenter
+          ? offL + (f.coord.l + f.coord.w / 2) * iW - 4
+          : f.anchorBR
+            ? offL + (f.coord.l + f.coord.w) * iW - 4
+            : offL + f.coord.l * iW - 4;
+        var dotY = f.anchorCenter
+          ? offT + f.coord.t * iH + (f.coord.w * iW) / 2 - 4
+          : f.anchorBR
+            ? offT + (f.coord.t + f.coord.h) * iH - 4
+            : offT + f.coord.t * iH - 4;
+        dot.style.cssText = [
+          'position:absolute',
+          'width:8px','height:8px',
+          'background:red','border-radius:50%',
+          'pointer-events:none','z-index:9999',
+          'left:' + dotX + 'px',
+          'top:'  + dotY + 'px'
+        ].join(';');
+        wrapper.appendChild(dot);
+      });
+    }
+  }
+
+  /* ── Full-bleed + stage sizing ──
+     Section always escapes SQS column via JS (required — CSS width resolves
+     to narrow code block column). Section bg is white so full-width is invisible.
+     On desktop: .contact-stage is sized to match Mainroom image geometry,
+     same pattern as About's .about-paper. Stump bg lives on stage, not section. ── */
+  function fixFullBleed() {
+    if (!section) return;
+    /* Reset so measurement reflects natural document position */
+    section.style.marginLeft = '';
+    section.style.width = '';
+    void section.offsetWidth;
+    var rect    = section.getBoundingClientRect();
+    var scrollX = window.pageXOffset || document.documentElement.scrollLeft;
+    /* Stretch section to full viewport width */
+    section.style.marginLeft = (-rect.left - scrollX) + 'px';
+    section.style.width = window.innerWidth + 'px';
+
+    /* Desktop: size stage to match Mainroom image width + centering */
+    if (stage && !isMobile()) {
+      var vw = window.innerWidth;
+      /* Standard content width: min(1300px, vw - 120px).
+         Independent of any other section — self-contained centering.
+         1300px cap: wide enough for rich illustrated content, confirmed
+         by measuring About section at ~1266px which looks correct.
+         Leaves ≥60px breathing room each side at any viewport width. */
+      var stageW = Math.min(1300, vw - 120);
+      stage.style.width      = stageW + 'px';
+      stage.style.marginLeft = Math.floor((vw - stageW) / 2) + 'px';
+      if (DEBUG_STAGE) {
+        console.log('[SBC DEBUG_STAGE] stage set to width=' + stageW +
+          ' marginLeft=' + Math.floor((vw - stageW) / 2) +
+          ' vw=' + vw + ' formula=min(1300,vw-120)');
+        var sectionR = section.getBoundingClientRect();
+        console.log('[SBC DEBUG_STAGE] section BCR left=' +
+          Math.round(sectionR.left) + ' width=' + Math.round(sectionR.width));
+        var stageR2 = stage.getBoundingClientRect();
+        console.log('[SBC DEBUG_STAGE] stage BCR left=' +
+          Math.round(stageR2.left) + ' width=' + Math.round(stageR2.width));
+      }
+    } else if (stage) {
+      stage.style.width      = '';
+      stage.style.marginLeft = '';
+    }
+  }
+
+  /* ── Mobile full-width wrapper ──
+     CSS align-self:stretch can be overridden by SQS injected styles.
+     After fixFullBleed() sets section to innerWidth, explicitly set
+     wrapper width to match — section.offsetWidth is already innerWidth
+     at this point, so this is deterministic and override-proof. ── */
+  function fixMobileWidth() {
+    if (!wrapper) return;
+    if (isMobile()) {
+      wrapper.style.width    = section.offsetWidth + 'px';
+      wrapper.style.maxWidth = 'none';
+    } else {
+      wrapper.style.width    = '';
+      wrapper.style.maxWidth = '';
+    }
+    if (DEBUG_WIDTH) {
+      wrapper.style.background = 'rgba(255,0,0,0.25)';
+    }
+  }
+
+  /* ── Fix SQS container height (confirmed working pattern) ── */
+  function fixContainerHeight() {
+    if (!section) return;
+    var h = section.offsetHeight + 'px';
+    [
+      section.closest('.fluid-engine'),
+      section.closest('.sqs-block'),
+      section.closest('.fe-block'),
+      section.closest('.sqs-block-content'),
+      section.closest('.sqs-code-container')
+    ].forEach(function(el) {
+      if (!el) return;
+      el.style.height    = h;
+      el.style.minHeight = h;
+      el.style.maxHeight = h;
+    });
+  }
+
+  /* ── Console width: computed from stage height ──
+     Console image is portrait (1132×2048, ratio 0.5527 w/h).
+     Target: console height = 75% of stage height.
+     consoleW = stageH * 0.75 * 0.5527
+     Clamped 240–400px so it stays readable at any viewport size.
+     Must run after stage is sized by fixFullBleed(). ── */
+  function setConsoleWidth() {
+    if (!wrapper || isMobile()) return;
+    var stageEl = document.getElementById('contactStage');
+    if (!stageEl) return;
+    var stageH = stageEl.getBoundingClientRect().height;
+    if (DEBUG_STAGE) console.log('[SBC DEBUG_STAGE] setConsoleWidth: stageH=' + Math.round(stageH));
+    if (stageH === 0) {
+      if (DEBUG_STAGE) console.warn('[SBC DEBUG_STAGE] stageH=0, skipping — will retry via rAF');
+      return;
+    }
+    var MOB_IMG_RATIO = 1132 / 2048;
+    var targetH  = stageH * 0.95;  /* 95% of stage height → ~401px wide at 765px stage */
+    var consoleW = Math.round(targetH * MOB_IMG_RATIO);
+    consoleW = Math.max(260, Math.min(consoleW, 420));
+    if (DEBUG_STAGE) console.log('[SBC DEBUG_STAGE] setConsoleWidth: consoleW=' + consoleW);
+    wrapper.style.width = consoleW + 'px';
+    var fontSize = Math.max(13, Math.round(consoleW * 0.052));
+    var fontVal  = fontSize + 'px';
+    [inputName, inputEmail, inputPhone, inputMsg].forEach(function(inp) {
+      if (inp) inp.style.fontSize = fontVal;
+    });
+  }
+
+  /* ── Init ── */
+  function init() {
+    fixFullBleed();
+    fixMobileWidth();
+    /* Defer overlay placement by one rAF so the browser resolves
+       aspect-ratio geometry on the stage before we measure it.
+       fixFullBleed sets stage.style.width (inline), but the browser
+       needs a layout pass to compute stage.offsetHeight from aspect-ratio. */
+    requestAnimationFrame(function() {
+      setConsoleWidth();
+      placeOverlays();
+      fixContainerHeight();
+      if (DEBUG_STAGE) {
+        var stageEl2 = document.getElementById('contactStage');
+        if (stageEl2) {
+          var r2 = stageEl2.getBoundingClientRect();
+          console.log('[SBC DEBUG_STAGE] post-rAF stage BCR: w=' +
+            Math.round(r2.width) + ' h=' + Math.round(r2.height));
+          console.log('[SBC DEBUG_STAGE] wrapper BCR w=' +
+            Math.round(wrapper ? wrapper.getBoundingClientRect().width : -1));
+        }
+      }
+    });
+  }
+
+  /* Both breakpoints now use the mobile image (transparent bg).
+     Only gate on mobReady — deskReady/imgDesk no longer needed. */
+  var mobReady  = false;
+
+  function tryInit() {
+    if (mobReady) init();
+  }
+
+  if (imgMob) {
+    if (imgMob.complete) { mobReady = true; }
+    else imgMob.addEventListener('load', function() { mobReady = true; tryInit(); });
+  }
+
+  tryInit();
+  window.addEventListener('load',   init);
+  window.addEventListener('resize', init);
+
+  /* ══════════════════════════════════════════════════════════════
+     INTERACTIVE ELEMENTS
+  ══════════════════════════════════════════════════════════════ */
+
+  /* ── Reusable tap handler (scroll-vs-tap: delta < 12px) ── */
+  function addTap(el, fn) {
+    if (!el) return;
+    var _x = 0, _y = 0;
+    el.addEventListener('pointerdown', function(e) { _x = e.clientX; _y = e.clientY; });
+    el.addEventListener('pointerup',   function(e) {
+      if (Math.abs(e.clientX - _x) < 12 && Math.abs(e.clientY - _y) < 12) fn(e);
+    });
+    el.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); fn(e); }
+    });
+  }
+
+  /* ── LEDs: tap to toggle glow ── */
+  addTap(led1, function() { led1.classList.toggle('lit'); });
+  addTap(led2, function() { led2.classList.toggle('lit'); });
+
+  /* ── Sticky note: wider tap threshold + full-surface hit area ──
+     Standard addTap uses 12px movement threshold — too tight when users
+     press-and-drag trying to "read" or "copy" text on the note.
+     25px tolerates small selection gestures while still distinguishing
+     intentional page scrolling. pointer-events:all on .sticky-note__text
+     ensures the whole note surface is tappable, not just the image behind it. */
+  if (stickyNote) {
+    var stickyAnimFrame = null;
+    var _sx = 0, _sy = 0;
+
+    function animateFall(fromL, fromT) {
+      if (stickyAnimFrame) cancelAnimationFrame(stickyAnimFrame);
+      var noteW    = stickyNote._noteW || (STICKY.w * 300);
+      var noteH    = stickyNote._noteH || (noteW * 284/278);
+      var toL      = (stickyNote._fallCX || 100) - noteW/2;
+      var toT      = (stickyNote._fallCY || 400) - noteH/2;
+      /* End rotation: mobile lands flat (~-8deg), desktop leans nearly vertical
+         (~-78deg) as if propped against the console base. Stored by placeOverlays. */
+      var fromRot  = -12;
+      var toRot    = (stickyNote._fallRot !== undefined) ? stickyNote._fallRot : -8;
+      var duration = 5000;
+      var startTs  = null;
+      function easeOut(t) { return 1 - Math.pow(1 - t, 3); }
+      function frame(ts) {
+        if (!startTs) startTs = ts;
+        var t  = Math.min((ts - startTs) / duration, 1);
+        var te = easeOut(t);
+        var zigzag = Math.sin(t * Math.PI * 2.5) * 35 * (1 - t);
+        stickyNote.style.left      = (fromL + (toL - fromL) * te + zigzag) + 'px';
+        stickyNote.style.top       = (fromT + (toT - fromT) * te) + 'px';
+        stickyNote.style.transform = 'rotate(' + (fromRot + (toRot - fromRot) * te) + 'deg)';
+        if (t < 1) stickyAnimFrame = requestAnimationFrame(frame);
+        else {
+          stickyAnimFrame = null;
+          stickyNote.classList.add('settled');
+        }
+      }
+      stickyAnimFrame = requestAnimationFrame(frame);
+    }
+
+    function handleStickyTap(e) {
+      /* Let link taps fire normally when settled */
+      if (e && e.target && e.target.closest && e.target.closest('a') &&
+          stickyNote.classList.contains('settled')) return;
+      /* Re-stick on both mobile and desktop — user can re-pin to replay animation,
+         especially useful on desktop where auto-drop may have fired unexpectedly. */
+      if (stickyNote.classList.contains('fallen')) {
+        if (stickyAnimFrame) { cancelAnimationFrame(stickyAnimFrame); stickyAnimFrame = null; }
+        stickyNote.classList.remove('fallen');
+        stickyNote.classList.remove('settled');
+        stickyNote.style.left      = (stickyNote._restL || 0) + 'px';
+        stickyNote.style.top       = (stickyNote._restT || 0) + 'px';
+        stickyNote.style.transform = 'rotate(-12deg)';
+        /* Desktop: reset auto-drop flag so focus triggers it again */
+        desktopDropped = false;
+      }
+    }
+
+    /* ── Desktop auto-drop: note falls when user focuses any form field ──
+       Thematic: you picked up the radio to transmit, the note fell off.
+       desktopDropped hoisted here so handleStickyTap can reset it on re-pin. ── */
+    var desktopDropped = false;
+    if (!isMobile()) {
+      function desktopAutoDrop() {
+        if (desktopDropped || stickyNote.classList.contains('fallen')) return;
+        desktopDropped = true;
+        var curL = parseFloat(stickyNote.style.left) || 0;
+        var curT = parseFloat(stickyNote.style.top)  || 0;
+        stickyNote._restL = curL;
+        stickyNote._restT = curT;
+        stickyNote.classList.add('fallen');
+        animateFall(curL, curT);
+      }
+      [inputName, inputEmail, inputPhone, inputMsg].forEach(function(inp) {
+        if (inp) inp.addEventListener('focus', desktopAutoDrop);
+      });
+    }
+
+    stickyNote.addEventListener('pointerdown', function(e) {
+      _sx = e.clientX; _sy = e.clientY;
+      /* Fall triggers immediately on pointerdown when note is at rest.
+         pointerup on this same touch is intentionally ignored — we set
+         _fallStarted so the pointerup handler knows not to re-stick. */
+      if (!stickyNote.classList.contains('fallen')) {
+        if (e.target && e.target.closest && e.target.closest('a')) return;
+        var curL = parseFloat(stickyNote.style.left) || 0;
+        var curT = parseFloat(stickyNote.style.top)  || 0;
+        stickyNote._restL = curL;
+        stickyNote._restT = curT;
+        stickyNote._fallStarted = true; /* flag: ignore the paired pointerup */
+        stickyNote.classList.add('fallen');
+        animateFall(curL, curT);
+      }
+    });
+    stickyNote.addEventListener('pointerup', function(e) {
+      /* Ignore the pointerup that immediately follows the initiating pointerdown.
+         Only handle pointerup once the note is settled (links + re-pin active). */
+      if (stickyNote._fallStarted) {
+        stickyNote._fallStarted = false;
+        return;
+      }
+      if (!stickyNote.classList.contains('fallen')) return;
+      var moved = Math.abs(e.clientX - _sx) + Math.abs(e.clientY - _sy);
+      if (moved > 25) return;
+      handleStickyTap(e);
+    });
+    stickyNote.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleStickyTap(e); }
+    });
+  }
+
+
+  /* ── Knob: tap cycles through 4 ink colors ──
+     Starts at -45° (10-11 o'clock, naturally resting position).
+     Each click rotates 45° clockwise. After 4 clicks reaches 135° (4-5 o'clock).
+     5th click wraps back to -45°. Ink color maps: pos 0-3 → 4 themes, pos 4 = pos 0. */
+  /* Formula-based symmetric knob positions:
+     KNOB_START_DEG = -(KNOB_STEP_DEG × (KNOB_COLOR_STOPS-1) / 2)
+     With 4 stops at 32° each: start=-48°, positions: -48,-16,+16,+48
+     Arc = 96° total, centered on 12 o'clock.
+     To change: adjust KNOB_STEP_DEG or KNOB_COLOR_STOPS; start auto-recalculates. */
+  var KNOB_COLOR_STOPS = 4;
+  var KNOB_STEP_DEG    = 32;  /* 32° steps → -48,-16,+16,+48 (96° arc, symmetric) */
+  var KNOB_START_DEG   = -(KNOB_STEP_DEG * (KNOB_COLOR_STOPS - 1) / 2); /* = -48 */
+
+  /* Default = position 1 (blue) — knob rests at second stop, looks naturally
+     adjusted rather than untouched, and blue is the most legible ink color. */
+  var knobPos = 1;
+
+  /* Apply initial resting position immediately — no transition on load */
+  knobEl.style.transition = 'none';
+  knobEl.style.transform  = 'rotate(' + (KNOB_START_DEG + knobPos * KNOB_STEP_DEG) + 'deg)';
+  /* Re-enable spring transition after a frame so first click animates */
+  requestAnimationFrame(function() {
+    knobEl.style.transition = '';
+  });
+
+  section.setAttribute('data-knob', String(knobPos));
+
+  addTap(knobEl, function() {
+    knobPos = (knobPos + 1) % KNOB_COLOR_STOPS;
+    var deg = KNOB_START_DEG + (knobPos * KNOB_STEP_DEG);
+    knobEl.style.transform = 'rotate(' + deg + 'deg)';
+    section.setAttribute('data-knob', String(knobPos));
+  });
+
+  /* ── Antenna: wobble on hover and tap ── */
+  var antBusy = false;
+
+  function wobble() {
+    if (!antennaEl || antBusy) return;
+    antBusy = true;
+    antennaEl.classList.add('wobbling');
+    antennaEl.addEventListener('animationend', function h() {
+      antennaEl.classList.remove('wobbling');
+      antBusy = false;
+      antennaEl.removeEventListener('animationend', h);
+    });
+  }
+
+  if (antennaEl) {
+    antennaEl.addEventListener('pointerenter', wobble);
+    addTap(antennaEl, wobble);
+
+    /* Auto-wobble when Contact section scrolls into view —
+       same pattern as About Me fidget spinner (threshold:0.6,
+       fires once on first intersection, 300ms delay). */
+    if ('IntersectionObserver' in window) {
+      /* No disconnect() — fires each time section enters viewport.
+         Physical metaphor: page motion causes wobbly antenna to wobble,
+         same logic as fidget spinner spinning on page motion. Feels alive
+         rather than glitchy because the animation has a plausible cause. */
+      var antObs = new IntersectionObserver(function(entries) {
+        entries.forEach(function(e) {
+          if (e.isIntersecting) setTimeout(wobble, 300);
+        });
+      }, { threshold: 0.6 });
+      antObs.observe(section);
+    }
+  }
+
+  /* ══════════════════════════════════════════════════════════════
+     FORM SUBMISSION (progressive enhancement via fetch)
+     Falls back gracefully if JS fails — native POST to Formspree
+     still works without the delight animations.
+  ══════════════════════════════════════════════════════════════ */
+  if (form) {
+    form.addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      /* ── Client-side validation before fetch ──
+         Runs after e.preventDefault() so we control the error display.
+         Email regex matches standard format: x@x.xx
+         Phone: optional — only validates if something was entered. */
+      var emailVal = inputEmail ? inputEmail.value.trim() : '';
+      var emailOk  = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(emailVal);
+      if (!emailOk) {
+        if (inputEmail) {
+          inputEmail.focus();
+          inputEmail.style.borderBottom = '2px solid rgba(180,30,30,0.8) !important';
+          setTimeout(function() {
+            inputEmail.style.borderBottom = '';
+          }, 2500);
+        }
+        alert('Please enter a valid email address (e.g. name@domain.com)');
+        return;
+      }
+
+      var data = new FormData(form);
+
+      fetch(form.action, {
+        method:  'POST',
+        body:    data,
+        headers: { 'Accept': 'application/json' }
+      })
+      .then(function(res) {
+        if (res.ok) {
+          /* ── ✅ Success delight sequence ── */
+
+          /* 1. Show success message in console screen */
+          if (successBox) successBox.classList.add('visible');
+
+          /* 2. Both LEDs go green */
+          [led1, led2].forEach(function(led) {
+            if (!led) return;
+            led.classList.remove('lit');       /* clear existing state */
+            void led.offsetWidth;              /* reflow */
+            led.classList.add('success');
+          });
+
+          /* 3. Antenna celebrates — double wobble */
+          wobble();
+          setTimeout(wobble, 850);
+
+          /* 4. Disable submit to prevent double-send */
+          if (submitBtn) submitBtn.disabled = true;
+
+        } else {
+          /* ── ❌ Formspree returned an error ── */
+          res.json().then(function(data) {
+            var msg = (data && data.errors)
+              ? data.errors.map(function(err) { return err.message; }).join('\n')
+              : 'Something went wrong — please try again.';
+            alert(msg);
+          }).catch(function() {
+            alert('Something went wrong — please try again.');
+          });
+        }
+      })
+      .catch(function() {
+        /* Network error — form still submitted natively if user retries */
+        alert('Network error — check your connection and try again.');
+      });
+    });
+  }
+
+  /* ══════════════════════════════════════════════════════════════
+     CHEVRON
+  ══════════════════════════════════════════════════════════════ */
+  var chevron = document.getElementById('contact-scroll-hint');
+
+  /* Move to body for reliable position:fixed in Fluid Engine */
+  if (chevron) document.body.appendChild(chevron);
+
+  function updateChevron() {
+    if (!chevron || !section) return;
+    var r = section.getBoundingClientRect();
+    var inView = r.top < window.innerHeight && r.bottom > window.innerHeight * 0.3;
+    chevron.classList.toggle('visible', inView);
+  }
+
+  if (chevron) {
+    chevron.addEventListener('click', function() {
+      if (window.SBC) window.SBC.scrollToNext('contact-section');
+      else window.scrollBy({ top: window.innerHeight, behavior: 'smooth' });
+    });
+  }
+
+  window.addEventListener('scroll', updateChevron, { passive: true });
+  window.addEventListener('load',   updateChevron);
+
+  /* ══════════════════════════════════════════════════════════════
+     DEBUG PANEL — remove before launch (along with version badge)
+     Floating panel with toggle buttons for all debug flags.
+     State persists via sessionStorage so it survives page reloads.
+     Open browser console to see DEBUG_STAGE output.
+  ══════════════════════════════════════════════════════════════ */
+  (function buildDebugPanel() {
+    var panel = document.createElement('div');
+    panel.id  = 'sbc-debug-panel';
+    panel.style.cssText = [
+      'position:fixed','bottom:8px','left:8px',
+      'background:rgba(10,30,50,0.55)',
+      'color:#fff',
+      'font:bold 11px/1.6 monospace','padding:6px 10px',
+      'border-radius:6px','z-index:999999',
+      'display:flex','flex-direction:column','gap:3px',
+      'box-shadow:0 2px 8px rgba(0,0,0,0.4)',
+      'backdrop-filter:blur(2px)',
+      'min-width:160px'
+    ].join(';');
+
+    var flags = [
+      { key:'sbc_debug_coords', label:'DEBUG_COORDS' },
+      { key:'sbc_debug_width',  label:'DEBUG_WIDTH'  },
+      { key:'sbc_debug_stage',  label:'DEBUG_STAGE'  }
+    ];
+
+    flags.forEach(function(f) {
+      var row = document.createElement('div');
+      row.style.cssText = 'display:flex;align-items:center;gap:6px;cursor:pointer;user-select:none';
+      var on  = sessionStorage.getItem(f.key) === 'true';
+      var dot = document.createElement('span');
+      dot.style.cssText = 'display:inline-block;width:8px;height:8px;border-radius:50%;flex-shrink:0;' +
+        'background:' + (on ? '#4f4' : '#f66');
+      var lbl = document.createElement('span');
+      lbl.textContent = f.label + ' ' + (on ? 'ON' : 'OFF');
+      row.appendChild(dot); row.appendChild(lbl);
+      row.addEventListener('click', function() {
+        var cur = sessionStorage.getItem(f.key) === 'true';
+        sessionStorage.setItem(f.key, String(!cur));
+        location.reload();
+      });
+      panel.appendChild(row);
+    });
+
+    /* Re-run init without reload */
+    var reloadBtn = document.createElement('div');
+    reloadBtn.textContent = '↺ re-run init';
+    reloadBtn.style.cssText = 'margin-top:2px;cursor:pointer;color:#8cf;user-select:none;' +
+      'border-top:1px solid rgba(255,255,255,0.15);padding-top:3px';
+    reloadBtn.addEventListener('click', function() { init(); });
+    panel.appendChild(reloadBtn);
+
+    /* Mouse coordinate display */
+    var coordRow = document.createElement('div');
+    coordRow.style.cssText = 'border-top:1px solid rgba(255,255,255,0.15);' +
+      'padding-top:3px;margin-top:2px;color:#fd8;letter-spacing:0.03em';
+    coordRow.textContent = 'x:— y:—';
+    panel.appendChild(coordRow);
+    document.addEventListener('mousemove', function(e) {
+      coordRow.textContent = 'x:' + e.clientX + ' y:' + e.clientY;
+    });
+
+    document.body.appendChild(panel);
+  })();
+
+})();
+</script>

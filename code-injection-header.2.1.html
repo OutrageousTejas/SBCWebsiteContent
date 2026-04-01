@@ -1,0 +1,137 @@
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Pangolin&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Gaegu&display=swap" rel="stylesheet">
+
+<style>
+  /* Hide Squarespace's native header */
+  #header,
+  .header-announcement-bar-wrapper,
+  .sqs-announcement-bar-dropzone {
+    display: none !important;
+  }
+
+  /* Persistent nav bar */
+  #sbc-nav {
+    position: fixed;
+    top: 0 !important;
+    left: 0;
+    width: 100%;
+    z-index: 9999;
+    background-color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 4%;
+    height: clamp(48px, 6vh, 72px);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    box-sizing: border-box;
+  }
+
+  #sbc-nav .sbc-brand {
+    color: #3d3d3d;
+    font-family: 'Pangolin', cursive;
+    font-size: clamp(1rem, 2vw, 1.4rem);
+    font-weight: 700;
+    text-decoration: none;
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+  }
+
+  #sbc-nav .sbc-links {
+    display: flex;
+    gap: clamp(16px, 3vw, 40px);
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  #sbc-nav .sbc-links a {
+    color: #AAA7AD;
+    font-family: 'Pangolin', cursive;
+    font-size: clamp(0.85rem, 1.5vw, 1.1rem);
+    text-decoration: none;
+    opacity: 0.85;
+    transition: opacity 0.2s ease, color 0.2s ease;
+    white-space: nowrap;
+    cursor: pointer;
+  }
+
+  #sbc-nav .sbc-links a:hover {
+    opacity: 1;
+    color: #3d3d3d;
+  }
+
+  #sbc-nav .sbc-links a.active {
+    opacity: 1;
+    color: #3d3d3d;
+    border-bottom: 2px solid #3d3d3d;
+  }
+
+  /* Push page content below nav */
+  body {
+    padding-top: clamp(48px, 6vh, 72px) !important;
+  }
+
+  /* Mobile: collapse brand name to emoji only if viewport too narrow */
+  @media (max-width: 480px) {
+    #sbc-nav .sbc-brand-full  { display: none; }
+    #sbc-nav .sbc-brand-short { display: inline; }
+  }
+  @media (min-width: 481px) {
+    #sbc-nav .sbc-brand-full  { display: inline; }
+    #sbc-nav .sbc-brand-short { display: none; }
+  }
+</style>
+
+<nav id="sbc-nav">
+  <a class="sbc-brand" href="/">
+    <span class="sbc-brand-full">🐿️ Squirrel Brain Coaching</span>
+    <span class="sbc-brand-short">🐿️</span>
+  </a>
+  <ul class="sbc-links">
+    <li><a data-target="mainroom-wrap">Explore</a></li>
+    <li><a data-target="about-section">About</a></li>
+    <li><a data-target="mainroom-wrap">Contact</a></li>
+  </ul>
+</nav>
+
+<script>
+(function() {
+  // ── Nav link click handlers ─────────────────────────────────
+  // Each link has a data-target pointing to a section ID.
+  // Smooth-scrolls to that section on click.
+  document.querySelectorAll('#sbc-nav .sbc-links a').forEach(function(link) {
+    link.addEventListener('click', function() {
+      var target = document.getElementById(link.dataset.target);
+      if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  });
+
+  // ── Scroll-based active state ───────────────────────────────
+  // Highlights the nav link whose section is most in view.
+  // Runs on scroll and on load. Uses the same data-target IDs.
+  function updateActiveLink() {
+    var links = document.querySelectorAll('#sbc-nav .sbc-links a');
+    var bestLink = null;
+    var bestVisibility = 0;
+
+    links.forEach(function(link) {
+      var section = document.getElementById(link.dataset.target);
+      if (!section) return;
+      var r = section.getBoundingClientRect();
+      // How much of the section is visible in the viewport
+      var visible = Math.max(0, Math.min(r.bottom, window.innerHeight) - Math.max(r.top, 0));
+      if (visible > bestVisibility) {
+        bestVisibility = visible;
+        bestLink = link;
+      }
+    });
+
+    links.forEach(function(link) { link.classList.remove('active'); });
+    if (bestLink) bestLink.classList.add('active');
+  }
+
+  window.addEventListener('scroll', updateActiveLink, { passive: true });
+  window.addEventListener('load', updateActiveLink);
+})();
+</script>

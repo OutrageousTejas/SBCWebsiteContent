@@ -1,0 +1,535 @@
+<!--
+  SQUIRREL BRAIN COACHING — TREEHOUSE SECTION
+  Version: 4.2
+  Changes from v4.1:
+  - Added class="sbc-section" to #treehouse-wrap root div.
+    This registers it with the global SBC navigation system
+    (Code Injection footer script v1.0+) which discovers all
+    .sbc-section elements in DOM order at page load.
+  - All three scroll triggers (sign, hole, chevron) now call
+    window.SBC.scrollToNext('treehouse-wrap') instead of
+    nextElementSibling. Sections can be freely reordered in
+    Squarespace without touching any section's code.
+  - scrollToNext() helper removed — logic lives in Code Injection.
+
+  REQUIRES: code-injection-global-nav v1.0+ in
+  Squarespace > Settings > Advanced > Code Injection > Footer
+
+  ARCHITECTURE
+  ─────────────
+  Desktop: hero image centered, overlays positioned by JS relative
+           to image coordinates (IMG_W x IMG_H = 2048 x 2048).
+  Mobile:  same image, scaled to 100vw x 100vw and zoomed 1.5x.
+           All hotspots work on both breakpoints.
+
+  INTERACTIVE ELEMENTS
+  ─────────────────────
+  - Tire swing: swings on pointerenter/pointerdown
+  - Squirrel: hides on hover, stays hidden near trunk hole
+  - COME IN sign: pulsing glow, scrolls to next section on click
+  - Trunk hole: tooltip appears after squirrel hides, scrolls to next section
+  - Branch: acorn drops on hover/click
+  - Random acorn: drops every 8-15 seconds automatically
+  - Scroll hint chevron: hides after scrolling 50px down
+-->
+
+<style>
+
+.treehouse-section {
+  position: relative;
+  width: 100vw;
+  height: 100dvh;
+  overflow: hidden;
+  background: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.treehouse-img {
+  position: absolute;
+  height: 100%;
+  width: auto;
+  display: block;
+  user-select: none;
+  pointer-events: none;
+}
+
+@media (max-width: 768px), (orientation: portrait) {
+  .treehouse-section {
+    width: 100vw;
+    margin-left: calc(-50vw + 50%) !important;
+  }
+
+  .treehouse-img {
+    position: absolute;
+    width: 100vw;
+    height: 100vw;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(1.5);
+    transform-origin: center center;
+    object-fit: cover;
+    object-position: center center;
+  }
+}
+
+/* Squirrel overlay */
+#squirrel-overlay {
+  position: absolute;
+  width: auto;
+  cursor: pointer;
+  transition: opacity 0.4s ease, transform 0.4s ease;
+  transform-origin: center bottom;
+  pointer-events: all;
+  user-select: none;
+}
+
+#squirrel-overlay.hide {
+  transform: translateY(30px);
+  opacity: 0;
+}
+
+/* Tire swing overlay */
+#tire-overlay {
+  position: absolute;
+  width: auto;
+  cursor: pointer;
+  transform-origin: top center;
+  user-select: none;
+}
+
+@keyframes swingTire {
+  0%   { transform: rotate(0deg); }
+  15%  { transform: rotate(14deg); }
+  35%  { transform: rotate(-13deg); }
+  50%  { transform: rotate(10deg); }
+  65%  { transform: rotate(-8deg); }
+  78%  { transform: rotate(5deg); }
+  88%  { transform: rotate(-3deg); }
+  94%  { transform: rotate(1.5deg); }
+  100% { transform: rotate(0deg); }
+}
+
+#tire-overlay.swinging {
+  animation: swingTire 2s cubic-bezier(0.37, 0, 0.63, 1);
+}
+
+/* COME IN sign hotspot */
+@keyframes signPulse {
+  0%, 100% {
+    box-shadow: none;
+    background: transparent;
+  }
+  50% {
+    box-shadow: 0 0 30px 10px rgba(180, 230, 255, 0.95),
+                0 0 60px 20px rgba(180, 230, 255, 0.6);
+    background: rgba(200, 240, 255, 0.25);
+  }
+}
+
+#sign-spot {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.3s ease, box-shadow 0.3s ease;
+  animation: signPulse 3.5s ease-in-out infinite;
+}
+
+#sign-spot:hover,
+#sign-spot.active {
+  animation: none;
+  background: rgba(200, 240, 255, 0.25);
+  box-shadow: 0 0 30px 10px rgba(180, 230, 255, 0.95),
+              0 0 70px 20px rgba(180, 230, 255, 0.6),
+              0 0 120px 30px rgba(180, 230, 255, 0.3);
+}
+
+/* Trunk hole hotspot */
+#hole-spot {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  cursor: pointer;
+  transition: background 0.3s ease, box-shadow 0.3s ease;
+}
+
+#hole-spot:hover,
+#hole-spot.active {
+  background: rgba(100, 60, 20, 0.25);
+  box-shadow: 0 0 24px rgba(100, 60, 20, 0.5);
+}
+
+#hole-tooltip {
+  position: absolute;
+  background: rgba(61, 31, 0, 0.85);
+  color: #fff;
+  padding: 0.4em 0.8em;
+  border-radius: 20px;
+  font-size: clamp(0.75rem, 1.5vw, 0.95rem);
+  font-family: 'Pangolin', cursive;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transform: translate(-50%, -120%);
+  transition: opacity 0.3s ease;
+}
+
+#hole-tooltip.visible {
+  opacity: 1;
+}
+
+/* Page transition overlay */
+#transition-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: #3d1f00;
+  opacity: 0;
+  pointer-events: none;
+  z-index: 10000;
+  transition: opacity 0.8s ease;
+}
+
+#transition-overlay.active {
+  opacity: 1;
+  pointer-events: all;
+}
+
+/* Scroll hint chevron */
+#scroll-hint {
+  position: fixed;
+  bottom: clamp(12px, 2dvh, 20px);
+  left: 50%;
+  transform: translateX(-50%);
+  cursor: pointer;
+  z-index: 500;
+  opacity: 1;
+  transition: opacity 0.5s ease;
+  background: none;
+  animation: bounceChevron 1.5s ease infinite;
+}
+
+#scroll-hint svg {
+  width: clamp(24px, 3.5vw, 36px);
+  height: auto;
+  filter: drop-shadow(0 2px 3px rgba(0,0,0,0.6));
+}
+
+#scroll-hint.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+@keyframes bounceChevron {
+  0%, 100% { transform: translateX(-50%) translateY(0); }
+  50%       { transform: translateX(-50%) translateY(5px); }
+}
+
+</style>
+
+<div id="transition-overlay"></div>
+
+<!-- sbc-section class registers this with the global SBC nav system -->
+<div class="treehouse-section sbc-section" id="treehouse-wrap">
+
+  <img
+    class="treehouse-img"
+    id="treehouse-img"
+    src="https://images.squarespace-cdn.com/content/69ba3296dd8f7f351597cdb9/a0ca85e9-001a-4673-800c-5129bb85c2c5/TreeOutsideBG.webp"
+    alt="Squirrel Brain Coaching Treehouse"
+  />
+
+  <img
+    id="squirrel-overlay"
+    src="https://images.squarespace-cdn.com/content/69ba3296dd8f7f351597cdb9/782d2f24-58ca-401e-bcd9-519869c5b0ea/SquirrelCutout1.png"
+    alt="Squirrel"
+  />
+
+  <img
+    id="tire-overlay"
+    src="https://images.squarespace-cdn.com/content/69ba3296dd8f7f351597cdb9/46e47851-5b3f-4b4a-a49c-eb7039298045/TireCutout1.png"
+    alt="Tire Swing"
+  />
+
+  <!-- COME IN sign hotspot (no tooltip) -->
+  <div id="sign-spot"></div>
+
+  <!-- Trunk hole hotspot -->
+  <div id="hole-spot"></div>
+  <div id="hole-tooltip">⚡Follow me!</div>
+
+  <div id="scroll-hint">
+    <svg viewBox="0 0 24 14" xmlns="http://www.w3.org/2000/svg">
+      <polyline
+        points="2,2 12,12 22,2"
+        fill="none"
+        stroke="white"
+        stroke-width="3"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+    </svg>
+  </div>
+
+</div>
+
+<script>
+  const IMG_W = 2048;
+  const IMG_H = 2048;
+
+  const SQUIRREL   = { x: 792,  y: 1407 };
+  const ROPE_TOP   = { x: 462,  y: 1024 };
+  const TIRE       = { x: 468,  y: 1606 };
+  const BRANCH_PT  = { x: 1650, y: 500  };
+  const ACORN_PT   = { x: 1650, y: 420  };
+  const COME_IN    = { x: 1029, y: 956  };
+  const TRUNK_HOLE = { x: 845,  y: 1427 };
+
+  // ── Scroll to next section ────────────────────────────────────
+  // Delegates to global SBC nav (Code Injection footer v1.0+).
+  // SBC discovers all .sbc-section elements in DOM order —
+  // sections can be freely reordered without touching this file.
+  function scrollToNext() {
+    if (window.SBC) {
+      window.SBC.scrollToNext('treehouse-wrap');
+    } else {
+      // Fallback if Code Injection script hasn't loaded
+      window.scrollBy({ top: window.innerHeight, behavior: 'smooth' });
+    }
+  }
+
+  // ── Positioning ──────────────────────────────────────────────
+  function getScale() {
+    const img      = document.getElementById('treehouse-img');
+    const wrap     = document.getElementById('treehouse-wrap');
+    const imgRect  = img.getBoundingClientRect();
+    const wrapRect = wrap.getBoundingClientRect();
+    return {
+      rect:     imgRect,
+      wrapRect: wrapRect,
+      scaleX:   imgRect.width  / IMG_W,
+      scaleY:   imgRect.height / IMG_H,
+      offsetX:  imgRect.left - wrapRect.left,
+      offsetY:  imgRect.top  - wrapRect.top
+    };
+  }
+
+  function toScreen(coord, s) {
+    return {
+      left: s.offsetX + coord.x * s.scaleX,
+      top:  s.offsetY + coord.y * s.scaleY
+    };
+  }
+
+  function positionElements() {
+    const s = getScale();
+
+    // Squirrel
+    const sq           = toScreen(SQUIRREL, s);
+    const squirrelEl   = document.getElementById('squirrel-overlay');
+    const squirrelSize = 260 * s.scaleX;
+    squirrelEl.style.width = squirrelSize + 'px';
+    squirrelEl.style.left  = (sq.left - squirrelSize / 2 + 70 * s.scaleX) + 'px';
+    squirrelEl.style.top   = (sq.top  - squirrelSize / 2) + 'px';
+
+    // Tire
+    const ropeTopPx  = toScreen(ROPE_TOP, s);
+    const tirePx     = toScreen(TIRE, s);
+    const tireEl     = document.getElementById('tire-overlay');
+    const tireHeight = (tirePx.top - ropeTopPx.top) * 1.2;
+    tireEl.style.height = tireHeight + 'px';
+    tireEl.style.width  = 'auto';
+    tireEl.style.left   = (ropeTopPx.left - (tireHeight * 0.2) + 40 * s.scaleX) + 'px';
+    tireEl.style.top    = (ropeTopPx.top  - 35 * s.scaleY) + 'px';
+
+    // COME IN sign hotspot
+    const ci     = toScreen(COME_IN, s);
+    const signEl = document.getElementById('sign-spot');
+    const signW  = 280 * s.scaleX;
+    const signH  = 180 * s.scaleY;
+    signEl.style.left   = ci.left + 'px';
+    signEl.style.top    = ci.top  + 'px';
+    signEl.style.width  = signW   + 'px';
+    signEl.style.height = signH   + 'px';
+
+    // Trunk hole hotspot
+    const th     = toScreen(TRUNK_HOLE, s);
+    const holeEl = document.getElementById('hole-spot');
+    const tipEl  = document.getElementById('hole-tooltip');
+    const holeW  = 160 * s.scaleX;
+    const holeH  = 120 * s.scaleY;
+    holeEl.style.left   = th.left + 'px';
+    holeEl.style.top    = th.top  + 'px';
+    holeEl.style.width  = holeW   + 'px';
+    holeEl.style.height = holeH   + 'px';
+    tipEl.style.left    = th.left + 'px';
+    tipEl.style.top     = th.top  + 'px';
+
+    // Branch hotspot
+    positionBranch(s);
+  }
+
+  // ── Squirrel ─────────────────────────────────────────────────
+  const squirrelEl = document.getElementById('squirrel-overlay');
+
+  squirrelEl.addEventListener('pointerenter', () => squirrelEl.classList.add('hide'));
+  squirrelEl.addEventListener('pointerdown',  () => squirrelEl.classList.add('hide'));
+
+  squirrelEl.addEventListener('pointerleave', (e) => {
+    const holeRect = holeSpot.getBoundingClientRect();
+    const movingToHole = (
+      e.clientX >= holeRect.left - 20 &&
+      e.clientX <= holeRect.right + 20 &&
+      e.clientY >= holeRect.top - 20 &&
+      e.clientY <= holeRect.bottom + 20
+    );
+    if (!movingToHole) squirrelEl.classList.remove('hide');
+  });
+
+  // ── Tire swing ───────────────────────────────────────────────
+  const tireEl = document.getElementById('tire-overlay');
+
+  function swingTire() {
+    tireEl.classList.remove('swinging');
+    void tireEl.offsetWidth;
+    tireEl.classList.add('swinging');
+  }
+
+  tireEl.addEventListener('pointerenter', swingTire);
+  tireEl.addEventListener('pointerdown',  swingTire);
+  tireEl.addEventListener('animationend', () => tireEl.classList.remove('swinging'));
+
+  // ── COME IN sign ─────────────────────────────────────────────
+  const signSpot = document.getElementById('sign-spot');
+  signSpot.addEventListener('pointerdown', scrollToNext);
+
+  // ── Trunk hole ───────────────────────────────────────────────
+  const holeSpot = document.getElementById('hole-spot');
+  const holeTip  = document.getElementById('hole-tooltip');
+
+  holeSpot.addEventListener('pointerenter', () => {
+    squirrelEl.classList.add('hide');
+    holeTip.classList.add('visible');
+  });
+
+  holeSpot.addEventListener('pointerleave', () => {
+    holeTip.classList.remove('visible');
+    squirrelEl.classList.remove('hide');
+  });
+
+  holeSpot.addEventListener('pointerdown', () => {
+    holeTip.classList.remove('visible');
+    scrollToNext();
+  });
+
+  // ── Acorn ────────────────────────────────────────────────────
+  function dropAcorn() {
+    const img     = document.getElementById('treehouse-img');
+    const imgRect = img.getBoundingClientRect();
+    const scaleX  = imgRect.width  / IMG_W;
+    const scaleY  = imgRect.height / IMG_H;
+
+    const startX       = imgRect.left + ACORN_PT.x * scaleX;
+    const startY       = imgRect.top  + ACORN_PT.y * scaleY;
+    const groundY      = imgRect.top  + 1850 * scaleY;
+    const rollDistance = (80 + Math.random() * 60) * scaleX;
+
+    const acorn = document.createElement('div');
+    acorn.textContent = '🌰';
+    acorn.style.cssText = `
+      position: fixed;
+      font-size: ${28 * scaleX}px;
+      left: ${startX}px;
+      top: ${startY}px;
+      z-index: 100;
+      pointer-events: none;
+    `;
+    document.body.appendChild(acorn);
+
+    const fallDistance = groundY - startY;
+    const fallDuration = 800;
+    const rollDuration = 600;
+    let startTime = null;
+
+    function fall(timestamp) {
+      if (!startTime) startTime = timestamp;
+      const progress = Math.min((timestamp - startTime) / fallDuration, 1);
+      const eased    = progress * progress;
+      const wobble   = Math.sin(progress * Math.PI * 4) * 4 * scaleX;
+      acorn.style.top       = (startY + fallDistance * eased) + 'px';
+      acorn.style.left      = (startX + wobble) + 'px';
+      acorn.style.transform = `rotate(${progress * 180}deg)`;
+      if (progress < 1) { requestAnimationFrame(fall); }
+      else { startTime = null; requestAnimationFrame(roll); }
+    }
+
+    function roll(timestamp) {
+      if (!startTime) startTime = timestamp;
+      const progress = Math.min((timestamp - startTime) / rollDuration, 1);
+      const eased    = 1 - (1 - progress) * (1 - progress);
+      const bounceY  = groundY - Math.abs(Math.sin(progress * Math.PI * 3)) * 8 * scaleY;
+      acorn.style.left      = (startX + rollDistance * eased) + 'px';
+      acorn.style.top       = bounceY + 'px';
+      acorn.style.transform = `rotate(${180 + progress * 360}deg)`;
+      if (progress < 1) { requestAnimationFrame(roll); }
+      else {
+        acorn.style.transition = 'opacity 0.5s ease';
+        acorn.style.opacity    = '0';
+        setTimeout(() => acorn.remove(), 500);
+      }
+    }
+
+    requestAnimationFrame(fall);
+  }
+
+  // ── Branch hotspot ───────────────────────────────────────────
+  const branchHotspot = document.createElement('div');
+  branchHotspot.style.cssText = `
+    position: absolute;
+    cursor: default;
+    z-index: 10;
+  `;
+  document.getElementById('treehouse-wrap').appendChild(branchHotspot);
+  branchHotspot.addEventListener('pointerenter', dropAcorn);
+  branchHotspot.addEventListener('pointerdown',  dropAcorn);
+
+  function positionBranch(s) {
+    const br = toScreen(BRANCH_PT, s);
+    branchHotspot.style.left   = (br.left - 75 * s.scaleX) + 'px';
+    branchHotspot.style.top    = (br.top  - 50 * s.scaleY) + 'px';
+    branchHotspot.style.width  = (150 * s.scaleX) + 'px';
+    branchHotspot.style.height = (100 * s.scaleY) + 'px';
+  }
+
+  // ── Random acorn ─────────────────────────────────────────────
+  function scheduleRandomAcorn() {
+    setTimeout(() => {
+      dropAcorn();
+      scheduleRandomAcorn();
+    }, 8000 + Math.random() * 7000);
+  }
+  scheduleRandomAcorn();
+
+  // ── Scroll hint chevron ───────────────────────────────────────
+  const scrollHint = document.getElementById('scroll-hint');
+
+  scrollHint.addEventListener('click', scrollToNext);
+
+  window.addEventListener('scroll', () => {
+    if (window.scrollY > 50) scrollHint.classList.add('hidden');
+    else scrollHint.classList.remove('hidden');
+  }, { passive: true });
+
+  // ── Init ─────────────────────────────────────────────────────
+  window.addEventListener('load',   positionElements);
+  window.addEventListener('resize', positionElements);
+  document.getElementById('treehouse-img')
+    .addEventListener('load', positionElements);
+
+</script>

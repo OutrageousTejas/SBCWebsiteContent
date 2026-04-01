@@ -1,0 +1,725 @@
+<!-- ============================================================
+     SQUIRREL BRAIN COACHING — About Me Section  v5.10
+     Changes from v5.9:
+     - Body text font-size matched to Welcome v1.13 standard:
+       .about-body, .about-fun-list li (desktop + mobile) →
+       clamp(1.15rem, 1.6vw, 1.25rem). .about-section-break left
+       unchanged (heading element, not body text).
+     Changes from v5.4:
+     - Hobby list: line-height 1.4→1.3, margin-bottom 0.8em→0.5em
+       (values tuned by Tejas for best aesthetic balance between
+       wrap tightness and between-item spacing).
+     ============================================================ -->
+
+<style>
+#about-section,
+#about-section * {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html { scroll-padding-top: 90px; }
+
+/* ── Section shell: JS sets marginLeft + width ── */
+#about-section {
+  position: relative;
+  background-color: #ffffff;
+}
+
+/* ── Paper width: 52vw ≈ Mainroom rendered width on 16:9 screens
+   Confirmed: at 1936px viewport, Mainroom = 1003px = 51.8vw
+   min() keeps it from overflowing on narrow/portrait screens ── */
+.about-paper {
+  width: min(52vw, 1922px);
+  /* safety: never touch edges on very wide or narrow screens */
+  max-width: calc(100% - 40px);
+  margin: 0 auto;
+  background-image: url('https://images.squarespace-cdn.com/content/69ba3296dd8f7f351597cdb9/599fa632-96cc-4a51-a699-5c17ab0e59ae/NotebookBackgroundUp.webp');
+  background-repeat: repeat-y;
+  background-size: 100% auto;
+  background-position: left top;
+  padding: clamp(60px, 6vw, 96px) 0 clamp(40px, 4vw, 72px);
+  box-shadow: 0 2px 28px rgba(0,0,0,0.13);
+}
+
+/* ── Inner flex row ── */
+.about-inner {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: stretch;
+  gap: clamp(16px, 2.5vw, 40px);
+  padding: 0 clamp(24px, 3vw, 56px) !important;
+}
+
+/* ── Left col: 38% of paper width ── */
+.about-left-col {
+  flex: 0 0 28%;
+  max-width: 28%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  align-self: stretch;
+}
+
+/* Portrait sticks while right col scrolls */
+.portrait-sticky {
+  position: sticky;
+  top: clamp(80px, 10vw, 110px);
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+/* ── Portrait ── */
+.portrait-wrapper {
+  position: relative;
+  width: clamp(140px, 18vw, 260px);
+  aspect-ratio: 1 / 1;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+  border-radius: 50%;
+}
+
+.portrait-wrapper img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+  object-position: center top;
+  transition: opacity 0.7s ease;
+  border: 2px solid rgba(150, 90, 30, 0.15);
+}
+
+.portrait-drawing { opacity: 1; z-index: 2; }
+.portrait-photo   { opacity: 0; z-index: 1; }
+
+.portrait-wrapper:hover .portrait-drawing { opacity: 0; }
+.portrait-wrapper:hover .portrait-photo   { opacity: 1; }
+.portrait-wrapper.revealed .portrait-drawing { opacity: 0; }
+.portrait-wrapper.revealed .portrait-photo   { opacity: 1; }
+
+.portrait-caption {
+  font-family: 'Pangolin', cursive;
+  font-size: clamp(0.72rem, 0.9vw, 0.86rem);
+  color: rgba(100, 60, 15, 0.55);
+  font-style: italic;
+  text-align: center;
+  margin-top: 8px;
+  min-height: 1.4em;
+  pointer-events: none;
+}
+
+/* ── Sticky note: 45vh margin pushes it near viewport bottom ──
+   Portrait is near section top on arrival (~200-280px tall).
+   zero-height anchor div contains the note so it never
+   contributes to section/column height ── */
+
+/* Zero-height anchor: sits in flow after portrait, takes no space */
+.sticky-note-anchor {
+  position: relative;
+  width: 100%;
+  height: 0;
+  overflow: visible;
+}
+
+.sticky-note-img {
+  position: absolute;
+  z-index: 1;
+  width: clamp(130px, 14vw, 200px);
+  height: auto;
+  filter: drop-shadow(3px 4px 10px rgba(0,0,0,0.18));
+  transform: rotate(-2deg);
+  /* top set by JS; default shows it just below anchor */
+  top: 0;
+  left: 50%;
+  translate: -50% 0;
+}
+
+/* ── Right col ── */
+.about-right-col {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+/* ── Typography ── */
+.about-heading {
+  font-family: 'Fredoka One', cursive;
+  font-size: clamp(1.6rem, 2.4vw, 2.4rem);
+  color: #7a4a18;
+  margin-top: clamp(16px, 2vw, 32px) !important;
+  margin-bottom: clamp(10px, 1.2vw, 18px) !important;
+  line-height: 1.15;
+}
+
+.about-body {
+  font-family: 'Pangolin', cursive;
+  font-size: clamp(1.15rem, 1.6vw, 1.25rem); /* matches Welcome v1.13 */
+  color: #2c1a08;
+  line-height: 2.1;
+}
+
+.about-body p { margin-bottom: 1.25em !important; margin-top: 1.25em !important; }
+
+.about-body a {
+  color: #8B4A0F;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  text-decoration-color: rgba(139, 74, 15, 0.4);
+  transition: color 0.2s, text-decoration-color 0.2s;
+}
+.about-body a:hover {
+  color: #5c2e06;
+  text-decoration-color: rgba(92, 46, 6, 0.8);
+}
+
+.about-section-break {
+  display: block;
+  font-family: 'Fredoka One', cursive;
+  font-size: clamp(1.2rem, 1.8vw, 1.5rem);
+  color: #7a4a18;
+  margin: 1.6em 0 0.5em;
+}
+
+.about-fun-list { list-style: none; padding: 0 !important; margin: 0; }
+.about-fun-list li {
+  font-family: 'Pangolin', cursive;
+  font-size: clamp(1.15rem, 1.6vw, 1.25rem); /* matches Welcome v1.13 */
+  color: #2c1a08;
+  line-height: 1.3;
+  margin-bottom: 0.5em !important;
+  display: flex;
+  gap: 0.4em;
+  align-items: baseline;
+}
+.about-fun-list li span {
+  flex-shrink: 0;
+}
+
+/* ── Floated stickers — flow with text ── */
+.sticker-float {
+  height: auto;
+  filter: drop-shadow(2px 3px 8px rgba(0,0,0,0.13));
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  shape-outside: margin-box;
+}
+
+.sticker-float-right {
+  float: right;
+  margin: 0 0 0 clamp(12px, 2vw, 28px);
+  width: clamp(80px, 10vw, 130px);
+  transform: rotate(8deg);
+  transform-origin: calc(50% - 5px) calc(50% + 5px);
+}
+
+.sticker-float-left {
+  float: left;
+  margin: 0 clamp(24px, 3.5vw, 48px) 0 0 !important;
+  width: clamp(90px, 11vw, 145px);
+  transform: rotate(-5deg);
+}
+
+/* Floats are siblings of <p> tags — no overflow:hidden needed */
+
+/* End marker: centered acorn */
+.sticker-end-marker {
+  display: block;
+  clear: both;
+  text-align: center;
+  margin: 1.6em auto 0;
+}
+.sticker-end-marker img {
+  width: clamp(48px, 6vw, 80px);
+  height: auto;
+  filter: drop-shadow(1px 2px 5px rgba(0,0,0,0.12));
+  transform: rotate(-8deg);
+  display: inline-block;
+}
+
+/* Fidget: cursor pointer on the float img itself */
+#aboutFidget { cursor: pointer; }
+
+@keyframes fidget-spin {
+  0%   { transform: rotate(8deg); }
+  100% { transform: rotate(1088deg); }
+}
+
+#aboutFidget.spinning {
+  animation: fidget-spin 1.6s cubic-bezier(0.12, 0.8, 0.3, 1) forwards;
+}
+
+/* ── Scroll hint chevron ── */
+#about-scroll-hint {
+  position: fixed;
+  bottom: clamp(12px, 2dvh, 20px);
+  left: 50%;
+  transform: translateX(-50%);
+  cursor: pointer;
+  z-index: 9999;
+  opacity: 0;
+  pointer-events: none;
+  background: none;
+  transition: opacity 0.5s ease;
+  animation: aboutBounceChevron 1.5s ease infinite;
+}
+
+#about-scroll-hint svg {
+  width: clamp(24px, 3.5vw, 36px);
+  height: auto;
+  filter: drop-shadow(0 2px 3px rgba(0,0,0,0.6));
+}
+
+#about-scroll-hint.visible {
+  opacity: 1;
+  pointer-events: all;
+}
+
+@keyframes aboutBounceChevron {
+  0%, 100% { transform: translateX(-50%) translateY(0); }
+  50%       { transform: translateX(-50%) translateY(5px); }
+}
+
+.about-heading-mobile  { display: none; }
+.about-heading-desktop { display: block; }
+
+/* ── Mobile ── */
+@media (max-width: 767px) {
+  #about-section {
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  /* Override 52vw formula — mobile fills full width */
+  .about-paper {
+    width: 100% !important;
+    max-width: 100% !important;
+    padding: clamp(16px, 3vw, 28px) 0;
+    box-shadow: none;
+  }
+
+  .about-inner {
+    flex-direction: column !important;
+    align-items: center !important;
+    padding: 0 clamp(14px, 4vw, 24px) !important;
+    gap: 0 !important;
+  }
+
+  .about-left-col {
+    flex: 0 0 100%;
+    max-width: 100%;
+    width: 100%;
+    order: 1;
+    align-items: center;
+  }
+
+  .portrait-sticky { position: static; z-index: auto; }
+
+  .portrait-wrapper {
+    width: clamp(130px, 40vw, 190px);
+  }
+
+  /* Mobile: anchor becomes normal flow, note right-aligned */
+  .sticky-note-anchor {
+    height: auto !important;
+    overflow: visible;
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+  }
+  .sticky-note-img {
+    position: relative !important;
+    top: auto !important;
+    left: auto !important;
+    translate: none !important;
+    width: clamp(110px, 34vw, 160px);
+    margin-top: clamp(4px, 1.5vw, 10px) !important;
+    margin-left: auto;
+    margin-right: 4px;
+    transform: rotate(-1.5deg);
+    align-self: flex-end;
+    z-index: auto;
+  }
+
+  .about-right-col {
+    flex: 0 0 100%;
+    max-width: 100%;
+    width: 100%;
+    order: 2;
+    margin-top: clamp(-16px, -2vw, -6px);
+  }
+
+  .about-heading-mobile {
+    display: block;
+    font-family: 'Fredoka One', cursive;
+    font-size: clamp(1.6rem, 6.5vw, 2rem);
+    color: #7a4a18;
+    text-align: center;
+    margin-top: clamp(16px, 4vw, 28px);
+    margin-bottom: 10px;
+    line-height: 1.15;
+  }
+  .about-heading-desktop { display: none; }
+
+  /* Restore explicit mobile font sizes */
+  .about-body {
+    font-size: clamp(1.15rem, 4.8vw, 1.25rem); /* matches Welcome v1.13 (mobile-scaled) */
+    line-height: 1.8;
+  }
+  .about-body p { margin-top: 1.1em !important; margin-bottom: 1.1em !important; }
+
+  .about-section-break { font-size: clamp(1.15rem, 5vw, 1.35rem); }
+
+  .about-fun-list li { font-size: clamp(1.15rem, 4.8vw, 1.25rem); } /* matches Welcome v1.13 (mobile-scaled) */
+
+  /* Cancel floats on mobile — centered block between paragraphs.
+     Sticker margins are zero; all spacing around stickers comes
+     entirely from adjacent paragraph margins (1.1em). */
+  .sticker-float:not(#aboutFidget),
+  .sticker-float-right:not(#aboutFidget),
+  .sticker-float-left:not(#aboutFidget) {
+    float: none !important;
+    display: block !important;
+    margin: 0 auto !important;
+    width: clamp(64px, 18vw, 88px) !important;
+    transform: none !important;
+  }
+
+  /* Fidget: cancel float + center, but keep transform free for spin animation */
+  #aboutFidget {
+    float: none !important;
+    display: block !important;
+    margin: 0 auto !important;
+    width: clamp(64px, 18vw, 88px) !important;
+  }
+}
+</style>
+
+
+<section id="about-section" class="sbc-section" aria-label="About Me">
+
+  <!-- Chevron: moved to body by JS for reliable position:fixed -->
+  <div id="about-scroll-hint">
+    <svg viewBox="0 0 24 14" xmlns="http://www.w3.org/2000/svg">
+      <polyline points="2,2 12,12 22,2" fill="none" stroke="white"
+                stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </div>
+  <div class="about-paper">
+    <div class="about-inner">
+
+      <!-- LEFT: portrait (sticky) + sticky note (scrolls) -->
+      <div class="about-left-col">
+        <h2 class="about-heading about-heading-mobile">About Me</h2>
+
+        <div class="portrait-sticky">
+          <div class="portrait-wrapper" id="aboutPortrait"
+               role="img"
+               aria-label="Portrait of Tejas — hover or click to reveal photo">
+            <img class="portrait-drawing"
+                 src="https://images.squarespace-cdn.com/content/69ba3296dd8f7f351597cdb9/f52ed02f-061d-48a3-8db5-2996567707c7/TejasNoExGray.webp"
+                 alt="Hand-drawn portrait of Tejas Mistry"
+                 draggable="false">
+            <img class="portrait-photo"
+                 src="https://images.squarespace-cdn.com/content/69ba3296dd8f7f351597cdb9/365ffb9c-a8c6-48bb-b504-5d0b9da7ba06/TejasNoEx.webp"
+                 alt="Photo of Tejas Mistry"
+                 draggable="false">
+          </div>
+          <p class="portrait-caption" id="portraitCaption">tap to say hello!</p>
+        </div>
+
+        <!-- Zero-height anchor: note is absolutely positioned inside,
+             never contributes to column/section height -->
+        <div class="sticky-note-anchor" id="stickyNoteAnchor">
+          <img class="sticky-note-img" id="aboutStickyNote"
+               src="https://images.squarespace-cdn.com/content/69ba3296dd8f7f351597cdb9/01f4b8ae-4059-47bf-8d96-42afc8484db8/MedsNoteUp.webp"
+               alt="Sticky note: Did I take my meds today?"
+               draggable="false">
+        </div>
+      </div>
+
+      <!-- RIGHT: text + inline stickers -->
+      <div class="about-right-col">
+        <h2 class="about-heading about-heading-desktop">About Me</h2>
+        <div class="about-body">
+
+          <p>Hi! I'm Tejas Mistry.</p>
+
+          <p>I have ADHD.</p>
+          <p>I know firsthand what it's like to have potential and drive—and still struggle to live up to it consistently.<br>I also know how powerful it can be when someone truly understands what you're dealing with.</p>
+
+          <!-- Fidget: sibling before paragraph, floats right, text wraps -->
+          <img class="sticker-float sticker-float-right" id="aboutFidget"
+               src="https://images.squarespace-cdn.com/content/69ba3296dd8f7f351597cdb9/48c15bec-6252-4f2b-aae5-169838ab6aec/FidgetRBYSticker.webp"
+               alt="Fidget spinner — tap me!" draggable="false">
+          <p>Before coaching, I spent 25 years at Microsoft as a software engineer and manager. Over time it was apparent, what energized me most was the people side of the work—guiding teams, mentoring people, helping them feel seen, understood, and empowered.</p>
+          <p>I discovered I was doing a lot of coaching before I ever called it that.</p>
+          <p>To deepen that work, I trained with the <a href="https://addca.com" target="_blank" rel="noopener">ADD Coach Academy (ADDCA)</a> in coaching frameworks designed specifically for ADHD.</p>
+
+          <!-- Acorns: sibling before paragraph, floats left -->
+          <img class="sticker-float sticker-float-left"
+               src="https://images.squarespace-cdn.com/content/69ba3296dd8f7f351597cdb9/0dac856a-3b7b-4cb8-adef-ad9720bf30f8/AcornsSticker.webp"
+               alt="" aria-hidden="true" draggable="false">
+          <p>I named my business Squirrel Brain Coaching with intention—I wish for us to reclaim that label. Much like a squirrel, what may appear scattered from the outside often hides an incredibly capable, curious, and resourceful mind.</p>
+
+          <p>My coaching approach is simple: I'm a collaborator.<br>I don't claim to have all the answers—but I'm good at helping people explore and discover approaches that work for them.</p>
+
+          <!-- Goggles: sibling before paragraph, floats right -->
+          <img class="sticker-float sticker-float-right"
+               src="https://images.squarespace-cdn.com/content/69ba3296dd8f7f351597cdb9/dff59945-30f9-4b40-b788-c9b48e3ed04f/GogglesSticker.webp"
+               alt="" aria-hidden="true" draggable="false"
+               style="transform:rotate(12deg); transform-origin:calc(50% - 5px) calc(50% + 5px);">
+          <p>My goal is to create a space where people can finally see themselves with a little more clarity—and a lot less judgment.</p>
+
+          <!-- Goggles is above hobbies in HTML flow, so on mobile it appears before hobbies list -->
+          <span class="about-section-break" style="clear:both;display:block;">A bit more about me…</span>
+          <ul class="about-fun-list">
+            <li><span>🎲</span> Board-game addict (200+ games owned, zero regrets)</li>
+            <li><span>🧩</span> Puzzles &amp; graphic-novel nerd</li>
+            <li><span>🏂</span> Ex-snowboarder, wannabe rock-climber, over-enthusiastic pickleballer</li>
+            <li><span>🎭</span> Humor preference: wordplay and irreverent wit</li>
+            <li><span>📚</span> Favorite hangout: the library</li>
+            <li><span>🧑‍🍳</span> Latest experiment: <a href="https://www.seriouseats.com/homebrewing-recipe-how-to-brew-ginger-beer-at-home" target="_blank" rel="noopener">homemade ginger beer</a></li>
+          </ul>
+
+          <div class="sticker-end-marker">
+            <img src="https://images.squarespace-cdn.com/content/69ba3296dd8f7f351597cdb9/4d2be353-6293-41b5-bc32-e37e4bead5ef/Acorn1Sticker.webp"
+                 alt="" aria-hidden="true" draggable="false">
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<script>
+(function () {
+  'use strict';
+
+  var VERSION = 'About v5.10';
+
+  /* ── Version badge ── */
+  var badge = document.createElement('div');
+  badge.textContent = VERSION;
+  badge.style.cssText = [
+    'position:fixed',
+    'bottom:52px',
+    'right:14px',
+    'background:rgba(160,70,10,0.82)',
+    'color:#fff',
+    'font:bold 11px/1 monospace',
+    'padding:4px 9px',
+    'border-radius:4px',
+    'z-index:99999',
+    'pointer-events:none',
+    'letter-spacing:0.03em'
+  ].join(';');
+  document.body.appendChild(badge);
+
+  /* ── Full-bleed: JS-measured (confirmed working pattern) ── */
+  var section = document.getElementById('about-section');
+
+  var paper = document.querySelector('.about-paper');
+
+  function fixFullBleed() {
+    if (!section) return;
+    /* 1. Reset so measurement reflects natural document position */
+    section.style.marginLeft = '';
+    section.style.width = '';
+    void section.offsetWidth;
+    var rect    = section.getBoundingClientRect();
+    var scrollX = window.pageXOffset || document.documentElement.scrollLeft;
+    /* 2. Stretch section to full viewport */
+    section.style.marginLeft = (-rect.left - scrollX) + 'px';
+    section.style.width = window.innerWidth + 'px';
+    /* 3. Match paper position + width to Mainroom image exactly.
+          Diagnostic confirmed: CSS margin:auto is overridden by SQS (paper.left=0).
+          Mainroom image left/width are the ground truth for alignment — 
+          we measure and mirror them directly so both sections share
+          identical left edge + width at any viewport/editor state. */
+    /* Desktop only: paper is positioned to match Mainroom geometry.
+       Mobile: paper fills full section width via CSS (width:100% !important) */
+    if (paper && window.innerWidth > 767) {
+      var mainImg = document.querySelector('[id*="mainroom"] img') ||
+                    document.querySelector('[class*="mainroom"] img');
+      if (mainImg) {
+        var mr  = mainImg.getBoundingClientRect();
+        var vw  = window.innerWidth;
+        var margin = Math.round(vw - mr.right);
+        var paperW = vw - (2 * margin);
+        paper.style.width      = paperW + 'px';
+        paper.style.marginLeft = margin + 'px';
+      } else {
+        /* Fallback: center at 64vw */
+        var vw2     = window.innerWidth;
+        var paperW2 = Math.min(Math.round(vw2 * 0.64), 1922, vw2 - 40);
+        paper.style.width      = paperW2 + 'px';
+        paper.style.marginLeft = Math.floor((vw2 - paperW2) / 2) + 'px';
+      }
+    } else if (paper) {
+      /* Mobile: reset any JS-set styles, let CSS take over */
+      paper.style.width      = '';
+      paper.style.marginLeft = '';
+    }
+  }
+
+  function positionStickyNote() {
+    var anchor = document.getElementById('stickyNoteAnchor');
+    if (!anchor || !stickyNote || !portrait || !section || window.innerWidth <= 767) {
+      if (stickyNote) { stickyNote.style.top = ''; }
+      return;
+    }
+    /* Anchor sits in normal flow right after portrait-sticky.
+       anchor.getBoundingClientRect().top = where the anchor currently is in viewport.
+       We want the note's top to appear at 72% of viewport height ON ARRIVAL.
+       On arrival, section top = 90px (scroll-margin-top).
+       Anchor top on arrival = 90px + (anchor's offset from section top).
+       anchor's offset from section top is stable (not scroll-dependent). */
+    var anchorOffsetFromSection = anchor.getBoundingClientRect().top
+                                  - section.getBoundingClientRect().top;
+    var anchorTopOnArrival = 90 + anchorOffsetFromSection;
+    var targetNoteTop = window.innerHeight * 0.72;
+    /* note.top is relative to anchor (position:relative, height:0) */
+    var noteTop = targetNoteTop - anchorTopOnArrival;
+    /* Minimum: at least portrait height below anchor so note clears portrait */
+    var minTop = portrait.offsetHeight + 16;
+    stickyNote.style.top = Math.max(Math.round(noteTop), minTop) + 'px';
+  }
+
+  var stickyNote = document.querySelector('.sticky-note-img');
+  var portrait   = document.getElementById('aboutPortrait');
+
+  /* ── Fix SQS container height ──
+     SQS calculates .sqs-code-container height at render time (before our JS).
+     After fixFullBleed() expands the section, the SQS block stays at its
+     original height, causing whitespace below our section.
+     Fix: explicitly set SQS container height = our section height. ── */
+  function fixContainerHeight() {
+    if (!section) return;
+    var h = section.offsetHeight + 'px';
+    /* Confirmed from ancestor walk: .sqs-block (level 3) is 28228px.
+       .sqs-block-content (level 2) is correct. Must target .sqs-block. */
+    var targets = [
+      section.closest('.fluid-engine'),
+      section.closest('.sqs-block'),
+      section.closest('.fe-block'),
+      section.closest('.sqs-block-content'),
+      section.closest('.sqs-code-container')
+    ];
+    targets.forEach(function(el) {
+      if (el) {
+        el.style.height = h;
+        el.style.minHeight = h;
+        el.style.maxHeight = h;
+      }
+    });
+  }
+
+  function init() {
+    fixFullBleed();
+    positionStickyNote();
+    fixContainerHeight();
+  }
+
+  init();
+  window.addEventListener('load', init);
+  window.addEventListener('resize', init);
+
+  /* ── Scroll hint chevron ── */
+  var aboutScrollHint = document.getElementById('about-scroll-hint');
+
+  // Move to body for reliable position:fixed in Fluid Engine
+  if (aboutScrollHint) document.body.appendChild(aboutScrollHint);
+
+  function updateAboutChevron() {
+    if (!aboutScrollHint || !section) return;
+    var r = section.getBoundingClientRect();
+    // Show while About Me is substantially in view.
+    // Hide once bottom of section nears viewport bottom (next section approaching).
+    var inView = r.top < window.innerHeight && r.bottom > window.innerHeight * 0.3;
+    aboutScrollHint.classList.toggle('visible', inView);
+  }
+
+  if (aboutScrollHint) {
+    aboutScrollHint.addEventListener('click', function () {
+      if (window.SBC) window.SBC.scrollToNext('about-section');
+      else window.scrollBy({ top: window.innerHeight, behavior: 'smooth' });
+    });
+  }
+
+  window.addEventListener('scroll', updateAboutChevron, { passive: true });
+  window.addEventListener('load', updateAboutChevron);
+
+  /* ── Portrait caption swap ── */
+  var caption  = document.getElementById('portraitCaption');
+
+  if (portrait) {
+    var _px = 0, _py = 0;
+    portrait.addEventListener('pointerdown', function (e) { _px = e.clientX; _py = e.clientY; });
+    portrait.addEventListener('pointerup', function (e) {
+      if (Math.abs(e.clientX - _px) < 12 && Math.abs(e.clientY - _py) < 12) {
+        var revealed = portrait.classList.toggle('revealed');
+        if (caption) caption.textContent = revealed ? "that's really me!" : 'tap to say hello!';
+      }
+    });
+    portrait.addEventListener('mouseenter', function () {
+      if (!portrait.classList.contains('revealed') && caption)
+        caption.textContent = "that's really me!";
+    });
+    portrait.addEventListener('mouseleave', function () {
+      if (!portrait.classList.contains('revealed') && caption)
+        caption.textContent = 'tap to say hello!';
+    });
+  }
+
+  /* ── Fidget: auto-spins every viewport entry, manual always works ── */
+  var fidgetWrap = document.getElementById('aboutFidget');
+  var fidget     = document.getElementById('aboutFidget');
+  var fidgetBusy = false;
+
+  function spinFidget() {
+    if (!fidget || fidgetBusy) return;
+    fidgetBusy = true;
+    fidget.classList.remove('spinning');
+    void fidget.offsetWidth;
+    fidget.classList.add('spinning');
+  }
+
+  if (fidget) {
+    fidget.addEventListener('animationend', function () {
+      fidget.classList.remove('spinning');
+      fidgetBusy = false;
+    });
+  }
+
+  if (fidgetWrap && 'IntersectionObserver' in window) {
+    var obs = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (e.isIntersecting) setTimeout(spinFidget, 300);
+      });
+    }, { threshold: 0.6 });
+    obs.observe(fidgetWrap);
+  }
+
+  if (fidgetWrap && fidget) {
+    var _fx = 0, _fy = 0;
+    fidgetWrap.addEventListener('pointerdown', function (e) { _fx = e.clientX; _fy = e.clientY; });
+    fidgetWrap.addEventListener('pointerup', function (e) {
+      if (Math.abs(e.clientX - _fx) < 12 && Math.abs(e.clientY - _fy) < 12) {
+        fidgetBusy = false;
+        spinFidget();
+      }
+    });
+  }
+
+})();
+</script>

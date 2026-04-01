@@ -1,0 +1,1937 @@
+<!-- ============================================================
+     SQUIRREL BRAIN COACHING — Coaching Section v3.17
+     "What Is ADHD Coaching?"
+
+     CHANGELOG
+     v3.19 — LED idle yellow brightened: rgba(220,200,60,0.45) →
+             rgba(240,240,40,0.65), glow rgba(220,200,0,0.45).
+             Color reference comment added (teal + yellow values).
+             Slider reverted to plain warm gray track (#b0a898), white
+             knob, no teal ring — yellow LED sufficient for attention.
+             Flicker weights rebalanced: bright 7/12→4/12, dim/off
+             4/12→6/12 for more even struggling-bulb distribution.
+     v3.18 — LED rework: removed CSS ledIdlePulse animation entirely —
+             animation contention was preventing green ON state from
+             rendering. LED state now fully JS-driven via setLED().
+             LED_IDLE_STYLE: steady dim yellow rgba(220,200,60,0.45)
+             with soft glow — applied to all LEDs on init and on OFF.
+             LED_ON_STYLE: bright green (unchanged).
+             animationPlayState removed from all style objects and
+             setLED(). startFlicker() stale pause line removed.
+             Slider track: #8fb8c4 → #c8dfe5 (faint teal whisper).
+             Slider knob: reverted to original white gradient
+             (#fff→#c8c2bc) with teal ring at 0.40 opacity — white
+             knob contrasts better against the lighter track.
+     v3.17 — LED/slider discoverability pass 2:
+             (1) ledIdlePulse amber standby glow strengthened:
+             background rgba(220,150,30,0.35)→0.55, glow spread
+             0 0 6px 3px→0 0 8px 4px, outer opacity 0.25→0.40.
+             (2) Slider knob (OFF state) gradient shifted from
+             near-white (#fff→#c8c2bc) to pale teal (#d4e8ed→#a0bfc8);
+             teal ring opacity 0.40→0.55. "try it" hint rejected —
+             controls speak for themselves.
+     v3.16 — LED + slider discoverability improvements:
+             LED .led-glow: idle amber breathing pulse (ledIdlePulse
+             keyframe, 3s ease-in-out). Animation paused via inline
+             animationPlayState when JS fires ON/flicker state, resumed
+             on OFF/stopFlicker. setLED() updated to carry
+             animationPlayState in both style objects.
+             Slider track: idle grey #b0a898 → faint teal #8fb8c4.
+             Slider thumb: dark 0.5px ring → teal ring
+             rgba(74,122,138,0.40) at 1.5px.
+     v3.15 — §4 adhd-pair labels: removed font-weight:bold from
+             --recommended and --yours modifier rules. Normal weight
+             reads better at the small label size.
+     v3.14 — §4 adhd-pair labels: added .adhd-pair-label--recommended
+             (red #c0392b) and .adhd-pair-label--yours (green #27ae60)
+             modifier classes. Bold added (reverted in v3.15).
+     v3.13 — Global body font size aligned to Welcome v1.13 standard:
+             --para-size token updated from clamp(1.1rem,1.5vw,1.15rem)
+             to clamp(1.15rem,1.6vw,1.25rem). All var(--para-size)
+             consumers (body text, table, ADHD bullets, amber overlay)
+             inherit automatically.
+     v3.12 — Scroll-hint chevron added (About v5.9 pattern): teal SVG
+             polyline (#4a7a8a), appended to document.body for reliable
+             position:fixed in Fluid Engine. coachingBounceChevron
+             keyframe namespaced. Visibility: show while section in
+             view (r.top < innerHeight && r.bottom > innerHeight*0.3).
+             Click fires SBC.scrollToNext('coaching-section').
+     v3.11 — §2 voodoo sticker mobile fix: querySelector → querySelectorAll for
+             sticker toggle. Row has two stickers (desktop + mobile); querySelector
+             always returned the desktop one first, leaving mobile sticker untouched.
+             Desktop image shift (§2, §4) on toggle deferred — suspected flex
+             align-self:stretch recalculating on tiny text-column height delta
+             between content states; needs targeted investigation.
+     v3.10 — §2 voodoo sticker: removed rotate(2deg) — rotation was adding corner
+             overflow pixels, causing hero image to shift 2-3px on toggle.
+             bottom: 3% → 6% for additional clearance from image edge.
+             Sticker added to mobile image: same s2-image-wrap pattern, width:25%
+             (32% * 0.8 = 80% of desktop scale). Mobile override in
+             @media(max-width:640px) scoped to .coaching-image-mobile .voodoo-sticker.
+     v3.9  — §2 hero image: SupportModalities.webp → SupportModalitiesMissing.webp
+             (voodoo doll erased from default state). VoodooDoll.webp added as
+             .voodoo-sticker: position:absolute over lower-right of image, 32% width,
+             2deg rotation, display:none by default. .s2-image-wrap (position:relative)
+             wraps desktop img to anchor sticker. Toggle JS: show/hide sticker in
+             sync with text content swap — instant, no fade. Mobile uses
+             SupportModalitiesMissing only (no sticker on mobile — image is small
+             visual accent, sticker would be unreadable at that scale).
+     v3.8  — §5 amber: left:3% → left:10% (centered at 80% width: (100-80)/2).
+             translateY(-60%) → translateY(-65%) (additional upward nudge).
+     v3.7  — Section header moved inside #coaching-paper (was sibling before it).
+             Header now sits on cream graph-paper bg — grounded, not floating in
+             white void. JS fixFullBleed: removed header sizing lines (width,
+             marginLeft, marginRight) — header flows naturally inside paper.
+             Removed unused `header` variable from fixFullBleed.
+             §5 amber: translateY(-50%) → translateY(-60%) — subtle nudge above
+             horizontal center.
+     v3.6  — §5 amber font-size: clamp(1.1rem,1.6vw,1.3rem) → var(--para-size);
+             line-height: 1.5 → 1.6. Matches body text spec exactly.
+             STANDING RULE: all new text blocks use var(--para-size)/1.6 — never
+             a new clamp value. Enforced via comment on .broken-amber-text.
+             §2 table mobile: restore width:30% + white-space:normal on td:first-child
+             inside @media(max-width:640px). Desktop keeps width:auto/nowrap
+             (content-sized, flush left edge); mobile keeps 30% (prevents col-2
+             from wrapping excessively on narrow viewports).
+     v3.5  — §2 table col-1: removed width:30%, added white-space:nowrap. Column
+             now sizes to content (widest label) — eliminates left-edge dead space.
+             §5 amber overlay: opacity 0.82 → 0.94 (near-solid, faint ghost).
+             Width 108%/left:-4% → 80%/left:3% ("slapped on sticker" — default
+             text visible beyond left/right edges of block).
+     v3.4  — §2 table width: removed max-width:520px + width:100% → width:auto.
+             Root cause: 520px was an old visual tightness cap; parent
+             .coaching-adhd-content resolves to width:auto while display:none,
+             so width:100% was chasing an unresolved parent. width:auto on
+             display:table sizes to content naturally, no parent resolution needed.
+             Also removed JS reflow trick (void offsetWidth) — no longer needed.
+     v3.3  — §5 amber text: redesigned as absolute overlay centered over
+             .coaching-text-body, rotated -3deg, semi-transparent cream bg.
+             Hides on toggle OFF (fade-out, remove .visible after 500ms).
+             Table width: added min-width:320px floor + JS reflow force at
+             toggle time (void offsetWidth trick) to fix display:table
+             percentage resolution from display:none parent.
+             §6 desktop image: 75% → 80% (+5%).
+             §6 mobile image: 80% → 65% (scoped override, -15% from global).
+             hidden state to .visible state — eliminates extra height in
+             lockRowHeights measurement.
+             §2 table: width:100% + max-width:520px replaces min() — percentage
+             resolves correctly on block elements, max-width caps on wide viewports.
+             §6 image: max-width 85% → 75% (additional -10% scale).
+             Mobile hero images: width 100% → 80%, centered — visual accent size.
+             Treehouse end image: ~20% smaller on both desktop and mobile.
+             divider height 24px → 12px. Tighter feel desktop + mobile.
+             §4 + §6 hero images: max-width:85% scoped to desktop only (scale -15%).
+             §2 adhd table: width min(520px,100%) replaces max-content — wider
+             on desktop, no col-2 word wrap; line-height explicit on table element.
+             §5 hero image: updated URL + aspect-ratio 723/688 → 723/580.
+             §6 hero image: ReadyLadder.webp (581×730).
+             §7 (When Coaching Makes Sense) deleted — HTML, inline
+             COACHING_COPY entry, and preceding divider all removed.
+             §2 adhd-content: replaced data-copy-content with hardcoded
+             comparison table (Medication / Therapy / Productivity tools /
+             ADHD Coaching / Voodoo). Table is not JSON-driven.
+     v2.9.1— §5 hero image: replaced placeholder with Compassion.webp (723×688).
+     v2.9  — Hero image vertical centering: .coaching-image gets
+             align-self:stretch (fills full row track height) +
+             align-items:center (centers img within that space).
+             Row stays align-items:start so text column pins to top.
+             Safe now that crossfade is gone — no interaction with
+             the double-render bug that affected v2.2.
+     v2.8  — Emoji bullet indent: 2.6em → 1.8em (matches stud bullets).
+     v2.0  — New subsection order (8 sections §0–§7). §0 gains ADHD toggle.
+             New §2 "A Different Type of Support" added. §1 ADHD content
+             switches from hardcoded table to JSON-driven bullets. All
+             subsection indices and flip states updated to maintain zigzag.
+             JSON URL updated to coaching-section-text-v2.json.
+     v1.3  — Unified typed content schema for both default and ADHD content.
+             defaultParagraphs/adhdParagraphs → defaultContent/adhdContent typed arrays.
+             Each item: { "type": "text"|"bullet"|"lightbulb", "text": "…" }.
+             Renderer builds <ul> dynamically from consecutive bullets; emoji
+             detection sets emoji-only class automatically. .lightbulb-text CSS
+             rule added. note fields added to all subsections in JSON.
+     v1.2  — USE_REMOTE_COPY=true; real GitHub URL wired in (OutrageousTejas/SBCWebsiteContent).
+             Treehouse scroll-to-top noted — different section, not coaching regression.
+     v1.1  — Fix §4 orphaned div (broke §4 adhd images + §5/§6 layout + treehouse size).
+             Fix mobile scroll-to-top: replaced section opacity:0 hide with targeted
+             visibility:hidden on text containers only — avoids SQS height mis-measurement.
+             Fix mobile toggle reflow: ON→OFF path now keeps defaultEl position:absolute
+             until fade completes; display set to explicit 'block' not empty string.
+     v1.0  — JSON-driven copy. All text content moved to COACHING_COPY object
+             at top of script, delimited by @@COPY_START / @@COPY_END sentinels.
+             USE_REMOTE_COPY flag: true = fetch from GitHub (dev iteration),
+             false = use inline object (production). populateCopy() injects all
+             text into DOM before init() runs. HTML structure and behavior
+             unchanged from v0.24. Build script: coaching-sectiontext-to-html.js
+     v0.14 — LED: div with background-image:LEDNoBase.webp + background-color
+             for fill. CSS renders bg-color first, bg-image (transparent shell)
+             on top — color shows through. Reverts CSS dome from v0.13.
+             Green ON fill + glow set by JS (setLED). Amber flicker via
+             background-color cycling on the same div.
+             rgba(100,140,200,0.13). Font: all Nunito removed; all subsection
+             titles → Exo 2 500 (one size larger: clamp 1.5/2.8vw/2rem); even
+             subsections (§2,4,6) → Exo 2 600; section h2 → Exo 2 600.
+             LED: back to pure CSS dome (radial-gradient highlight + fill color
+             via background shorthand) — image LED abandoned (couldn't fill).
+             Flicker: dome gradient + amber fill via background shorthand.
+             Mobile overflow fix: .coaching-text-body overflow-x:hidden;
+             .adhd-table width:100% on mobile. Slider swipe: touchstart/touchend
+             handler, dx>8px + dy<35px = toggle, else scroll passes through.
+             Fonts: all Exo 2 (Nunito removed). Odd subsections (§0,1,3,5):
+             Exo 2 500, one size larger. Even (§2,4,6) + h2: Exo 2 600.
+             LED: pure CSS dome (radial-gradient highlight + fill color) —
+             no image dependency, full color control. Flicker updated to use
+             dome + amber fill via background shorthand.
+             Mobile: overflow-x hidden on text-body, table constrained to
+             100% width; swipe-to-toggle on switch row (touchstart/end).
+     v0.12 — Fonts: Exo 2 700 for section h2 + even subsections (§2,4,6);
+             Nunito 700 for odd subsections (§0,1,3,5) — side-by-side comparison.
+             Paper bg: #e8f4fc (LEGO blue) with white gridlines rgba(255,255,255,0.45).
+             Text-bg spans updated to #e8f4fc to match paper. True simultaneous
+             crossfade: both content divs fade at same time with height lock.
+             LED: backgroundColor fills glass shell (green ON, dark OFF, amber flicker).
+             Flicker: sine-sum oscillator (3 sines, irrational ratios) for organic
+             non-repeating intensity. §5 header: amber color removed on activation.
+             Slider: inset trough shadow + radial-gradient thumb for physical depth.
+             Mobile images: object-fit:contain, natural height — no crop.
+             Subheader color: #3d3d3d → #2c4a6e (deep slate).
+     v0.11 — Subheader color: #4a6480 → #3d3d3d (charcoal, contrasts teal ADHD text).
+             ON↔OFF fade: incoming element fades in, outgoing snaps away cleanly —
+             exact mirror in both directions, no page-redraw feel. Table: display:table
+             + width:max-content + max-width:100% fixes left-alignment; line-height
+             1.35 for tighter rows. Bullet li padding 0.2em→0.1em for body-text
+             rhythm. CSS LED → LEDNoBase image (171×171, filter-driven ON/OFF/flicker).
+             §0 image: UnsortedPile.webp. §1 image: SortedPile2.webp (desktop+mobile).
+     v0.10 — Fix ON→OFF layout shift: height-lock on .coaching-text-body
+             during 260ms fade prevents collapse. ADHD content font-size
+             and line-height scrubbed to var(--para-size)/1.6 everywhere.
+             Subheader + subtitle color: #7a4a18/#8B4A0F → #4a6480.
+             ADHD text color → teal #4a7a8a. Table margin-left: 0.
+             Amber LED brightness reduced (glowHigh 0.90→0.65, bgHigh
+             0.80→0.60). Table row padding 0.35em → 0.22em. ADHD MODE
+             label: <br> between ADHD and MODE for reliable wrap.
+     v0.9 — LED: instant snap (no transition), inner brighter than outer
+            (box-shadow order fixed). §5 flicker: background alternates
+            with boxShadow so inner fill flickers too. ADHD MODE label:
+            max-width 3.5em, wraps ADHD/MODE only. Line-height 1.6.
+            ADHD content gets same per-line cream bg as default text.
+            Table: inline-table (content width only), 30% col1, thicker
+            horizontal lines (1.5px 45% alpha), font matches body.
+            Mobile: reduced paper horizontal padding, subsection header
+            gets slight horizontal padding. LED transition removed.
+     v0.8 — Contact-style LED glow, 32px grid, table right-justify col1,
+            crossfade fix, switch label wrap, mobile tap highlight.
+     v0.7 — CSS glass LED, box-shadow flicker, teal slider, crossfade,
+            per-line text bg, jagged shake, table ink borders.
+     v0.6 — CSS slider+LED, per-line font bg, vertical shake, §5 amber.
+     ============================================================ -->
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Exo+2:wght@500;600&display=swap');
+
+/* ── RESET & TOKENS ─────────────────────────────────────── */
+#coaching-section,
+#coaching-section * {
+  box-sizing: border-box;
+}
+
+#coaching-section {
+  --paper-bg:       #fdf8f0;
+  --graph-line:     rgba(100,140,200,0.13);
+  --paper-shadow:   rgba(0,0,0,0.08);
+  --ink:            #2c2c2c;
+  --ink-light:      #555;
+  --accent:         #e8a020;
+  --accent-dark:    #b87800;
+  --green-glow:     #44dd66;
+  --amber-glow:     #ffaa22;
+  --broken-border:  #cc8800;
+  --font-body:      'Pangolin', cursive;
+  --font-head-b:    'Exo 2', sans-serif;     /* geometric — all subsections + h2 */
+  --section-max:    1300px;
+  --row-gap:        clamp(1rem, 2vw, 1.75rem);
+  --para-size:      clamp(1.15rem, 1.6vw, 1.25rem); /* matches Welcome v1.13 */
+  --head-size:      clamp(1.3rem, 2.5vw, 1.8rem);
+  --section-title-size: clamp(1.8rem, 4vw, 3rem);
+  /* White outside the paper — cream graph-paper inside */
+  background: #ffffff;
+  font-family: var(--font-body);
+  color: var(--ink);
+  overflow-x: hidden;   /* prevent scrollbar-width bleed; JS sets exact pixel width */
+}
+
+/* ── VERSION BADGE ──────────────────────────────────────── */
+#coaching-version-badge {
+  position: fixed;
+  bottom: 32px;
+  right: 12px;
+  background: rgba(0,0,0,0.65);
+  color: #fff;
+  font: 700 11px/1 monospace;
+  padding: 5px 9px;
+  border-radius: 4px;
+  z-index: 9999;
+  pointer-events: none;
+  letter-spacing: 0.5px;
+}
+
+/* ── OUTER WRAPPER ──────────────────────────────────────── */
+#coaching-outer {
+  width: 100%;
+  padding: clamp(2rem, 4vw, 3.5rem) 0;
+}
+
+/* ── SECTION HEADER ─────────────────────────────────────── */
+#coaching-section-header {
+  text-align: center;
+  margin-bottom: clamp(1.5rem, 4vw, 3rem);
+}
+
+#coaching-section-header h2 {
+  font-family: 'Exo 2', sans-serif;
+  font-weight: 600;
+  font-size: clamp(1.6rem, 2.4vw, 2.4rem);
+  color: #2c4a6e;
+  margin: 0 0 0.3em;
+  line-height: 1.15;
+  letter-spacing: 0.01em;
+}
+
+#coaching-section-header .coaching-subtitle {
+  font-size: clamp(1rem, 1.8vw, 1.25rem);
+  color: #2c4a6e;
+  font-style: italic;
+  font-family: 'Pangolin', cursive;
+  margin: 0;
+  line-height: 1.5;
+  letter-spacing: 0.02em;
+}
+
+/* ── PAPER CARD — cream graph paper ────────────────────── */
+#coaching-paper {
+  background-color: #fdf8f0;
+  /* SVG noise texture + light blue grid lines */
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E"),
+    linear-gradient(rgba(100,140,200,0.13) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(100,140,200,0.13) 1px, transparent 1px);
+  background-size: 200px 200px, 32px 32px, 32px 32px;
+  border-radius: 6px;
+  box-shadow: 0 2px 24px rgba(0,0,0,0.10), 0 1px 4px rgba(0,0,0,0.06);
+  padding: clamp(2rem, 4vw, 3.5rem) clamp(1rem, 3vw, 2.5rem);
+  position: relative;
+}
+
+/* Text body: transparent bg, position:relative to contain fading-out elements */
+.coaching-text-body {
+  background: transparent;
+  padding: 0;
+  border-radius: 0;
+  font-size: var(--para-size);
+  line-height: 1.6;
+  color: var(--ink);
+  position: relative;
+}
+
+/* ── SUBSECTION ROW ─────────────────────────────────────── */
+.coaching-row {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  grid-template-areas: "text image";
+  gap: clamp(1.5rem, 3vw, 2.5rem);
+  margin-bottom: var(--row-gap);
+  align-items: start;   /* text column pins to top; image column uses align-self:stretch */
+  position: relative;
+}
+
+.coaching-row.flip {
+  grid-template-columns: 1fr 2fr;
+  grid-template-areas: "image text";
+}
+
+/* ── TEXT BLOCK ─────────────────────────────────────────── */
+.coaching-text {
+  grid-area: text;
+}
+
+/* Header unit — just the title now, no switch inside */
+.coaching-header-unit {
+  margin-bottom: 0;
+}
+
+/* All subsection titles: Exo 2 600 — matches §2 "How Coaching Works" */
+.coaching-row-title {
+  font-family: 'Exo 2', sans-serif;
+  font-weight: 600;
+  font-size: clamp(1.5rem, 2.8vw, 2rem);
+  color: #2c4a6e;
+  margin: 0 0 0.1em;
+  line-height: 1.15;
+  letter-spacing: 0.02em;
+  display: block;
+}
+
+/* §4 gets a wider image column — BuildGuide is square and benefits from more space */
+.coaching-row[data-subsection="4"].flip {
+  grid-template-columns: 1.5fr 2fr;
+}
+
+/* §4 and §6: hero images visually large — scale down within their column */
+.coaching-row[data-subsection="4"] .coaching-image-desktop .coaching-lego-img {
+  max-width: 85%;
+}
+.coaching-row[data-subsection="6"] .coaching-image-desktop .coaching-lego-img {
+  max-width: 80%;
+}
+
+/* §6 mobile image: additional scale down (-15% from global 80%) */
+@media (max-width: 640px) {
+  .coaching-row[data-subsection="6"] .coaching-image-mobile .coaching-lego-img {
+    width: 65%;
+  }
+}
+
+/* Span inside title carries per-line cream bg */
+.coaching-row-title > span.text-bg {
+  background-color: #fdf8f0;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+  padding: 1px 4px;
+  display: inline;
+}
+
+/* ── CSS SLIDER + LED ───────────────────────────────────── */
+/* Single consolidated rule — explicit flex-direction:row and nowrap
+   prevent any cascade from stacking the LED/slider/label vertically */
+.coaching-switch-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  flex-wrap: nowrap;
+  gap: 0.5rem;
+  margin: 0.35rem 0 0.7rem;
+  cursor: pointer;
+  user-select: none;
+  padding-left: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* LED: wrapper holds the housing image + a transparent glow overlay on top.
+   Exactly the Contact section pattern: transparent div sits on top of the image
+   and receives fill color + box-shadow when lit. No background tricks needed. */
+.led-wrapper {
+  position: relative;
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.led-img {
+  width: 24px;
+  height: 24px;
+  display: block;
+  pointer-events: none;
+  user-select: none;
+}
+
+/* Glow overlay: sits on top of the LED image, same size, rounded.
+   Transparent at rest. JS sets all states (idle/on/off) via setLED().
+   No CSS animation — JS owns all LED state to avoid animation contention. */
+.led-glow {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: transparent;
+  box-shadow: none;
+  pointer-events: none;
+}
+
+/* CSS slider track — recessed trough with inset shadow for depth */
+.css-slider {
+  position: relative;
+  width: 44px;
+  height: 22px;
+  border-radius: 11px;
+  background: #b0a898;  /* neutral warm gray — unobtrusive OFF state */
+  flex-shrink: 0;
+  transition: background 0.18s ease;
+  border: 1px solid rgba(0,0,0,0.18);
+  box-shadow:
+    inset 0 2px 4px rgba(0,0,0,0.22),
+    inset 0 1px 2px rgba(0,0,0,0.15);
+}
+
+/* Thumb: gradient shading = raised dome feel */
+.css-slider::after {
+  content: '';
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 38% 35%, #ffffff 0%, #e0dbd5 55%, #c8c2bc 100%);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.35);
+  transition: left 0.18s ease;
+}
+
+.css-slider.on {
+  background: #4a7a8a;
+}
+
+.css-slider.on::after {
+  left: calc(100% - 18px);
+}
+
+.css-slider.broken-active {
+  background: #cc8800;
+}
+
+/* ADHD MODE label — wraps between ADHD and MODE, not mid-word */
+.adhd-mode-label {
+  font-size: clamp(0.6rem, 0.9vw, 0.7rem);
+  color: var(--ink-light);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  font-family: var(--font-body);
+  line-height: 1.2;
+  word-break: keep-all;
+  overflow-wrap: normal;
+  hyphens: none;
+}
+
+/* §5 broken: rapid mechanical jolt — short, linear, no smoothing */
+@keyframes coaching-broken-shake {
+  0%   { transform: translateY(0); }
+  12%  { transform: translateY(-6px); }
+  25%  { transform: translateY(5px); }
+  37%  { transform: translateY(-5px); }
+  50%  { transform: translateY(4px); }
+  62%  { transform: translateY(-3px); }
+  75%  { transform: translateY(3px); }
+  87%  { transform: translateY(-1px); }
+  100% { transform: translateY(0); }
+}
+
+.coaching-row.broken.shake-once .coaching-text-body {
+  animation: coaching-broken-shake 0.22s linear;
+}
+
+/* §5 amber reveal text — absolute overlay centered over .coaching-text-body
+   Appears on 2nd toggle ON. .coaching-text-body has position:relative so this
+   anchors correctly without affecting layout. Out of flow — no height impact.
+   80% width + left:3% = "slapped on sticker" feel — text below visible on sides. */
+.broken-amber-text {
+  display: none;
+  position: absolute;
+  top: 50%;
+  left: 10%;                             /* centered: (100% - 80% width) / 2 */
+  width: 80%;
+  transform: translateY(-65%) rotate(-3deg);
+  margin: 0;
+  padding: 0.55em 1em;
+  font-style: italic;
+  font-size: var(--para-size);   /* ALWAYS use var(--para-size)/1.6 for new text blocks — never a new clamp */
+  line-height: 1.6;
+  color: #cc8800;
+  text-align: center;
+  /* Near-solid cream — faint ghost of paragraph text underneath */
+  background: rgba(253, 248, 240, 0.94);
+  box-shadow: 0 2px 16px rgba(180, 100, 0, 0.13);
+  border-top: 1.5px solid rgba(204, 136, 0, 0.30);
+  border-bottom: 1.5px solid rgba(204, 136, 0, 0.30);
+  z-index: 2;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.5s ease;
+}
+
+.broken-amber-text.visible {
+  display: block;
+}
+
+.broken-amber-text.fade-in {
+  opacity: 1;
+}
+
+/* §5 broken: title stays default color — slider/LED provide sufficient state cue */
+
+/* ── ITALIC COLLISION FIX ───────────────────────────────── */
+/* padding-right prevents Pangolin italic glyphs from visually colliding
+   with the next character. letter-spacing:normal !important overrides any
+   SQS global stylesheet rule that may be widening italic text. */
+#coaching-section .coaching-text-body em,
+#coaching-section .coaching-text-body strong em,
+#coaching-section .coaching-text-body em strong {
+  letter-spacing: normal !important;
+  padding-right: 0.1em;
+}
+
+/* ── LIGHTBULB TEXT ─────────────────────────────────────── */
+/* Inline insight line — semantic type in JSON, rendered as <p> with distinct style.
+   Currently matches body text; styled here so future color/weight changes
+   need only touch this one rule. */
+.lightbulb-text {
+  font-size: var(--para-size);
+  line-height: 1.6;
+  color: var(--ink);
+  margin: 0 0 0.85em;
+  font-style: normal;
+}
+
+/* ── BODY TEXT ──────────────────────────────────────────── */
+.coaching-text-body p {
+  margin: 0 0 0.85em;
+  line-height: 1.6;
+  display: block;
+}
+
+.coaching-text-body p:last-child {
+  margin-bottom: 0;
+}
+
+/* Inner span carries the per-line cream bg via box-decoration-break */
+.coaching-text-body p > span.text-bg {
+  background-color: #fdf8f0;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+  padding: 1px 3px;
+  display: inline;
+  line-height: inherit;
+}
+
+/* ADHD mode content — hidden by default, shown by JS toggle */
+.coaching-adhd-content {
+  display: none;
+  opacity: 1;           /* opacity:1 so JS only needs to manage display */
+  color: #4a7a8a;
+}
+
+/* §5 broken: default content always visible, adhd never shows */
+.coaching-row.broken .coaching-default-content {
+  display: block !important;
+  position: static !important;
+  opacity: 1 !important;
+}
+.coaching-row.broken .coaching-adhd-content {
+  display: none !important;
+}
+
+/* ADHD mode bullets — CSS LEGO stud, per-line cream bg matching default text */
+.adhd-bullets {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.adhd-bullets li {
+  padding: 0 0 0 1.8em;    /* no vertical padding — line-height:1.6 handles spacing */
+  position: relative;
+  font-size: var(--para-size);
+  line-height: 1.6;
+  color: inherit;
+  background-color: #fdf8f0;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+}
+
+/* CSS LEGO stud — small raised circle, LEGO yellow */
+.adhd-bullets li::before {
+  content: '';
+  position: absolute;
+  left: 0.2em;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  background: #e8a020;
+  box-shadow:
+    0 -2px 0 rgba(255,255,255,0.4) inset,
+    0 1px 3px rgba(0,0,0,0.25);
+}
+
+/* Emoji bullets: match LEGO stud indent so all bullet types wrap
+   consistently. text-indent pulls emoji flush left; padding-left sets
+   the wrap point at 1.8em — same as stud bullets. */
+.adhd-bullets.emoji-only li {
+  padding-left: 1.8em;
+  text-indent: -1.8em;
+}
+
+/* Hide LEGO stud for emoji bullets — emoji is the visual marker */
+.adhd-bullets.emoji-only li::before {
+  display: none;
+}
+
+/* ADHD table (§1) — content-width only, always left-aligned */
+.coaching-adhd-content {
+  text-align: left; /* prevent any inherited centering from drifting table */
+}
+
+.adhd-table {
+  display: table;
+  width: auto;              /* sizes to content — no magic pixel cap */
+  min-width: 320px;         /* floor — ensures table is never too narrow even before parent reflows */
+  border-collapse: collapse;
+  font-size: var(--para-size);
+  line-height: 1.35;
+  font-family: var(--font-body);
+  margin: 0;
+  border-top: 2px solid rgba(44,28,8,0.45);
+  border-bottom: 2px solid rgba(44,28,8,0.45);
+}
+
+.adhd-table td {
+  padding: 0.22em 0.75em;
+  text-align: left;
+  border-bottom: 1.5px solid rgba(44,28,8,0.35);
+  vertical-align: middle;
+  line-height: 1.35;        /* tighter than body — table rows aren't paragraphs */
+  font-size: var(--para-size);
+  color: inherit;
+  background-color: #fdf8f0;
+}
+
+/* First column: right-justified, content-width (no fixed % — label sits
+   flush to left edge; column shrinks to widest label naturally) */
+.adhd-table td:first-child {
+  text-align: right;
+  min-width: 120px;
+  border-right: 2px solid rgba(44,28,8,0.45);
+  padding-right: 0.85em;
+  padding-left: 0;
+  font-weight: bold;
+  white-space: nowrap;   /* prevent label wrapping now that col has no fixed width */
+}
+
+.adhd-table td:last-child {
+  padding-right: 0;
+}
+
+.adhd-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+/* ── §2 VOODOO STICKER ──────────────────────────────────── */
+/* Wrapper gives the sticker a positioned anchor without affecting
+   the flex centering of .coaching-image */
+.s2-image-wrap {
+  position: relative;
+  width: 100%;
+}
+
+/* Sticker: hidden by default, shown instantly on ADHD mode ON.
+   Positioned over lower-right of SupportModalitiesMissing composition.
+   ~32% width matches doll's natural scale in the 739x680 source. */
+.voodoo-sticker {
+  display: none;
+  position: absolute;
+  bottom: 6%;
+  right: 4%;
+  width: 32%;
+  height: auto;
+  pointer-events: none;
+}
+
+
+/* align-self:stretch fills the image grid cell to the full row track height
+   (set by the text column). align-items:center then vertically centers the
+   img within that space. Row minHeight is locked on window load so this
+   height stays fixed regardless of whether default or adhd content shows. */
+.coaching-image {
+  grid-area: image;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  align-self: stretch;
+}
+
+.coaching-lego-img {
+  width: 100%;
+  max-width: 100%;
+  border-radius: 8px;
+  object-fit: cover;
+  display: block;
+}
+
+/* Placeholder div for missing images */
+.lego-placeholder {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  border-radius: 8px;
+  background: linear-gradient(135deg, #f5e6b8 0%, #e8d4a0 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-head);
+  color: var(--accent-dark);
+  font-size: clamp(0.8rem, 1.5vw, 1rem);
+  text-align: center;
+  padding: 1rem;
+  gap: 0.5rem;
+  border: 2px dashed var(--accent);
+}
+
+.lego-placeholder span.lego-emoji {
+  font-size: clamp(2rem, 4vw, 3rem);
+}
+
+/* ── SCROLL HINT CHEVRON ────────────────────────────────── */
+#coaching-scroll-hint {
+  position: fixed;
+  bottom: clamp(12px, 2dvh, 20px);
+  left: 50%;
+  transform: translateX(-50%);
+  cursor: pointer;
+  z-index: 9999;
+  opacity: 0;
+  pointer-events: none;
+  background: none;
+  transition: opacity 0.5s ease;
+  animation: coachingBounceChevron 1.5s ease infinite;
+}
+
+#coaching-scroll-hint svg {
+  width: clamp(24px, 3.5vw, 36px);
+  height: auto;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.4));
+}
+
+#coaching-scroll-hint.visible {
+  opacity: 1;
+  pointer-events: all;
+}
+
+@keyframes coachingBounceChevron {
+  0%, 100% { transform: translateX(-50%) translateY(0); }
+  50%       { transform: translateX(-50%) translateY(5px); }
+}
+
+/* ── DIVIDER ────────────────────────────────────────────── */
+.coaching-row-divider {
+  width: 100%;
+  height: 12px;
+  margin-bottom: var(--row-gap);
+  position: relative;
+  /* SVG connector injected here by JS in later version */
+}
+
+/* ── MOBILE ─────────────────────────────────────────────── */
+@media (max-width: 640px) {
+  /* Tighter paper padding on mobile */
+  #coaching-paper {
+    padding: clamp(1.25rem, 4vw, 2rem) 0.5rem;
+  }
+
+  /* Subsection title: slight horizontal padding so not touching edges */
+  .coaching-row-title {
+    padding-left: 0.4rem;
+    padding-right: 0.4rem;
+  }
+
+  /* Stack everything vertically: image → header → switch → body */
+  .coaching-row,
+  .coaching-row.flip {
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Mobile image: full width, natural height — show full image uncropped */
+  .coaching-image-mobile {
+    width: 100%;
+    border-radius: 8px;
+    margin-bottom: 0.75rem;
+    background: transparent;
+  }
+
+  .coaching-image-mobile img.coaching-lego-img {
+    width: 80%;
+    height: auto;
+    object-fit: contain;
+    display: block;
+    margin: 0 auto;   /* keep centered now that it's not full-width */
+  }
+
+  .coaching-image-mobile .lego-placeholder {
+    aspect-ratio: 16 / 9;
+    height: auto;
+    width: 100%;
+  }
+
+  /* mobile-top contains header + image; no bottom margin — switch follows immediately */
+  .coaching-mobile-top {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 0;
+  }
+
+  /* Switch row: lock to horizontal row on mobile, restore gap */
+  .coaching-switch-row {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    flex-wrap: nowrap !important;
+    gap: 0.5rem !important;
+    margin: 0.5rem 0 0.6rem;
+    padding-left: 0.4rem;
+  }
+
+  .coaching-text-body {
+    width: 100%;
+    overflow-x: hidden; /* prevent ADHD content (table, images) from breaking out */
+  }
+
+  /* Table: must not exceed viewport on mobile — override max-content width */
+  .adhd-table {
+    width: 100%;
+    max-width: 100%;
+    display: table; /* stay block-level */
+  }
+
+  /* Mobile col-1: restore fixed width so col-2 doesn't get pushed too far right.
+     Desktop uses width:auto (content-sized) for flush left edge;
+     mobile uses 30% to keep col-2 from excessive wrapping. */
+  .adhd-table td:first-child {
+    width: 30%;
+    white-space: normal;   /* allow label wrap on mobile if needed */
+  }
+
+  /* Desktop image grid slot hidden; also ensure no stray display:block leaks out */
+  .coaching-image-desktop {
+    display: none !important;
+  }
+
+  /* §2 voodoo sticker on mobile: 80% of desktop size (32% * 0.8 ≈ 25%).
+     s2-image-wrap on mobile inherits position:relative from desktop rule. */
+  .coaching-image-mobile .voodoo-sticker {
+    width: 25%;
+    bottom: 6%;
+    right: 4%;
+  }
+}
+.adhd-image-pair {
+  display: flex;
+  gap: clamp(0.75rem, 2vw, 1.25rem);
+  align-items: flex-start;
+  /* No max-width — fills text column fully, giving ~320px per image */
+}
+
+/* Each item: image stacked above its label */
+.adhd-pair-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.4em;
+}
+
+.adhd-pair-item img {
+  width: 100%;         /* fills item — pair container controls overall size */
+  height: auto;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  border-radius: 6px;
+  border: 1.5px solid rgba(44,28,8,0.30);
+  display: block;
+}
+
+/* Label: same font as adhd-mode-label, one step larger */
+.adhd-pair-label {
+  font-family: var(--font-body);
+  font-size: clamp(0.7rem, 1.0vw, 0.8rem);
+  color: #4a7a8a;   /* teal, matches adhd content color */
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  line-height: 1.3;
+  text-align: center;
+}
+
+/* Per-label color overrides */
+.adhd-pair-label--recommended {
+  color: #c0392b;   /* red */
+}
+
+.adhd-pair-label--yours {
+  color: #27ae60;   /* green */
+}
+
+/* ── MOBILE IMAGE VISIBILITY ────────────────────────────── */
+/* Desktop: hide the in-header mobile image copies */
+@media (min-width: 641px) {
+  .coaching-image-mobile {
+    display: none !important;
+  }
+}
+
+/* ── SECTION END: completed treehouse ──────────────────── */
+#coaching-treehouse-end {
+  display: flex;
+  justify-content: center;
+  padding: clamp(2rem, 4vw, 3.5rem) 0 clamp(1rem, 2vw, 2rem);
+}
+
+.coaching-treehouse-img {
+  width: clamp(224px, 40%, 384px);   /* ~20% smaller than previous clamp(280px, 50%, 480px) */
+  height: auto;
+  display: block;
+}
+
+@media (max-width: 640px) {
+  .coaching-treehouse-img {
+    width: clamp(176px, 60%, 288px); /* ~20% smaller than previous clamp(220px, 75%, 360px) */
+  }
+}
+
+</style>
+
+<div id="coaching-version-badge">coaching v3.19</div>
+
+<section id="coaching-section" class="sbc-section">
+
+  <!-- Chevron: moved to body by JS for reliable position:fixed in SQS -->
+  <div id="coaching-scroll-hint">
+    <svg viewBox="0 0 24 14" xmlns="http://www.w3.org/2000/svg">
+      <polyline points="2,2 12,12 22,2" fill="none" stroke="#4a7a8a"
+                stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </div>
+
+  <div id="coaching-outer">
+
+    <div id="coaching-paper">
+
+      <!-- Section header — inside paper card, grounded on graph-paper bg -->
+      <div id="coaching-section-header">
+        <h2 data-copy="sectionHeader.title"></h2>
+        <p class="coaching-subtitle" data-copy="sectionHeader.subtitle"></p>
+      </div>
+
+      <!-- ── §0 A View from the Rug — flip, with toggle ── -->
+      <div class="coaching-row flip" data-subsection="0">
+        <div class="coaching-image coaching-image-desktop">
+          <img class="coaching-lego-img" src="https://images.squarespace-cdn.com/content/69ba3296dd8f7f351597cdb9/1c3f3927-6b8f-4f00-857d-1109152aaf51/TreeUnsortedPile.webp" alt="A chaotic pile of LEGO bricks — treehouse pieces scattered everywhere" style="aspect-ratio:872/514; object-fit:cover;">
+        </div>
+        <div class="coaching-text">
+          <div class="coaching-mobile-top">
+            <div class="coaching-header-unit">
+              <h3 class="coaching-row-title"><span class="text-bg" data-copy="subsection.0.title"></span></h3>
+            </div>
+            <div class="coaching-image coaching-image-mobile">
+              <img class="coaching-lego-img" src="https://images.squarespace-cdn.com/content/69ba3296dd8f7f351597cdb9/1c3f3927-6b8f-4f00-857d-1109152aaf51/TreeUnsortedPile.webp" alt="A chaotic pile of LEGO bricks">
+            </div>
+          </div>
+          <div class="coaching-switch-row" data-section="0" role="button" tabindex="0" aria-pressed="false" aria-label="Toggle ADHD Mode for section 0">
+            <span class="led-wrapper"><img class="led-img" src="https://images.squarespace-cdn.com/content/69ba3296dd8f7f351597cdb9/46741a59-8f76-4594-b2a6-7c23e2087204/LEDNoBase.webp" alt="" aria-hidden="true" width="24" height="24"><span class="led-glow"></span></span>
+            <div class="css-slider"></div>
+            <span class="adhd-mode-label">ADHD<br>Mode</span>
+          </div>
+          <div class="coaching-text-body">
+            <div class="coaching-default-content" data-copy-content="subsection.0.default"></div>
+            <div class="coaching-adhd-content" data-copy-content="subsection.0.adhd"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="coaching-row-divider"></div>
+
+      <!-- ── §1 What Is ADHD Coaching? — normal, JSON-driven adhd bullets ── -->
+      <div class="coaching-row" data-subsection="1">
+        <div class="coaching-text">
+          <div class="coaching-mobile-top">
+            <div class="coaching-header-unit">
+              <h3 class="coaching-row-title"><span class="text-bg" data-copy="subsection.1.title"></span></h3>
+            </div>
+            <div class="coaching-image coaching-image-mobile">
+              <img class="coaching-lego-img" src="https://images.squarespace-cdn.com/content/69ba3296dd8f7f351597cdb9/71ef298d-fcf4-48b1-8f87-9e805c676227/WorkingTogether2.webp" alt="Two people working together on a LEGO build">
+            </div>
+          </div>
+          <div class="coaching-switch-row" data-section="1" role="button" tabindex="0" aria-pressed="false" aria-label="Toggle ADHD Mode for section 1">
+            <span class="led-wrapper"><img class="led-img" src="https://images.squarespace-cdn.com/content/69ba3296dd8f7f351597cdb9/46741a59-8f76-4594-b2a6-7c23e2087204/LEDNoBase.webp" alt="" aria-hidden="true" width="24" height="24"><span class="led-glow"></span></span>
+            <div class="css-slider"></div>
+            <span class="adhd-mode-label">ADHD<br>Mode</span>
+          </div>
+          <div class="coaching-text-body">
+            <div class="coaching-default-content" data-copy-content="subsection.1.default"></div>
+            <div class="coaching-adhd-content" data-copy-content="subsection.1.adhd"></div>
+          </div>
+        </div>
+        <div class="coaching-image coaching-image-desktop">
+          <img class="coaching-lego-img" src="https://images.squarespace-cdn.com/content/69ba3296dd8f7f351597cdb9/71ef298d-fcf4-48b1-8f87-9e805c676227/WorkingTogether2.webp" alt="Two people working together on a LEGO build" style="aspect-ratio:641/457; object-fit:cover;">
+        </div>
+      </div>
+
+      <div class="coaching-row-divider"></div>
+
+      <!-- ── §2 A Different Type of Support — flip ── -->
+      <div class="coaching-row flip" data-subsection="2">
+        <div class="coaching-image coaching-image-desktop">
+          <!-- position:relative on this wrapper so voodoo sticker anchors to image -->
+          <div class="s2-image-wrap">
+            <img class="coaching-lego-img" src="https://images.squarespace-cdn.com/content/69ba3296dd8f7f351597cdb9/53a6a184-f301-4ac2-b34f-c82ab7773a85/SupportModalitiesMissing.webp" alt="Different types of support for ADHD" style="aspect-ratio:739/680; object-fit:cover;">
+            <!-- Voodoo sticker: hidden by default, shown on ADHD mode ON.
+                 Positioned to land over lower-right of the hero image composition.
+                 237x210 cutout over 739x680 source = ~32% width. -->
+            <img class="voodoo-sticker" src="https://images.squarespace-cdn.com/content/69ba3296dd8f7f351597cdb9/66e23bb2-a7d0-45df-aaf9-7fbc30e8a2d2/VoodooDoll.webp" alt="" aria-hidden="true">
+          </div>
+        </div>
+        <div class="coaching-text">
+          <div class="coaching-mobile-top">
+            <div class="coaching-header-unit">
+              <h3 class="coaching-row-title"><span class="text-bg" data-copy="subsection.2.title"></span></h3>
+            </div>
+            <div class="coaching-image coaching-image-mobile">
+              <div class="s2-image-wrap">
+                <img class="coaching-lego-img" src="https://images.squarespace-cdn.com/content/69ba3296dd8f7f351597cdb9/53a6a184-f301-4ac2-b34f-c82ab7773a85/SupportModalitiesMissing.webp" alt="Different types of support for ADHD">
+                <img class="voodoo-sticker" src="https://images.squarespace-cdn.com/content/69ba3296dd8f7f351597cdb9/66e23bb2-a7d0-45df-aaf9-7fbc30e8a2d2/VoodooDoll.webp" alt="" aria-hidden="true">
+              </div>
+            </div>
+          </div>
+          <div class="coaching-switch-row" data-section="2" role="button" tabindex="0" aria-pressed="false" aria-label="Toggle ADHD Mode for section 2">
+            <span class="led-wrapper"><img class="led-img" src="https://images.squarespace-cdn.com/content/69ba3296dd8f7f351597cdb9/46741a59-8f76-4594-b2a6-7c23e2087204/LEDNoBase.webp" alt="" aria-hidden="true" width="24" height="24"><span class="led-glow"></span></span>
+            <div class="css-slider"></div>
+            <span class="adhd-mode-label">ADHD<br>Mode</span>
+          </div>
+          <div class="coaching-text-body">
+            <div class="coaching-default-content" data-copy-content="subsection.2.default"></div>
+            <div class="coaching-adhd-content">
+              <!-- §2 ADHD content: hardcoded comparison table — not JSON-driven -->
+              <table class="adhd-table">
+                <tbody>
+                  <tr><td>Medication</td><td>Addresses neurobiology and enhances execution capability</td></tr>
+                  <tr><td>Therapy</td><td>Explores the past and heals emotional wounds</td></tr>
+                  <tr><td>Productivity tools</td><td>Often invite you to adapt to someone else's system</td></tr>
+                  <tr><td>ADHD Coaching</td><td>Grounded in brain science and focuses on execution</td></tr>
+                  <tr><td>Voodoo</td><td>Unclear approach. Mixed results.</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="coaching-row-divider"></div>
+
+      <!-- ── §3 How Coaching Works — normal ── -->
+      <div class="coaching-row" data-subsection="3">
+        <div class="coaching-text">
+          <div class="coaching-mobile-top">
+            <div class="coaching-header-unit">
+              <h3 class="coaching-row-title"><span class="text-bg" data-copy="subsection.3.title"></span></h3>
+            </div>
+            <div class="coaching-image coaching-image-mobile">
+              <img class="coaching-lego-img" src="https://images.squarespace-cdn.com/content/69ba3296dd8f7f351597cdb9/8d9f133b-f7fc-4f86-92fc-1c4dafba398c/TreeSortedPile2.webp" alt="LEGO treehouse pieces sorted into neat piles">
+            </div>
+          </div>
+          <div class="coaching-switch-row" data-section="3" role="button" tabindex="0" aria-pressed="false" aria-label="Toggle ADHD Mode for section 3">
+            <span class="led-wrapper"><img class="led-img" src="https://images.squarespace-cdn.com/content/69ba3296dd8f7f351597cdb9/46741a59-8f76-4594-b2a6-7c23e2087204/LEDNoBase.webp" alt="" aria-hidden="true" width="24" height="24"><span class="led-glow"></span></span>
+            <div class="css-slider"></div>
+            <span class="adhd-mode-label">ADHD<br>Mode</span>
+          </div>
+          <div class="coaching-text-body">
+            <div class="coaching-default-content" data-copy-content="subsection.3.default"></div>
+            <div class="coaching-adhd-content" data-copy-content="subsection.3.adhd"></div>
+          </div>
+        </div>
+        <div class="coaching-image coaching-image-desktop">
+          <img class="coaching-lego-img" src="https://images.squarespace-cdn.com/content/69ba3296dd8f7f351597cdb9/8d9f133b-f7fc-4f86-92fc-1c4dafba398c/TreeSortedPile2.webp" alt="LEGO treehouse pieces sorted into neat piles by type" style="aspect-ratio:683/505; object-fit:cover;">
+        </div>
+      </div>
+
+      <div class="coaching-row-divider"></div>
+
+      <!-- ── §4 Adapt to the Way Your Brain Works — flip ── -->
+      <div class="coaching-row flip" data-subsection="4">
+        <div class="coaching-image coaching-image-desktop">
+          <img class="coaching-lego-img" src="https://images.squarespace-cdn.com/content/69ba3296dd8f7f351597cdb9/fac002b6-f513-4fed-b31a-bb166d91d721/BuildGuide.webp" alt="A LEGO build guide showing the construction steps" style="aspect-ratio:1/1; object-fit:cover;">
+        </div>
+        <div class="coaching-text">
+          <div class="coaching-mobile-top">
+            <div class="coaching-header-unit">
+              <h3 class="coaching-row-title"><span class="text-bg" data-copy="subsection.4.title"></span></h3>
+            </div>
+            <div class="coaching-image coaching-image-mobile">
+              <img class="coaching-lego-img" src="https://images.squarespace-cdn.com/content/69ba3296dd8f7f351597cdb9/fac002b6-f513-4fed-b31a-bb166d91d721/BuildGuide.webp" alt="A LEGO build guide showing the construction steps">
+            </div>
+          </div>
+          <div class="coaching-switch-row" data-section="4" role="button" tabindex="0" aria-pressed="false" aria-label="Toggle ADHD Mode for section 4">
+            <span class="led-wrapper"><img class="led-img" src="https://images.squarespace-cdn.com/content/69ba3296dd8f7f351597cdb9/46741a59-8f76-4594-b2a6-7c23e2087204/LEDNoBase.webp" alt="" aria-hidden="true" width="24" height="24"><span class="led-glow"></span></span>
+            <div class="css-slider"></div>
+            <span class="adhd-mode-label">ADHD<br>Mode</span>
+          </div>
+          <div class="coaching-text-body">
+            <div class="coaching-default-content" data-copy-content="subsection.4.default"></div>
+            <div class="coaching-adhd-content">
+              <!-- §4 ADHD content: image pair — structure and image URLs stay in HTML -->
+              <div class="adhd-image-pair">
+                <div class="adhd-pair-item">
+                  <img src="https://images.squarespace-cdn.com/content/69ba3296dd8f7f351597cdb9/68b683a9-00f7-4e55-a277-8cebcd62533e/TheirBuildOrder.webp" alt="A standard LEGO build order guide — steps 1 through 100 in sequence">
+                  <span class="adhd-pair-label adhd-pair-label--recommended">Recommended Build Order</span>
+                </div>
+                <div class="adhd-pair-item">
+                  <img src="https://images.squarespace-cdn.com/content/69ba3296dd8f7f351597cdb9/d20325aa-7b96-4d6f-afdb-dbba51a80ecf/MyBuildOrder2.webp" alt="Your actual build order — jumping between steps in a nonlinear path">
+                  <span class="adhd-pair-label adhd-pair-label--yours">Your Build Order</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="coaching-row-divider"></div>
+
+      <!-- ── §5 Why Self-Awareness + Self-Compassion Come First (BROKEN) — normal ── -->
+      <div class="coaching-row broken" data-subsection="5">
+        <div class="coaching-text">
+          <div class="coaching-mobile-top">
+            <div class="coaching-header-unit">
+              <h3 class="coaching-row-title"><span class="text-bg" data-copy="subsection.5.title"></span></h3>
+            </div>
+            <div class="coaching-image coaching-image-mobile">
+              <img class="coaching-lego-img" src="https://images.squarespace-cdn.com/content/69ba3296dd8f7f351597cdb9/45aad03f-1fdd-4402-814a-99190894229d/Compassion.webp" alt="Self-compassion illustration">
+            </div>
+            <div class="coaching-switch-row" data-section="5" role="button" tabindex="0" aria-pressed="false" aria-label="Toggle ADHD Mode for section 5">
+              <span class="led-wrapper"><img class="led-img" src="https://images.squarespace-cdn.com/content/69ba3296dd8f7f351597cdb9/46741a59-8f76-4594-b2a6-7c23e2087204/LEDNoBase.webp" alt="" aria-hidden="true" width="24" height="24"><span class="led-glow"></span></span>
+              <div class="css-slider broken-slider"></div>
+              <span class="adhd-mode-label">ADHD<br>Mode</span>
+            </div>
+          </div>
+          <div class="coaching-text-body">
+            <!-- §5 broken: ADHD content div intentionally empty — switch flips but content never changes -->
+            <div class="coaching-default-content" data-copy-content="subsection.5.default"></div>
+            <div class="coaching-adhd-content">
+              <!-- Intentionally empty — broken subsection never reveals bullets -->
+            </div>
+            <!-- Amber text: appears only on 2nd toggle ON — text injected from JSON -->
+            <p class="broken-amber-text" data-copy-content="subsection.5.adhd"></p>
+          </div>
+        </div>
+        <div class="coaching-image coaching-image-desktop">
+          <img class="coaching-lego-img" src="https://images.squarespace-cdn.com/content/69ba3296dd8f7f351597cdb9/45aad03f-1fdd-4402-814a-99190894229d/Compassion.webp" alt="Self-compassion illustration" style="aspect-ratio:723/580; object-fit:cover;">
+        </div>
+      </div>
+
+      <div class="coaching-row-divider"></div>
+
+      <!-- ── §6 What Coaching Can and Can't Do — flip ── -->
+      <div class="coaching-row flip" data-subsection="6">
+        <div class="coaching-image coaching-image-desktop">
+          <img class="coaching-lego-img" src="https://images.squarespace-cdn.com/content/69ba3296dd8f7f351597cdb9/21e6bda3-b771-40ff-a837-3e0a75430c75/ReadyLadder.webp" alt="A LEGO figure ready to climb a ladder — taking the next step" style="aspect-ratio:581/730; object-fit:cover;">
+        </div>
+        <div class="coaching-text">
+          <div class="coaching-mobile-top">
+            <div class="coaching-header-unit">
+              <h3 class="coaching-row-title"><span class="text-bg" data-copy="subsection.6.title"></span></h3>
+            </div>
+            <div class="coaching-image coaching-image-mobile">
+              <img class="coaching-lego-img" src="https://images.squarespace-cdn.com/content/69ba3296dd8f7f351597cdb9/21e6bda3-b771-40ff-a837-3e0a75430c75/ReadyLadder.webp" alt="A LEGO figure ready to climb a ladder">
+            </div>
+          </div>
+          <div class="coaching-switch-row" data-section="6" role="button" tabindex="0" aria-pressed="false" aria-label="Toggle ADHD Mode for section 6">
+            <span class="led-wrapper"><img class="led-img" src="https://images.squarespace-cdn.com/content/69ba3296dd8f7f351597cdb9/46741a59-8f76-4594-b2a6-7c23e2087204/LEDNoBase.webp" alt="" aria-hidden="true" width="24" height="24"><span class="led-glow"></span></span>
+            <div class="css-slider"></div>
+            <span class="adhd-mode-label">ADHD<br>Mode</span>
+          </div>
+          <div class="coaching-text-body">
+            <div class="coaching-default-content" data-copy-content="subsection.6.default"></div>
+            <div class="coaching-adhd-content" data-copy-content="subsection.6.adhd"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── Section end: completed treehouse ─────────────────
+           Visual payoff — the full build. Centered at the bottom of the
+           paper, inside the instruction-manual card. -->
+      <div id="coaching-treehouse-end">
+        <img
+          src="https://images.squarespace-cdn.com/content/69ba3296dd8f7f351597cdb9/c18eaa67-bcaf-477b-8bfe-f29ea8dfce43/BlockTreehouseYellowFlag.webp"
+          alt="A completed LEGO treehouse — the finished build"
+          class="coaching-treehouse-img">
+      </div>
+
+    </div><!-- /coaching-paper -->
+  </div><!-- /coaching-outer -->
+</section>
+
+<script>
+(function() {
+  'use strict';
+
+  // ── RE-EXECUTION GUARD ───────────────────────────────────
+  // SQS Fluid Engine re-executes code blocks when fixContainerHeight changes
+  // parent element heights. This flag ensures the IIFE body only runs once,
+  // regardless of how many times SQS injects and re-runs the block.
+  if (window.__sbcCoachingInitialized) return;
+  window.__sbcCoachingInitialized = true;
+
+  const VERSION = 'coaching v3.19';
+
+  // ── COPY DATA ────────────────────────────────────────────
+  // @@COPY_START
+  const USE_REMOTE_COPY = true;   // false = use inline object below (production/offline)
+  const REMOTE_COPY_URL = 'https://raw.githubusercontent.com/OutrageousTejas/SBCWebsiteContent/refs/heads/main/coaching-section-text-v2.json';
+  const COACHING_COPY = {
+    "_comment": "Squirrel Brain Coaching — Coaching Section copy file v2. Edit text here, commit to GitHub, refresh SQS page to see changes. HTML structure/behavior changes still require editing the HTML file directly.",
+    "sectionHeader": {
+      "title": "What Is ADHD Coaching?",
+      "subtitle": "A thousand colorful bricks. One big question: where do you start?"
+    },
+    "subsections": [
+      {
+        "id": 0,
+        "note": "Now has ADHD toggle in v2.0. adhdContent shows condensed bullets.",
+        "title": "A View from the Rug",
+        "defaultContent": [
+          {
+            "type": "text",
+            "text": "You're sitting on the floor surrounded by a thousand colorful bricks. You know exactly what you want to build — a perfect 1,000-piece masterpiece. Well, 997. You lost three pieces somewhere."
+          },
+          {
+            "type": "text",
+            "text": "But you don't start. Not because you don't know how. Not because you don't want to. You just… sit there. Completely aware of everything you need to do, and completely unable to make yourself do the first thing."
+          },
+          {
+            "type": "text",
+            "text": "This isn't laziness. It's a disconnect between knowing and doing — and it's one of the most disorienting parts of having an ADHD brain."
+          }
+        ],
+        "adhdContent": [
+          { "type": "bullet", "text": "You know what to do — your brain just won't let you start" },
+          { "type": "bullet", "text": "The disconnect between knowing and doing is an ADHD hallmark" },
+          { "type": "bullet", "text": "It's not laziness. It's executive function." }
+        ]
+      },
+      {
+        "id": 1,
+        "note": "ADHD content is now JSON-driven bullets (table removed in v2.0).",
+        "title": "What Is ADHD Coaching?",
+        "defaultContent": [
+          {
+            "type": "text",
+            "text": "Coaching isn't someone building the set for you. It's having a Master Builder sit beside you on the rug."
+          },
+          {
+            "type": "text",
+            "text": "Therapy might explore <em>why</em> you're afraid of the Expert-level sets. Medication clears the clutter off the table so you can actually see the pieces. Coaching is the manual — written for your brain, by you. Not productivity hacks. Not glue. A sorting system you actually want to use."
+          }
+        ],
+        "adhdContent": [
+          { "type": "bullet", "text": "<strong>Productivity hacks</strong> — someone else's system, handed to you" },
+          { "type": "bullet", "text": "<strong>Medication</strong> — clears the table. Doesn't teach you how to sort." },
+          { "type": "bullet", "text": "<strong>Therapy</strong> — explores the past. Heals wounds." },
+          { "type": "bullet", "text": "<strong>Coaching</strong> — a manual written for your brain, by you." },
+          { "type": "lightbulb", "text": "💡 You still do the building. The coach just helps you figure out where to start." }
+        ]
+      },
+      {
+        "id": 2,
+        "note": "New section in v2.0 — A Different Type of Support. Placeholder copy — replace via JSON.",
+        "title": "A Different Type of Support",
+        "defaultContent": [
+          {
+            "type": "text",
+            "text": "[v2 copy pending — add content for 'A Different Type of Support' in coaching-section-text-v2.json]"
+          }
+        ],
+        "adhdContent": [
+          { "type": "bullet", "text": "[v2 adhd bullet 1 pending]" },
+          { "type": "bullet", "text": "[v2 adhd bullet 2 pending]" }
+        ]
+      },
+      {
+        "id": 3,
+        "note": "Formerly §2 in v1.3 — How Coaching Works. Standard subsection with bullets.",
+        "title": "How Coaching Works",
+        "defaultContent": [
+          {
+            "type": "text",
+            "text": "Think of sessions as a weekly Sorting Sync."
+          },
+          {
+            "type": "text",
+            "text": "We look at what's on your table: what's in progress, what's stalled, and what's been sitting in the corner since January. Together we break the 100-page instruction manual into five-minute micro-builds. We take stock of your mental energy, decide which bag to open first, and figure out what's actually blocking the build — not what <em>should</em> be blocking it."
+          },
+          {
+            "type": "text",
+            "text": "I'm not there to judge the mess on the floor. I'm there to help you find the techniques that work for <em>your</em> brain."
+          }
+        ],
+        "adhdContent": [
+          { "type": "bullet", "text": "We break the overwhelming stuff into five-minute micro-builds" },
+          { "type": "bullet", "text": "We figure out what's <em>actually</em> blocking you — not what should be blocking you" },
+          { "type": "bullet", "text": "We look at what's in progress, what's stalled, and what's been sitting in the corner since January" },
+          { "type": "bullet", "text": "No judgment. Just the right techniques for <em>your</em> brain" }
+        ]
+      },
+      {
+        "id": 4,
+        "note": "Formerly §4 in v1.3 — Adapt to the Way. ADHD content is an image pair hardcoded in HTML. adhdContent ignored.",
+        "title": "Adapt to the Way Your Brain Works",
+        "defaultContent": [
+          {
+            "type": "text",
+            "text": "\"Just be more organized\" is like being told to build a castle without any baseplates. Technically possible. Deeply miserable. Not the point."
+          },
+          {
+            "type": "text",
+            "text": "We don't force your brain through a linear 1-to-100 manual if you work better building the dragon first. We honor how your brain actually moves — hyperfocus, creative leaps, nonlinear everything — and design your Build Station around that. The pieces you need most? Always within reach."
+          }
+        ],
+        "adhdContent": []
+      },
+      {
+        "id": 5,
+        "note": "Broken subsection — switch flips but ADHD content never appears. adhdContent[0] is the amber reveal text shown only on the 2nd toggle attempt.",
+        "title": "Why Self-Awareness + Self-Compassion Come First",
+        "defaultContent": [
+          {
+            "type": "text",
+            "text": "You step on a stray brick in the dark. You curse the brick. You turn on the light and see the mess. You curse yourself. You meant to put them away. You didn't."
+          },
+          {
+            "type": "text",
+            "text": "Here's the thing — everyone leaves bricks out. Everyone. But for us, it never feels like a minor oversight or an understandable remnant after an exhausted day. It feels like proof. Proof that we are the mess, not the floor."
+          },
+          {
+            "type": "text",
+            "text": "That's the part worth examining — not the brick, not even how the mess came to be — but the story we've been telling ourselves about what that means."
+          }
+        ],
+        "adhdContent": [
+          {
+            "type": "text",
+            "text": "<em>\"Getting stuck isn't a character flaw.\"</em>"
+          }
+        ]
+      },
+      {
+        "id": 6,
+        "note": "Formerly §3 in v1.3 — What Coaching Can and Can't Do. Now at §6 (flip). Standard emoji bullets in ADHD mode.",
+        "title": "What Coaching Can and Can't Do",
+        "defaultContent": [
+          {
+            "type": "text",
+            "text": "A coach is a precision tool — like a brick separator. It makes the hard parts easier. It doesn't do the snapping for you."
+          },
+          {
+            "type": "text",
+            "text": "Coaching can help you find a better way to organize the pieces. It won't replace therapy, and it won't replace medication. We can't change the pieces you were given — it's a non-standard set — but we can change the way you arrange them."
+          },
+          {
+            "type": "text",
+            "text": "What coaching <em>will</em> do is help you figure out an arrangement that actually works — and help you stop waiting for the \"right\" moment to start."
+          }
+        ],
+        "adhdContent": [
+          { "type": "bullet", "text": "✅ Helps you find a better way to organize the pieces" },
+          { "type": "bullet", "text": "✅ Helps you stop waiting for the \"right\" moment to start" },
+          { "type": "bullet", "text": "✅ Changes the way you arrange what you've got" },
+          { "type": "bullet", "text": "❌ Won't replace therapy" },
+          { "type": "bullet", "text": "❌ Won't replace medication" },
+          { "type": "bullet", "text": "❌ Can't change the pieces you were given" },
+          { "type": "bullet", "text": "❌ Can't help you win the lottery" }
+        ]
+      }
+    ]
+  };
+  // @@COPY_END
+
+  // LED glow overlay: transparent <span> sitting on top of the LED image.
+  // Exact Contact section pattern: background fills the overlay circle,
+  // box-shadow radiates the glow outward. Off = transparent + no shadow.
+  // LED color reference (for future tuning):
+  // Teal:   background rgba(10,190,190,0.65)  boxShadow 0 0 4px 2px rgba(0,150,150,0.45)
+  // Yellow: background rgba(240,240,40,0.65)  boxShadow 0 0 4px 2px rgba(220,200,0,0.45)
+  const LED_IDLE_STYLE = {
+    background:  'rgba(240, 240, 40, 0.65)',  /* steady yellow — operational */
+    boxShadow:   '0 0 4px 2px rgba(220, 200, 0, 0.45)',
+    filter:      ''
+  };
+  const LED_OFF_STYLE = {
+    background:  'rgba(240, 240, 40, 0.65)',  /* restore idle — same as IDLE */
+    boxShadow:   '0 0 4px 2px rgba(220, 200, 0, 0.45)',
+    filter:      ''
+  };
+  const LED_ON_STYLE = {
+    background:  'rgba(30, 180, 60, 0.70)',   /* bright green fill */
+    boxShadow:   '0 0 5px 2px rgba(30,180,60,0.85), 0 0 14px 6px rgba(30,180,60,0.30)',
+    filter:      'brightness(1.2)'
+  };
+
+  function setLED(led, styleObj) {
+    if (!led) return;
+    led.style.background = styleObj.background;
+    led.style.boxShadow  = styleObj.boxShadow;
+    led.style.filter     = styleObj.filter;
+  }
+
+  // ── IMAGE VISIBILITY — JS-driven (CSS media queries unreliable in SQS) ──
+  function applyImageVisibility() {
+    const isMobile = window.innerWidth <= 640;
+    document.querySelectorAll('#coaching-section .coaching-image-desktop').forEach(el => {
+      el.style.display = isMobile ? 'none' : '';
+    });
+    document.querySelectorAll('#coaching-section .coaching-image-mobile').forEach(el => {
+      el.style.display = isMobile ? '' : 'none';
+    });
+  }
+
+  // ── FULL BLEED + PAPER CENTERING ───────────────────────
+  function fixFullBleed() {
+    const section = document.getElementById('coaching-section');
+    const paper   = document.getElementById('coaching-paper');
+    if (!section) return;
+    section.style.marginLeft = '';
+    section.style.width = '';
+    const rect = section.getBoundingClientRect();
+    const scrollX = window.scrollX || window.pageXOffset || 0;
+    section.style.marginLeft = (-rect.left - scrollX) + 'px';
+    section.style.width = window.innerWidth + 'px';
+    if (paper) {
+      const vw = window.innerWidth;
+      if (vw > 640) {
+        const paperW = Math.min(1300, vw - 120);
+        const marginL = Math.floor((vw - paperW) / 2) + 'px';
+        paper.style.width      = paperW + 'px';
+        paper.style.marginLeft = marginL;
+        paper.style.marginRight = '0';
+        // Header is now inside #coaching-paper — no independent sizing needed
+      } else {
+        paper.style.width = paper.style.marginLeft = paper.style.marginRight = '';
+      }
+    }
+  }
+
+  // ── TOGGLE SWITCHES ─────────────────────────────────────
+  // Each .coaching-switch-row is the interactive element.
+  // .css-slider toggles .on class for track/thumb animation.
+  // .img-led state driven entirely by setLED() inline styles.
+  const brokenToggleCount = new Map(); // tracks §5 ON-press count
+
+  function initToggles() {
+    document.querySelectorAll('#coaching-section .coaching-switch-row').forEach(switchRow => {
+      const row      = switchRow.closest('.coaching-row');
+      const textBody = row  ? row.querySelector('.coaching-text-body') : null;
+      const isBroken = row && row.classList.contains('broken');
+      const slider   = switchRow.querySelector('.css-slider');
+      const led      = switchRow.querySelector('.led-glow');
+
+      function toggle() {
+        const isOn = slider.classList.toggle('on');
+        switchRow.setAttribute('aria-pressed', String(isOn));
+
+        if (isBroken) {
+          if (isOn) {
+            row.classList.add('activated');
+            if (slider) slider.classList.add('broken-active');
+
+            // Shake text body once (vertical)
+            row.classList.add('shake-once');
+            if (textBody) {
+              textBody.addEventListener('animationend', () => {
+                row.classList.remove('shake-once');
+              }, { once: true });
+            }
+
+            startFlicker(led);
+
+            // Double-tap: show amber text on 2nd+ ON press
+            const count = (brokenToggleCount.get(row) || 0) + 1;
+            brokenToggleCount.set(row, count);
+            if (count >= 2) {
+              const amberEl = row.querySelector('.broken-amber-text');
+              if (amberEl) {
+                amberEl.classList.add('visible');
+                requestAnimationFrame(() => amberEl.classList.add('fade-in'));
+              }
+            }
+          } else {
+            row.classList.remove('activated');
+            row.classList.remove('shake-once');
+            if (slider) slider.classList.remove('broken-active');
+            stopFlicker(led);
+            // Hide amber overlay when switched back OFF
+            const amberEl = row.querySelector('.broken-amber-text');
+            if (amberEl) {
+              amberEl.classList.remove('fade-in');
+              // Remove visible after fade completes (matches 0.5s transition)
+              setTimeout(() => amberEl.classList.remove('visible'), 500);
+            }
+          }
+          return;
+        }
+
+        // Instant swap — no crossfade, no position:absolute, no minHeight juggling.
+        // Row minHeight is permanently locked on window load so layout never shifts.
+        if (textBody) {
+          const defaultEl = textBody.querySelector('.coaching-default-content');
+          const adhdEl    = textBody.querySelector('.coaching-adhd-content');
+
+          if (isOn) {
+            if (defaultEl) defaultEl.style.display = 'none';
+            if (adhdEl)    adhdEl.style.display    = 'block';
+          } else {
+            if (adhdEl)    adhdEl.style.display    = 'none';
+            if (defaultEl) defaultEl.style.display = 'block';
+          }
+        }
+        // §2 voodoo sticker: show/hide in sync with text toggle.
+        // querySelectorAll — row has two stickers (desktop + mobile); querySelector
+        // only finds the first (desktop), leaving mobile sticker untouched.
+        if (row) {
+          row.querySelectorAll('.voodoo-sticker').forEach(s => {
+            s.style.display = isOn ? 'block' : 'none';
+          });
+        }
+        if (led) setLED(led, isOn ? LED_ON_STYLE : LED_OFF_STYLE);
+      }
+
+      switchRow.addEventListener('click', toggle);
+      switchRow.addEventListener('keydown', e => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          toggle();
+        }
+      });
+
+      // Mobile swipe-to-toggle: detect horizontal drag across switch row.
+      // touchstart records finger position; touchend checks displacement.
+      // dx > 8px with dy < 35px = deliberate horizontal swipe → toggle.
+      // Vertical scroll (large dy) passes through untouched.
+      let _touchStartX = 0, _touchStartY = 0;
+      switchRow.addEventListener('touchstart', e => {
+        _touchStartX = e.touches[0].clientX;
+        _touchStartY = e.touches[0].clientY;
+      }, { passive: true });
+      switchRow.addEventListener('touchend', e => {
+        const dx = Math.abs(e.changedTouches[0].clientX - _touchStartX);
+        const dy = Math.abs(e.changedTouches[0].clientY - _touchStartY);
+        if (dx > 8 && dy < 35) {
+          // Horizontal swipe — toggle and suppress the synthetic click that follows
+          e.preventDefault();
+          toggle();
+        }
+        // If dy >= 35 or dx <= 8: vertical scroll or tap — let click handler take it
+      }, { passive: false });
+    });
+  }
+
+  // ── BROKEN LED FLICKER (rAF, amber) ────────────────────
+  const flickerState = new Map();
+
+  function startFlicker(led) {
+    if (!led || flickerState.has(led)) return;
+
+    // State-machine flicker with fully randomized hold durations.
+    // States weighted toward ON (failing bulb stays on more than off).
+    // Each state's duration = base * random(0.4..1.6) → no two holds alike.
+    // Inner box-shadow kept tight so center is the hot point, not the rim.
+    const states = [
+      // { bg alpha, inner glow alpha, outer glow alpha, base duration ms, weight }
+      // Weights rebalanced v3.19: bright was 7/12, now 4/12; dim/off now 6/12
+      { bg: 0.72, inner: 0.88, outer: 0.40, base: 420, w: 2 },  // fully on, long hold
+      { bg: 0.65, inner: 0.75, outer: 0.32, base: 180, w: 1 },  // on, medium
+      { bg: 0.20, inner: 0.25, outer: 0.08, base: 55,  w: 2 },  // brief dim
+      { bg: 0.00, inner: 0.00, outer: 0.00, base: 35,  w: 2 },  // brief off
+      { bg: 0.72, inner: 0.88, outer: 0.40, base: 80,  w: 1 },  // on after stutter
+      { bg: 0.00, inner: 0.00, outer: 0.00, base: 90,  w: 2 },  // off, medium
+      { bg: 0.55, inner: 0.60, outer: 0.25, base: 300, w: 2 },  // dim-on, long
+    ];
+
+    // Build weighted pool for random state selection
+    const pool = [];
+    states.forEach((s, i) => { for (let k = 0; k < s.w; k++) pool.push(i); });
+
+    let timeoutId = null;
+
+    function applyState(idx) {
+      if (!flickerState.has(led)) return;
+      const s = states[idx];
+      led.style.background = s.bg > 0 ? `rgba(220,100,10,${s.bg})` : 'transparent';
+      led.style.boxShadow  = s.inner > 0
+        ? `0 0 5px 2px rgba(220,100,10,${s.inner}), 0 0 14px 5px rgba(220,100,10,${s.outer})`
+        : 'none';
+
+      // Randomize hold duration: base * U(0.4, 1.6)
+      const hold = s.base * (0.4 + Math.random() * 0.8);
+      const next = pool[Math.floor(Math.random() * pool.length)];
+      timeoutId = setTimeout(() => applyState(next), hold);
+      flickerState.set(led, { cancel: () => clearTimeout(timeoutId) });
+    }
+
+    flickerState.set(led, { cancel: () => {} }); // placeholder before first state
+    applyState(0);
+  }
+
+  function stopFlicker(led) {
+    const state = flickerState.get(led);
+    if (state && state.cancel) state.cancel();
+    flickerState.delete(led);
+    if (led) setLED(led, LED_OFF_STYLE);
+  }
+
+  // ── COPY POPULATION ─────────────────────────────────────
+  // Walks the COACHING_COPY object and injects typed content into the DOM.
+  //
+  // Two data attributes drive injection:
+  //
+  //   data-copy="sectionHeader.title"
+  //     → sets element.innerHTML to that string value
+  //
+  //   data-copy-content="subsection.N.default" | "subsection.N.adhd"
+  //     → calls renderContent(array, container) which walks the typed
+  //       items array and emits elements in order:
+  //
+  //       { "type": "text", "text": "…" }
+  //         → <p><span class="text-bg">…</span></p>
+  //           (or raw innerHTML for .broken-amber-text — see §5 special case)
+  //
+  //       { "type": "bullet", "text": "…" }
+  //         → <li> appended to a running <ul class="adhd-bullets [emoji-only]">
+  //           Consecutive bullets share one <ul>. A new <ul> starts when
+  //           bullet runs are broken by text/lightbulb items.
+  //           Emoji detection: if text starts with an emoji char the <ul>
+  //           gets the "emoji-only" class (hides CSS LEGO stud).
+  //
+  //       { "type": "lightbulb", "text": "…" }
+  //         → <p class="lightbulb-text"><span class="text-bg">…</span></p>
+  //           Styled via .lightbulb-text CSS rule — edit there for visual changes.
+  //
+  // §1 table and §4 image-pair have no data-copy-content — left untouched.
+  // §5 broken-amber-text: first adhdContent item rendered as raw innerHTML.
+
+  // Emoji detection — checks if string starts with a Unicode emoji character.
+  const EMOJI_RE = /^\p{Emoji}/u;
+
+  function renderContent(items, container) {
+    if (!Array.isArray(items) || items.length === 0) return;
+
+    // Clear before rendering — guard against populateCopy being called twice
+    container.innerHTML = '';
+
+    // Special case: broken-amber-text renders first item as raw innerHTML only
+    if (container.classList.contains('broken-amber-text')) {
+      container.innerHTML = items[0].text || '';
+      return;
+    }
+
+    let currentUl = null; // tracks open <ul> for consecutive bullet grouping
+
+    items.forEach(item => {
+      if (item.type === 'bullet') {
+        // Start a new <ul> if we don't have one open
+        if (!currentUl) {
+          currentUl = document.createElement('ul');
+          const isEmoji = EMOJI_RE.test(item.text || '');
+          currentUl.className = isEmoji ? 'adhd-bullets emoji-only' : 'adhd-bullets';
+          container.appendChild(currentUl);
+        }
+        const li = document.createElement('li');
+        li.innerHTML = item.text || '';
+        currentUl.appendChild(li);
+
+      } else {
+        // Any non-bullet item closes the current <ul> run
+        currentUl = null;
+
+        if (item.type === 'text') {
+          const p = document.createElement('p');
+          const span = document.createElement('span');
+          span.className = 'text-bg';
+          span.innerHTML = item.text || '';
+          p.appendChild(span);
+          container.appendChild(p);
+
+        } else if (item.type === 'lightbulb') {
+          const p = document.createElement('p');
+          p.className = 'lightbulb-text';
+          const span = document.createElement('span');
+          span.className = 'text-bg';
+          span.innerHTML = item.text || '';
+          p.appendChild(span);
+          container.appendChild(p);
+        }
+      }
+    });
+  }
+
+  function resolvePath(obj, path) {
+    // Resolves "subsection.2.default" → obj.subsections[2].defaultContent
+    // Resolves "subsection.2.adhd"   → obj.subsections[2].adhdContent
+    // Resolves "sectionHeader.title" → obj.sectionHeader.title
+    const parts = path.split('.');
+    let cur = obj;
+    for (const part of parts) {
+      if (cur === undefined || cur === null) return undefined;
+      if (part === 'subsection') {
+        cur = cur.subsections;
+      } else if (part === 'default') {
+        cur = cur.defaultContent;
+      } else if (part === 'adhd') {
+        cur = cur.adhdContent;
+      } else if (!isNaN(part)) {
+        cur = cur[parseInt(part, 10)];
+      } else {
+        cur = cur[part];
+      }
+    }
+    return cur;
+  }
+
+  function populateCopy(copy) {
+    const section = document.getElementById('coaching-section');
+    if (!section) return;
+
+    // data-copy: single string → innerHTML
+    section.querySelectorAll('[data-copy]').forEach(el => {
+      const val = resolvePath(copy, el.dataset.copy);
+      if (typeof val === 'string') el.innerHTML = val;
+    });
+
+    // data-copy-content: typed array → rendered elements
+    section.querySelectorAll('[data-copy-content]').forEach(el => {
+      const arr = resolvePath(copy, el.dataset.copyContent);
+      if (Array.isArray(arr)) renderContent(arr, el);
+    });
+  }
+
+  // ── COPY LOADER ──────────────────────────────────────────
+  // If USE_REMOTE_COPY: fetch JSON from GitHub, populate, then init.
+  // If fetch fails: fall back to inline COACHING_COPY silently.
+  // If not USE_REMOTE_COPY: use inline COACHING_COPY directly.
+  //
+  // Section is hidden (opacity:0) until copy is populated,
+  // then revealed — prevents flash of empty text nodes.
+
+  function loadCopy(onReady) {
+    // Hide only text containers during copy injection — not the whole section.
+    // Hiding the entire section causes SQS to mis-measure height and jump to top on mobile.
+    const textTargets = '#coaching-section [data-copy], #coaching-section [data-copy-content]';
+    const hiddenEls = Array.from(document.querySelectorAll(textTargets));
+    hiddenEls.forEach(el => { el.style.visibility = 'hidden'; });
+
+    function reveal() {
+      hiddenEls.forEach(el => { el.style.visibility = ''; });
+      onReady();
+    }
+
+    function useInline() {
+      populateCopy(COACHING_COPY);
+      reveal();
+    }
+
+    if (USE_REMOTE_COPY) {
+      fetch(REMOTE_COPY_URL)
+        .then(r => {
+          if (!r.ok) throw new Error('fetch failed: ' + r.status);
+          return r.json();
+        })
+        .then(data => {
+          populateCopy(data);
+          reveal();
+        })
+        .catch(err => {
+          console.warn('[SBC coaching] Remote copy fetch failed, using inline fallback.', err);
+          useInline();
+        });
+    } else {
+      useInline();
+    }
+  }
+
+  // ── CONTAINER HEIGHT FIX (SQS Fluid Engine) ────────────
+  function fixContainerHeight() {
+    const section = document.getElementById('coaching-section');
+    if (!section) return;
+    const h = section.scrollHeight + 'px';
+    const targets = ['sqs-code-container','sqs-block-content','sqs-block','fe-block','fluid-engine'];
+    let parent = section.parentElement;
+    let depth = 0;
+    while (parent && depth < 8) {
+      const cls = (parent.className || '').toString();
+      if (targets.some(t => cls.includes(t))) {
+        parent.style.height = parent.style.minHeight = parent.style.maxHeight = h;
+      }
+      parent = parent.parentElement;
+      depth++;
+    }
+  }
+
+  // ── LOCK ROW HEIGHTS ────────────────────────────────────
+  // Permanently sets each row's minHeight to its rendered height with
+  // default content visible. Prevents two issues:
+  //   1. Section shift: row never collapses when adhd content (shorter) shows.
+  //   2. Image position shift: image column (align-self:stretch) always fills
+  //      the locked row height so the image never moves on toggle.
+  // Hooked to window 'load' — fires after all images are downloaded so
+  // offsetHeight measurements include actual image heights. No rAF/setTimeout
+  // timing guesswork.
+  function lockRowHeights() {
+    document.querySelectorAll('#coaching-section .coaching-row').forEach(row => {
+      if (!row.style.minHeight) {
+        row.style.minHeight = row.offsetHeight + 'px';
+      }
+    });
+  }
+
+  // ── INIT ────────────────────────────────────────────────
+  function init() {
+    loadCopy(() => {
+      fixFullBleed();
+      applyImageVisibility();
+      initToggles();
+      // Set all LEDs to idle (steady dim yellow) on load
+      document.querySelectorAll('#coaching-section .led-glow').forEach(led => {
+        setLED(led, LED_IDLE_STYLE);
+      });
+      // Note: fixContainerHeight removed — it modified SQS parent element
+      // heights which triggered SQS to re-execute this code block, causing
+      // a second populateCopy run. Row sizing handled by lockRowHeights on
+      // window load instead.
+    });
+  }
+
+  // Lock row heights after all images have loaded — accurate offsetHeight
+  window.addEventListener('load', lockRowHeights);
+
+  let resizeTimer;
+  window.addEventListener('resize', () => {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(() => { fixFullBleed(); applyImageVisibility(); }, 100);
+  });
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    requestAnimationFrame(() => requestAnimationFrame(init));
+  }
+
+  // ── SCROLL HINT CHEVRON ──────────────────────────────────
+  const coachingScrollHint = document.getElementById('coaching-scroll-hint');
+  const coachingSection    = document.getElementById('coaching-section');
+
+  // Move to body for reliable position:fixed in Fluid Engine
+  if (coachingScrollHint) document.body.appendChild(coachingScrollHint);
+
+  function updateCoachingChevron() {
+    if (!coachingScrollHint || !coachingSection) return;
+    var r = coachingSection.getBoundingClientRect();
+    var inView = r.top < window.innerHeight && r.bottom > window.innerHeight * 0.3;
+    coachingScrollHint.classList.toggle('visible', inView);
+  }
+
+  if (coachingScrollHint) {
+    coachingScrollHint.addEventListener('click', function () {
+      if (window.SBC) window.SBC.scrollToNext('coaching-section');
+      else window.scrollBy({ top: window.innerHeight, behavior: 'smooth' });
+    });
+  }
+
+  window.addEventListener('scroll', updateCoachingChevron, { passive: true });
+  window.addEventListener('load', updateCoachingChevron);
+
+})();
+</script>

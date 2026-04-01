@@ -1,0 +1,43 @@
+/*
+  ═══════════════════════════════════════════════════════════════
+  GLOBAL TOOLTIP STYLE — Squirrel Brain Coaching
+  Location: Squarespace → Design → Custom CSS
+
+  Used by all sections that use the .tooltip / .tooltip.visible
+  pattern (Treehouse, Mainroom, future sections).
+
+  To change tooltip appearance site-wide, edit only this block.
+  ═══════════════════════════════════════════════════════════════
+
+  !! REQUIRED ACTION: Load Fredoka One via Code Injection !!
+  ─────────────────────────────────────────────────────────────
+  Paste these two lines into:
+  Settings → Advanced → Code Injection → Header
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&display=swap" rel="stylesheet">
+
+  Without this, the font file is never downloaded by the browser
+  and all tooltips fall back to whatever Squarespace loads globally.
+  The !important below wins the CSS specificity battle but cannot
+  make the browser use a font that isn't loaded.
+  ═══════════════════════════════════════════════════════════════
+*/
+
+.tooltip {
+  background: rgba(61, 31, 0, 0.85);
+  color: #fff;
+  padding: 0.4em 0.8em;
+  border-radius: 20px;
+  font-size: clamp(0.75rem, 1.5vw, 0.95rem);
+  font-family: 'Fredoka One', cursive !important;
+  white-space: nowrap;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+  z-index: 100;
+  opacity: 0;
+}
+
+.tooltip.visible {
+  opacity: 1;
+}
