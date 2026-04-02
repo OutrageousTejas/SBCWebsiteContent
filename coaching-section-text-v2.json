@@ -74,7 +74,7 @@
       "note": "ADHD content is an image pair (TheirBuildOrder + MyBuildOrder2) — hardcoded in HTML. adhdContent here is ignored by the renderer. To edit the images or labels, update the HTML directly.",
       "title": "Adapt to the Way Your Brain Works",
       "defaultContent": [
-        { "type": "text", "text": "<em>\"Make a list, and set a timer.\"</em><br>Much of the advice ADHD persons receive is built on the premise the problem is effort or organization. It isn't. It's a difference in neurobiology — specifically in the brain regions that govern <strong>activation</strong>: the ability to engage in tasks without immediate reward." },
+        { "type": "text", "text": "<em>\"Make a list, and set a timer.\"</em><br>Much of the advice ADHD persons receive is built on the premise the problem is effort or organization. It isn't. It's a difference in neurobiology — specifically in brain regions that govern <strong>activation</strong>: the ability to engage in tasks without immediate reward." },
         { "type": "text", "text": "Research shows the ADHD brain thrives on <strong>I</strong>nterest, <strong>N</strong>ovelty, <strong>C</strong>hallenge, <strong>U</strong>rgency, and <strong>P</strong>assion (abbreviated:INCUP). So, we can be strategic in how we approach a task — using brain science, instead of a barrel of caffeine."},
         { "type": "text", "text": "You might struggle to follow linear instructions 1 through 12. But if tackling the most interesting part first is what gets you started — that's not cheating. That's <strong>strategy.</strong>" }
       ],
@@ -93,7 +93,7 @@
         { "type": "text", "text": "This isn't self-love in a bumper-sticker kind of way. It's motivation built on <br><strong>earned self-respect.</strong>" }
       ],
       "adhdContent": [
-        { "type": "text", "text": "<em>Things will inevitably go wrong sometimes.<br>Coaching supports you in replacing the inner critic with a curious observer</em>" }
+        { "type": "text", "text": "<em>Things will go wrong sometimes.<br>Coaching supports you in replacing the inner critic with a curious observer</em>" }
       ]
     },
     {
