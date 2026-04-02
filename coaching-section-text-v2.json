@@ -12,8 +12,8 @@
       "note": "Prologue, setting up the scene.",
       "title": "Prologue: A View from the Rug",
       "defaultContent": [
-        { "type": "text", "text": "You’re sitting on the floor, surrounded by a thousand colorful bricks. You know exactly what you want to build — a 1,254-piece masterpiece. <em>(Well, 1,251. You lost three pieces somewhere.)</em>" },
-        { "type": "text", "text": "You've wanted to build for weeks. You opened the box three times before. Today is the day!<br>But you don't start. You just sit there. Completely aware of everything you need to do, and yet completely unable to make yourself do it." },
+        { "type": "text", "text": "You’re sitting on the floor, surrounded by a thousand colorful bricks.<br>You know exactly what you want to build — a 1,254-piece masterpiece. <em>(Well, 1,251. You lost three pieces somewhere.)</em>" },
+        { "type": "text", "text": "You've wanted to build for weeks. You opened the box three times before.<br> Today is the day! But you don't start. You just sit there. Completely aware of everything you need to do, and yet completely unable to make yourself do it." },
         { "type": "text", "text": "That gap, between <em>knowing</em> and <em>doing</em>, is one of the most disorienting parts of ADHD.<br>And it's exactly where coaching lives." }
       ],
       "adhdContent": [
@@ -27,9 +27,9 @@
       "note": "May wish to add a tooltip for bespoke",
       "title": "ADHD Coaching",
       "defaultContent": [
-        { "type": "text", "text": "ADHD Coaching is a bespoke partnership.<br>Bespoke, because each person with ADHD experiences different challenges, and to different extents. It focuses on helping you understand how your brain actually works. And build strategies that work in accordance with it." },
+        { "type": "text", "text": "ADHD Coaching is a bespoke partnership.<br>Bespoke, because each person with ADHD experiences different challenges, and to arying extents. Coaching focuses on helping you understand how your brain works, and build strategies that work in accordance with it." },
         { "type": "text", "text": "A coach is someone who sits beside you on the rug. Not to build it for you. Not to tell you how to build it. To help you figure out what will move you forward, and keep building." },
-        { "type": "text", "text": "Over time, as awareness and understanding deepen, you start to notice and strategize by yourself. That shift — from coach-assisted to increasingly self-directed — is the whole point. The coaching relationship is designed to make itself less necessary over time." }  
+        { "type": "text", "text": "Over time, as awareness and understanding deepen, you begin to notice and strategize by yourself. That shift — from coach-assisted to increasingly <strong>self-directed</strong> — is the whole point. The coaching relationship is designed to make itself less necessary over time." }  
       ],
       "adhdContent": [
         { "type": "bullet", "text": "↔️ ADHD coaching closes the gap between wanting to and doing it — the defining frustration of ADHD." },
@@ -61,7 +61,7 @@
       "defaultContent": [
          { "type": "text", "text": "Coaching is a conversation — a curious one.<br>At the start of the journey, there's excavation: mapping patterns, understanding your defaults, discovering strengths you draw on naturally."},
          { "type": "text", "text": "Then much of the session lives in questions. This is the part that surprises people. A coach doesn't hand you an action plan or efficiency hacks. The exploration is the work."},  
-         { "type": "text", "text": "Between sessions, there's usually one specific commitment — not a to-do list. One thing, specific and small enough to actually be attempted. And if you don't follow through, no guilt. Just data. You're not expected to get it right. You're expected to stay in the process."}           
+         { "type": "text", "text": "Between sessions, there's usually one specific commitment — not a to-do list. Something small and specific enough to actually be attempted. And if you don't follow through, no guilt. Just data. You're not expected to get it right. You're expected to stay in the process."}           
     ],
       "adhdContent": [
         { "type": "bullet", "text": "The work happens through inquiry, not instructions" },
@@ -74,9 +74,9 @@
       "note": "ADHD content is an image pair (TheirBuildOrder + MyBuildOrder2) — hardcoded in HTML. adhdContent here is ignored by the renderer. To edit the images or labels, update the HTML directly.",
       "title": "Adapt to the Way Your Brain Works",
       "defaultContent": [
-        { "type": "text", "text": "\"Make a list, and set a timer.\"<br>Much of the advice ADHD persons receive is built on the premise the problem is effort or organization. It isn't. It's a difference in neurobiology — specifically in the brain regions that govern activation: the ability to engage in tasks without immediate reward." },
+        { "type": "text", "text": "<em>\"Make a list, and set a timer.\"</em><br>Much of the advice ADHD persons receive is built on the premise the problem is effort or organization. It isn't. It's a difference in neurobiology — specifically in the brain regions that govern <strong>activation</strong>: the ability to engage in tasks without immediate reward." },
         { "type": "text", "text": "Research shows the ADHD brain thrives on <strong>i</strong>nterest, <strong>n</strong>ovelty, <strong>c</strong>hallenge, <strong>u</strong>rgency, and <strong>p</strong>assion (abbreviated:INCUP). So, we can be strategic in approaching a task — using brain science, instead of a barrel of caffeine."},
-        { "type": "text", "text": "You might struggle to follow linear instructions 1 to 12. But if tackling the most interesting part first is what gets you started — that's not cheating. That's strategy." }
+        { "type": "text", "text": "You might struggle to follow linear instructions 1 through 12. But if tackling the most interesting part first is what gets you started — that's not cheating. That's strategy." }
       ],
       "adhdContent": [
         { "type": "bullet", "text": "Strategically leverage INCUP: If you need to start with the fun parts first to stay interested, we do that."},
@@ -88,9 +88,9 @@
       "note": "Broken subsection — switch flips but ADHD content never appears. adhdContent[0] is the amber reveal text shown only on the 2nd toggle attempt. Only the first item is used; additional items are ignored. Rendered as raw inline HTML inside a <p>, not a bullet.",
       "title": "Self-Awareness + Self-Compassion Come First",
       "defaultContent": [
-        { "type": "text", "text": "Most people arrive wanting to fix a problem. Or fix themselves. That's not where we start.<br>We start with understanding. Because when every mistake immediately becomes \"<em>what's wrong with me?</em>\" — you don't get insight. You get noise." },
-        { "type": "text", "text": "Self-awareness helps you stay curious about what's happening — even when what's happening is frustrating. Self-compassion lets you take risks with new strategies without the weight of judgment, and recover from setbacks with grace." },
-        { "type": "text", "text": "This isn't self-love in a bumper-sticker kind of way. It's motivation built on earned self-respect." }
+        { "type": "text", "text": "Most people arrive wanting to fix a problem. Or fix themselves. That's not where we start. We start with understanding.<br>Because when every mistake immediately becomes \"<em>what's wrong with me?</em>\" — you don't get insight. You get noise." },
+        { "type": "text", "text": "<strong>Self-awareness</strong> helps you stay curious about what's happening — even when what's happening is frustrating. <strong>Self-compassion</strong> lets you take risks with new strategies without the weight of judgment, and recover from inevitable setbacks with grace." },
+        { "type": "text", "text": "This isn't self-love in a bumper-sticker kind of way. It's motivation built on <br><strong>earned self-respect</strong>." }
       ],
       "adhdContent": [
         { "type": "text", "text": "<em>Things will inevitably go wrong sometimes.<br>Coaching supports you in replacing that inner critic with a curious observer</em>" }
@@ -101,13 +101,13 @@
       "note": "Standard subsection — emoji bullets in ADHD mode (emoji act as the visual marker, CSS hides the default LEGO stud).",
       "title": "When Coaching Makes Sense",
       "defaultContent": [
-        { "type": "text", "text": "Coaching makes sense when something isn't working, and you're curious to explore further. Feeling like a mess is usually the honest starting point anyway." },
+        { "type": "text", "text": "Coaching makes sense when something isn't working and you're curious to explore further. Feeling like a mess is usually the honest starting point anyway." },
         { "type": "text", "text": "It's also a natural fit at transition points:<br>◾ For adults: a new diagnosis, work, home, follow-through, or the private exhaustion of coping while feeling scattered underneath. <br>◾ For teens and young adults: school demands, building independence, finding routines that stick.<br>◾ For parents: seeking support for their child — and often, a better understanding of how to navigate this for themselves." },
-        { "type": "text", "text": "Coaching is a process, and it has limits. There will still be hard days. But with deeper understanding, life tends to feel more workable — less of a constant uphill push. Not effortless. But lighter." }
+        { "type": "text", "text": "Coaching is a process, and it has limits. There will still be hard days. But with deeper understanding, life tends to feel more workable. Not effortless. But lighter." }
       ],
       "adhdContent": [
         { "type": "bullet", "text": "✅ Readiness isn’t about having your life together. It's simply being curious enough to try a different approach."},      
-        { "type": "bullet", "text": "✅ For teens, adults, and parents, it’s often where the frustration <em>finally</em> has somewhere useful to go." },        
+        { "type": "bullet", "text": "✅ For adults, teens, and parents, it’s often where the frustration <em>finally</em> has somewhere useful to go." },        
         { "type": "bullet", "text": "❌ If you're in acute crisis, therapy is likely the better first step." }
       ]
     } 
