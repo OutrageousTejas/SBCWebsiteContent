@@ -14,7 +14,7 @@
       "defaultContent": [
         { "type": "text", "text": "You’re sitting on the floor, surrounded by a thousand colorful bricks.<br>You know exactly what you want to build — a 1,254-piece masterpiece. <em>(Well, 1,251. You lost three pieces somewhere.)</em>" },
         { "type": "text", "text": "You've wanted to build for weeks. You opened the box three times before.<br> Today is the day! But you don't start. You just sit there. Completely aware of everything you need to do, and yet completely unable to make yourself do it." },
-        { "type": "text", "text": "That gap, between <em>knowing</em> and <em>doing</em>, is one of the most disorienting parts of ADHD.<br>And it's exactly where coaching lives." }
+        { "type": "text", "text": "That gap, between <strong><em>knowing</em></strong> and <strong><em>doing</em></strong>, is one of the most disorienting parts of ADHD.<br>And it's exactly where coaching lives." }
       ],
       "adhdContent": [
         { "type": "bullet", "text": "⚡In an ADHD brain, the wiring between <em>thinking</em> and <em>doing</em> is frayed. Sometimes the spark carries, sometimes not, and rarely is the connection consistent." },
@@ -27,7 +27,7 @@
       "note": "May wish to add a tooltip for bespoke",
       "title": "ADHD Coaching",
       "defaultContent": [
-        { "type": "text", "text": "ADHD Coaching is a bespoke partnership.<br>Bespoke, because each person with ADHD experiences different challenges, and to arying extents. Coaching focuses on helping you understand how your brain works, and build strategies that work in accordance with it." },
+        { "type": "text", "text": "ADHD Coaching is a bespoke <strong>partnership</strong>.<br>Bespoke, because each person with ADHD experiences different challenges, and to arying extents. Coaching focuses on helping you understand how your brain works, and build strategies that work in accordance with it." },
         { "type": "text", "text": "A coach is someone who sits beside you on the rug. Not to build it for you. Not to tell you how to build it. To help you figure out what will move you forward, and keep building." },
         { "type": "text", "text": "Over time, as awareness and understanding deepen, you begin to notice and strategize by yourself. That shift — from coach-assisted to increasingly <strong>self-directed</strong> — is the whole point. The coaching relationship is designed to make itself less necessary over time." }  
       ],
@@ -43,7 +43,7 @@
       "title": "A Different Kind of Support",
       "defaultContent": [
         { "type": "text", "text": "Coaching works alongside other forms of ADHD support — medication, therapy, productivity systems. It doesn't replace them." },
-        { "type": "text", "text": "<strong>Medication</strong> addresses the neurobiology directly. It clears the floor so you can begin to build. It doesn't teach you how to proceed next. <strong>Therapy</strong> works on emotional wounds and challenges that often travel alongside ADHD. <strong>Productivity systems</strong> or <strong>life hacks</strong> often invite you to adapt your brain to someone else's methods. They tell you how to build, the way they did." }, 
+        { "type": "text", "text": "<strong>Medication</strong> addresses the neurobiology directly. It clears the floor so you can begin to build. It doesn't teach you how to proceed next. <strong>Therapy</strong> works on emotional wounds and challenges that often travel alongside ADHD. <strong>Productivity systems</strong> often invite you to adapt your brain to someone else's methods. They tell you how to build, the way they did." }, 
         { "type": "text", "text": "<strong>Traditional life coaching</strong> uses a similar reflective process — however, <strong>ADHD coaching</strong> is rooted in the neurobiology of the ADHD brain. It acknowledges the ADHD brain is fundamentally different in its operation of regions that affect motivation, focus, and self-regulation." }
       ],
       "adhdContent": [
@@ -59,9 +59,9 @@
       "note": "Standard subsection — bullets in ADHD mode.",
       "title": "How Coaching Works",
       "defaultContent": [
-         { "type": "text", "text": "Coaching is a conversation — a curious one.<br>At the start of the journey, there's excavation: mapping patterns, understanding your defaults, discovering strengths you draw on naturally."},
-         { "type": "text", "text": "Then much of the session lives in questions. This is the part that surprises people. A coach doesn't hand you an action plan or efficiency hacks. The exploration is the work."},  
-         { "type": "text", "text": "Between sessions, there's usually one specific commitment — not a to-do list. Something small and specific enough to actually be attempted. And if you don't follow through, no guilt. Just data. You're not expected to get it right. You're expected to stay in the process."}           
+         { "type": "text", "text": "Coaching is a conversation — a curious one.<br>At the start of the journey, there's excavation: mapping patterns, understanding your defaults, discovering <strong>strengths</strong> you draw on naturally."},
+         { "type": "text", "text": "Then much of the session lives in <strong>questions</strong>. This is the part that surprises people. A coach doesn't hand you an action plan or efficiency hacks. The exploration is the work."},  
+         { "type": "text", "text": "Between sessions, there's usually one specific <strong>commitment</strong> — not a to-do list. Something small and specific enough to actually be attempted. And if you don't follow through, no guilt. Just data. You're not expected to get it right. You're expected to stay in the process."}           
     ],
       "adhdContent": [
         { "type": "bullet", "text": "The work happens through inquiry, not instructions" },
@@ -75,8 +75,8 @@
       "title": "Adapt to the Way Your Brain Works",
       "defaultContent": [
         { "type": "text", "text": "<em>\"Make a list, and set a timer.\"</em><br>Much of the advice ADHD persons receive is built on the premise the problem is effort or organization. It isn't. It's a difference in neurobiology — specifically in the brain regions that govern <strong>activation</strong>: the ability to engage in tasks without immediate reward." },
-        { "type": "text", "text": "Research shows the ADHD brain thrives on <strong>i</strong>nterest, <strong>n</strong>ovelty, <strong>c</strong>hallenge, <strong>u</strong>rgency, and <strong>p</strong>assion (abbreviated:INCUP). So, we can be strategic in approaching a task — using brain science, instead of a barrel of caffeine."},
-        { "type": "text", "text": "You might struggle to follow linear instructions 1 through 12. But if tackling the most interesting part first is what gets you started — that's not cheating. That's strategy." }
+        { "type": "text", "text": "Research shows the ADHD brain thrives on <strong>I</strong>nterest, <strong>N</strong>ovelty, <strong>C</strong>hallenge, <strong>U</strong>rgency, and <strong>P</strong>assion (abbreviated:INCUP). So, we can be strategic in how we approach a task — using brain science, instead of a barrel of caffeine."},
+        { "type": "text", "text": "You might struggle to follow linear instructions 1 through 12. But if tackling the most interesting part first is what gets you started — that's not cheating. That's <strong>strategy</strong>." }
       ],
       "adhdContent": [
         { "type": "bullet", "text": "Strategically leverage INCUP: If you need to start with the fun parts first to stay interested, we do that."},
@@ -102,7 +102,7 @@
       "title": "When Coaching Makes Sense",
       "defaultContent": [
         { "type": "text", "text": "Coaching makes sense when something isn't working and you're curious to explore further. Feeling like a mess is usually the honest starting point anyway." },
-        { "type": "text", "text": "It's also a natural fit at transition points:<br>◾ For adults: a new diagnosis, work, home, follow-through, or the private exhaustion of coping while feeling scattered underneath. <br>◾ For teens and young adults: school demands, building independence, finding routines that stick.<br>◾ For parents: seeking support for their child — and often, a better understanding of how to navigate this for themselves." },
+        { "type": "text", "text": "It's also a natural fit at transition points:<br>◾ For <strong>adults</strong>: a new diagnosis, work, home, follow-through, or the private exhaustion of coping while feeling scattered underneath. <br>◾ For <strong>teens</strong> and <strong>young adults</strong>: school demands, building independence, finding routines that stick.<br>◾ For <strong>parents</strong>: seeking support for their child — and often, a better understanding of how to navigate this for themselves." },
         { "type": "text", "text": "Coaching is a process, and it has limits. There will still be hard days. But with deeper understanding, life tends to feel more workable. Not effortless. But lighter." }
       ],
       "adhdContent": [
