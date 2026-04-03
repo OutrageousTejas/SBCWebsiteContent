@@ -27,7 +27,7 @@
       "note": "May wish to add a tooltip for bespoke",
       "title": "ADHD Coaching",
       "defaultContent": [
-        { "type": "text", "text": "ADHD Coaching is a bespoke <strong>partnership</strong>.<br>Bespoke, because each person with ADHD experiences different challenges, and to arying extents. Coaching focuses on helping you understand how your brain works, and build strategies that work in accordance with it." },
+        { "type": "text", "text": "ADHD Coaching is a bespoke <strong>partnership</strong>.<br>Bespoke, because each person with ADHD experiences different challenges, and to varying extents. Coaching focuses on helping you understand how your brain works, and build strategies that work in accordance with it." },
         { "type": "text", "text": "A coach is someone who sits beside you on the rug. Not to build it for you. Not to tell you how to build it. To help you figure out what will move you forward, and keep building." },
         { "type": "text", "text": "Over time, as awareness and understanding deepen, you begin to notice and strategize by yourself. That shift — from coach-assisted to increasingly <strong>self-directed</strong> — is the whole point. The coaching relationship is designed to make itself less necessary over time." }  
       ],
