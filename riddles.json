@@ -32,7 +32,7 @@
     "a": "A cereal killer."
   },
   {
-    "q": "I have hundreds of wheels, but move I do not. Call me what I am; call me a lot. What am I?",
+    "q": "I have hundreds of wheels, but I do not move. What am I?",
     "a": "A parking lot."
   },
   {
@@ -44,7 +44,7 @@
     "a": "Running out of gas!"
   },
   {
-    "q": "I start with M, end with X, and have a never-ending amount of letters. What am I?",
+    "q": "I start with M, end with X, and can have any number of letters. What am I?",
     "a": "A mailbox."
   },
   {
@@ -54,14 +54,6 @@
   {
     "q": "What is orange and sounds like a parrot?",
     "a": "A carrot."
-  },
-  {
-    "q": "A farmer has 20 sheep, 10 pigs, and 10 cows. If we call the pigs cows, how many cows does he have?",
-    "a": "Ten. Calling pigs cows doesn't make them cows."
-  },
-  {
-    "q": "What do you call a snail on a ship?",
-    "a": "A snailor!"
   },
   {
     "q": "I make a loud sound when I change. When I do, I get bigger but weigh less. What am I?",
@@ -81,11 +73,7 @@
   },
   {
     "q": "How do you spell COW in thirteen letters?",
-    "a": "SEE O DOUBLE YOU."
-  },
-  {
-    "q": "Why is an island like the letter T?",
-    "a": "Both are in the middle of water!"
+    "a": "SEE O DOUBLE YOU"
   },
   {
     "q": "What has wheels and flies, but is not an aircraft?",
@@ -116,12 +104,8 @@
     "a": "Chicago!"
   },
   {
-    "q": "Which part of a road do ghosts love most?",
+    "q": "Which part of the street do ghosts live at?",
     "a": "The dead end."
-  },
-  {
-    "q": "Why can't a pirate ever finish the alphabet?",
-    "a": "He always gets lost at C!"
   },
   {
     "q": "What do Alexander the Great and Winnie the Pooh have in common?",
@@ -148,7 +132,7 @@
     "a": "A mushroom."
   },
   {
-    "q": "What can make the octopus laugh?",
+    "q": "What does it take to make an octopus laugh?",
     "a": "Ten tickles (tentacles)!"
   },
   {
@@ -162,10 +146,6 @@
   {
     "q": "What begins with T, ends with T, and has T in it?",
     "a": "A teapot."
-  },
-  {
-    "q": "What has a neck but no head?",
-    "a": "A bottle."
   },
   {
     "q": "What is full of holes but still holds water?",
@@ -184,20 +164,12 @@
     "a": "A candle."
   },
   {
-    "q": "If you don't keep me, I'll break. What am I?",
-    "a": "A promise."
-  },
-  {
     "q": "Which word becomes shorter when you add 2 letters to it?",
     "a": "Short."
   },
   {
     "q": "What's worth more after it's broken?",
     "a": "An egg."
-  },
-  {
-    "q": "Why did Snap, Crackle, and Pop get scared?",
-    "a": "They heard there was a cereal killer on the loose."
   },
   {
     "q": "What do geometry teachers have decorating their floor?",
@@ -220,10 +192,6 @@
     "a": "A carpet."
   },
   {
-    "q": "What has legs but cannot walk?",
-    "a": "A chair."
-  },
-  {
     "q": "What word is spelled wrong in every dictionary?",
     "a": "Wrong."
   },
@@ -237,7 +205,7 @@
   },
   {
     "q": "What falls often but never gets hurt?",
-    "a": "Snow or rain."
+    "a": "Rain."
   },
   {
     "q": "How far can you walk into a forest?",
@@ -248,35 +216,19 @@
     "a": "Monkeys and donkeys."
   },
   {
-    "q": "Which coat goes on best when wet?",
-    "a": "A coat of paint."
-  },
-  {
     "q": "Which band never plays music?",
     "a": "A rubber band."
-  },
-  {
-    "q": "What body part is one letter spoken but three letters written?",
-    "a": "Eye."
   },
   {
     "q": "Why don't lobsters share?",
     "a": "They're shellfish!"
   },
   {
-    "q": "What is next in this sequence: J F M A M J J A S O N?",
-    "a": "D — the first letter of each month."
-  },
-  {
     "q": "What is half of two plus two?",
-    "a": "Three."
+    "a": "Three. (half of two is one, then add two - it's a riddle, noth math ;-)"
   },
   {
-    "q": "I saw my math teacher with a piece of graph paper yesterday.",
-    "a": "I think he must be plotting something."
-  },
-  {
-    "q": "Why was math class so long?",
+    "q": "Why was trigonometry math class so long?",
     "a": "The teacher kept going off on a tangent."
   },
   {
